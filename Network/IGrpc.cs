@@ -7,6 +7,7 @@ namespace PerfRunner.Network
 {
     public interface IGrpc : IProtocol
     {
+        public string SampleGrpcMethod();
         
     }
 }

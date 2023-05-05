@@ -48,7 +48,7 @@ namespace PerfRunner
          var serviceProvider = services.BuildServiceProvider();
 
          var service = serviceProvider.GetRequiredService<IHttp>();
-         service.SomeMethod();
+         service.SampleHttpMethod();
 
         /*
          var list = (System.Collections.IList)serviceProvider.GetRequiredService(closedGenType);
@@ -61,12 +61,14 @@ namespace PerfRunner
          service_.SomeMethod(); */
 
          var lazySrvc = serviceProvider.GetRequiredService<Lazy<IHttp>>();
-         lazySrvc.Value.SomeMethod();
+         lazySrvc.Value.SampleHttpMethod();
 
          var funcSrvc = serviceProvider.GetRequiredService<Func<IHttp>>();
-         funcSrvc().SomeMethod();
+         funcSrvc().SampleHttpMethod();
 
          builder.Services.AddGrpc();
+         builder.Services.AddScoped<IHttp, Http>();
+         builder.Services.AddScoped<IGrpc, Network.Grpc>();
          var app = builder.Build();
 
          // app.MapGrpcService<PingService>();

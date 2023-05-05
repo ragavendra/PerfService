@@ -7,6 +7,10 @@ namespace PerfRunner.Network
 {
     public class Grpc : IGrpc
     {
+        public string SampleGrpcMethod()
+        {
+            return "From sample grpc method";
+        }
         
     }
 }

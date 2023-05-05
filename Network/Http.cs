@@ -7,9 +7,9 @@ namespace PerfRunner.Network
 {
     public class Http : IHttp
     {
-        public void SomeMethod()
+        public string SampleHttpMethod()
         {
-
+            return "From sample http method";
         }
         
     }
