@@ -29,8 +29,8 @@ namespace PerfRunner
          // builder.Services.AddScoped<IHttp, Http>();
 
          // generic type
-         Type openGenType = typeof(List<>);
-         Type closedGenType = openGenType.MakeGenericType(typeof(string));
+         // Type openGenType = typeof(List<>);
+         // Type closedGenType = openGenType.MakeGenericType(typeof(string));
          // builder.Services.AddScoped(openGenType, provider => Activator.CreateInstance(closedGenType));
 
          // resolve other service dynamically at run time
@@ -39,8 +39,8 @@ namespace PerfRunner
          var services = new ServiceCollection();
          services.AddScoped<IHttp, Http>();
          
-         services.AddScoped(openGenType, provider => Activator.CreateInstance(closedGenType));
-         services.AddSingleton<IServiceProvider>(provider => provider);
+         // services.AddScoped(openGenType, provider => Activator.CreateInstance(closedGenType));
+         // services.AddSingleton<IServiceProvider>(provider => provider);
          services.AddTransient(provider => new Lazy<IHttp>(provider.GetRequiredService<IHttp>));
          services.AddTransient(provider => new Func<IHttp>(provider.GetRequiredService<IHttp>));
 
@@ -49,6 +49,7 @@ namespace PerfRunner
          var service = serviceProvider.GetRequiredService<IHttp>();
          service.SomeMethod();
 
+        /*
          var list = (System.Collections.IList)serviceProvider.GetRequiredService(closedGenType);
          list.Add("one");
          list.Add("seven");
@@ -56,10 +57,11 @@ namespace PerfRunner
 
          var serviceProvider_ = serviceProvider.GetRequiredService<IServiceProvider>();
          var service_ = serviceProvider_.GetRequiredService<IHttp>();
-         service_.SomeMethod();
+         service_.SomeMethod(); */
 
          var lazySrvc = serviceProvider.GetRequiredService<Lazy<IHttp>>();
          lazySrvc.Value.SomeMethod();
+
          var funcSrvc = serviceProvider.GetRequiredService<Func<IHttp>>();
          funcSrvc().SomeMethod();
 
