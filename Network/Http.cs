@@ -7,6 +7,10 @@ namespace PerfRunner.Network
 {
     public class Http : IHttp
     {
+        public void SomeMethod()
+        {
+
+        }
         
     }
 }

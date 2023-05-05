@@ -7,6 +7,7 @@ namespace PerfRunner.Network
 {
     public interface IHttp : IProtocol
     {
+        public void SomeMethod();
         
     }
 }
