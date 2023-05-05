@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+option csharp_namespace = "PerfRunner";
+
+package perf;
+
+// Perf service definition.
+service Perf {
+
+    // Senda a ping response
+    rpc Ping (PingRequest) returns (PingReply);
+
+    // Run a test
+    rpc RunTest (TestRequest) returns (TestReply);
+}
+
+// request with user id
+message PingRequest {
+    string name = 1;
+}
+
+//message ping reply
+message PingReply {
+    string message = 1;
+}
+
+// request with user id
+message TestRequest {
+    string name = 1;
+}
+
+//message ping reply
+message TestReply {
+    string message = 1;
+}

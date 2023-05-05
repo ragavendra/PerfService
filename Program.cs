@@ -5,6 +5,7 @@ using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using PerfRunner.Network;
+using PerfRunner.Services;
 
 namespace PerfRunner
 {
@@ -65,8 +66,12 @@ namespace PerfRunner
          var funcSrvc = serviceProvider.GetRequiredService<Func<IHttp>>();
          funcSrvc().SomeMethod();
 
-         // builder.Services.AddGrpc();
+         builder.Services.AddGrpc();
          var app = builder.Build();
+
+         // app.MapGrpcService<PingService>();
+         app.MapGrpcService<PerfService>();
+         app.MapGet("/", () => "Comm with gRPC should be made through gRPC clients.");
 
          app.Run();
 
