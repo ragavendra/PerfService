@@ -12,6 +12,9 @@ service Perf {
 
     // Run a test
     rpc RunTest (TestRequest) returns (TestReply);
+
+    // Run a test
+    rpc StopAllTests (StopAllTestsRequest) returns (StopAllTestsReply);
 }
 
 // request with user id
@@ -26,10 +29,33 @@ message PingReply {
 
 // request with user id
 message TestRequest {
-    string name = 1;
+
+    // guid of the test
+    string guid = 1;
+    
+    // name of the test
+    string name = 2;
+
+    // rate at which the test should run per second
+    int32 rate = 3;
 }
 
 //message ping reply
 message TestReply {
-    string message = 1;
+
+    // status of test start
+    bool status = 1;
+
+    // message
+    string message = 2;
 }
+
+// StopAllTests request
+message StopAllTestsRequest {
+}
+
+// StopAllTests response
+message StopAllTestsReply {
+    bool status = 1;
+}
+

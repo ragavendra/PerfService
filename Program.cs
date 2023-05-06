@@ -71,6 +71,7 @@ namespace PerfRunner
          builder.Services.AddScoped<IGrpc, Network.Grpc>();
          var app = builder.Build();
 
+         // this server instance mapping to only one service to handle the gRPC calls
          // app.MapGrpcService<PingService>();
          app.MapGrpcService<PerfService>();
          app.MapGet("/", () => "Comm with gRPC should be made through gRPC clients.");
