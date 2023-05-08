@@ -1,6 +1,7 @@
 using System.Threading.Tasks.Dataflow;
 using Grpc.Core;
 using PerfRunner.Network;
+using PerfRunner.V1;
 
 namespace PerfRunner.Services
 {
@@ -10,13 +11,20 @@ namespace PerfRunner.Services
       private readonly IHttp _http;
       private readonly IGrpc _grpc;
 
-      private static CancellationTokenSource _cancelTokenSourceAllTests;
+      private TestRequest _testRequest;
 
-      public PerfService(ILogger<PerfService> logger, IHttp http, IGrpc grpc)
+      private readonly TestStateManager _testStateManager;
+
+      private readonly CancellationTokenSource _cancelTokenSource;
+
+      public Guid Guid = Guid.NewGuid();
+
+      public PerfService(ILogger<PerfService> logger, IHttp http, IGrpc grpc, TestStateManager testStateManager)
       {
          _logger = logger;
          _http = http;
          _grpc = grpc;
+         _testStateManager = testStateManager;
       }
 
       private void SomeFunc(int millisecondsTimeout)
@@ -30,7 +38,18 @@ namespace PerfRunner.Services
          _logger.LogInformation("Message from Http service - " + _http.SampleHttpMethod());
          _logger.LogInformation("Message from Grpc service - " + _grpc.SampleGrpcMethod());
 
-        _cancelTokenSourceAllTests = new CancellationTokenSource();
+        testRequest.CancellationTokenSource = new CancellationTokenSource();
+
+         if(!_testStateManager.AddTest(testRequest))
+         {
+           _logger.LogError($"Seems the test {testRequest.Guid} is already runing"); 
+           return default;
+         }
+
+         _testRequest = testRequest;
+
+        // _cancelTokenSourceAllTests = new CancellationTokenSource();
+        // testRequest.CancellationTokenSource = new CancellationTokenSource();
         
         // context.CancellationToken = cancellationTokenSource.Token;
         // _ = ThreadPool.QueueUserWorkItem(new WaitCallback(SomeFunc), cancellationTokenSource);
@@ -77,7 +96,7 @@ namespace PerfRunner.Services
          }
 
          // keep runnung till cancelled from the client
-         while(!_cancelTokenSourceAllTests.IsCancellationRequested)
+         while(!_cancelTokenSource.IsCancellationRequested)
          {
             elapsed = await actionRunner.StartActionsPerSecondAsync();
 
@@ -107,20 +126,35 @@ namespace PerfRunner.Services
          var reply = new TestReply { Message = $"Hi {testRequest.Name}" };
 
          return reply;
+      }
 
-         /*
-                  return Task.FromResult(new TestReply
-                  {
-                     Message = $"Hi {testRequest.Name}"
-                  });*/
+      public override async Task<StopTestReply> StopTest(StopTestRequest stopTestRequest, ServerCallContext context)
+      {
+        _testStateManager.Tests.Where(test => test.Key.ToString().
+        Equals(stopTestRequest.Guid)).First().Value.CancellationTokenSource.Cancel();
+
+         return new StopTestReply { Status = true };
       }
 
       public override async Task<StopAllTestsReply> StopAllTests(StopAllTestsRequest stopAllTestsRequest, ServerCallContext context)
       {
+         foreach (var test in _testStateManager.Tests)
+         {
+            test.Value.CancellationTokenSource.Cancel();
+         }
+
         // lets try cancel
-        _cancelTokenSourceAllTests.Cancel();
+        // _cancelTokenSourceAllTests.Cancel();
 
          return new StopAllTestsReply { Status = true };
+      }
+
+      public override async Task<UpdateRateReply> UpdateRate(UpdateRateRequest updateRateRequest, ServerCallContext context)
+      {
+        // lets update rate
+        // _cancelTokenSourceAllTests.Cancel();
+
+         return new UpdateRateReply { Status = true };
       }
    }
 }

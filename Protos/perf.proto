@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-option csharp_namespace = "PerfRunner";
+option csharp_namespace = "PerfRunner.V1";
 
 package perf;
 
@@ -13,8 +13,14 @@ service Perf {
     // Run a test
     rpc RunTest (TestRequest) returns (TestReply);
 
-    // Run a test
+    // Stops a test
+    rpc StopTest (StopTestRequest) returns (StopTestReply);
+
+    // Stop all test(s)
     rpc StopAllTests (StopAllTestsRequest) returns (StopAllTestsReply);
+
+    // Update rate
+    rpc UpdateRate (UpdateRateRequest) returns (UpdateRateReply);
 }
 
 // request with user id
@@ -50,12 +56,36 @@ message TestReply {
     string message = 2;
 }
 
+// StopTest request
+message StopTestRequest {
+
+    // guid of the test
+    string guid = 1;
+}
+
+// StopAllTests response
+message StopTestReply {
+    bool status = 1;
+}
+
 // StopAllTests request
 message StopAllTestsRequest {
 }
 
 // StopAllTests response
 message StopAllTestsReply {
+    bool status = 1;
+}
+
+// UpdateRate request
+message UpdateRateRequest {
+
+    // rate at which the test should run per second
+    int32 rate = 3;
+}
+
+// UpdateRate response
+message UpdateRateReply {
     bool status = 1;
 }
 

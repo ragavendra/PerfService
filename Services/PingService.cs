@@ -1,4 +1,5 @@
 using Grpc.Core;
+using PerfRunner.V1;
 
 namespace PerfRunner.Services
 {

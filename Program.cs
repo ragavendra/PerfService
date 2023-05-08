@@ -69,6 +69,8 @@ namespace PerfRunner
          builder.Services.AddGrpc();
          builder.Services.AddScoped<IHttp, Http>();
          builder.Services.AddScoped<IGrpc, Network.Grpc>();
+         // builder.Services.AddTransient<TestStateManager>();
+         builder.Services.AddSingleton<TestStateManager>();
          var app = builder.Build();
 
          // this server instance mapping to only one service to handle the gRPC calls
