@@ -19,13 +19,17 @@ and start the test first.
 // when using dataflow.
 internal class ActionRunner<T>
 {
-   public ActionBlock<T> ActionBlock { get; set; }
-
    public IList<ActionBlock<T>> ActionBlocks { get; set; } = new List<ActionBlock<T>>();
 
    public T TypeValue { get; set; }
 
    public Stopwatch Stopwatch { get; set; } = new();
+
+   private void SomeFunc(int millisecondsTimeout)
+   {
+      Thread.Sleep(millisecondsTimeout);
+      // _logger.LogInformation("Now in SomeFunc");
+   }
 
    // Initiates several computations by using dataflow and returns the elapsed
    // time required to initiate the computations.
@@ -37,6 +41,15 @@ internal class ActionRunner<T>
 
       Stopwatch.Start();
 
+      var workerBlock = new ActionBlock<int>(
+         // Simulate work by suspending the current thread.
+         millisecondsTimeout => SomeFunc(millisecondsTimeout),
+         // Specify a maximum degree of parallelism.
+         new ExecutionDataflowBlockOptions
+         {
+            MaxDegreeOfParallelism = 12
+         });
+
       var result = ActionBlocks.Select(action => action.Post(TypeValue));
 
       // no more to post 
@@ -46,6 +59,7 @@ internal class ActionRunner<T>
       foreach (var item in ActionBlocks)
       {
          item.Complete();
+         item.Completion.Wait();
       }
 
       // Wait for all messages to propagate through the network.

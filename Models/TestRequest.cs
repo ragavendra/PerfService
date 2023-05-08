@@ -1,5 +1,5 @@
-﻿// <copyright file="TestOptions.cs" company="Blizzard Entertainment">
-//   Copyright (c) Blizzard Entertainment. All rights reserved.
+﻿// <copyright file="TestRequest.cs" company="Garden Systems"
+//   Copyright (c) Garden Systems. All rights reserved.
 // </copyright>
 
 // ReSharper disable once CheckNamespace
@@ -14,6 +14,8 @@ namespace PerfRunner.V1
     /// The <see cref="TestStateManager"/> the test should run with.
     /// </summary>
     internal CancellationTokenSource CancellationTokenSource { get; set; }
+
+    internal ActionRunner<int> ActionRunner { get; set; }
 
   }
 }

@@ -80,8 +80,11 @@ message StopAllTestsReply {
 // UpdateRate request
 message UpdateRateRequest {
 
+    // guid of the test
+    string guid = 1;
+
     // rate at which the test should run per second
-    int32 rate = 3;
+    int32 rate = 2;
 }
 
 // UpdateRate response

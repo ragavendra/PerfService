@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Threading.Tasks.Dataflow;
 using Grpc.Core;
 using PerfRunner.Network;
@@ -17,6 +18,8 @@ namespace PerfRunner.Services
 
       public Guid Guid = Guid.NewGuid();
 
+      public Stopwatch Stopwatch { get; set; } = new();
+
       public PerfService(ILogger<PerfService> logger, IHttp http, IGrpc grpc, TestStateManager testStateManager)
       {
          _logger = logger;
@@ -31,18 +34,57 @@ namespace PerfRunner.Services
          _logger.LogInformation("Now in SomeFunc");
       }
 
+      // Initiates several computations by using dataflow and returns the elapsed
+      // time required to initiate the computations.
+      public async Task<TimeSpan> StartActionsPerSecondAsync(IList<ActionBlock<int>> ActionBlocks)
+      {
+         // Compute the time that it takes for several messages to
+         // flow through the dataflow block.
+         // Stopwatch stopwatch = new();
+
+         Stopwatch.Start();
+
+         var workerBlock = new ActionBlock<int>(
+            // Simulate work by suspending the current thread.
+            millisecondsTimeout => SomeFunc(millisecondsTimeout),
+            // Specify a maximum degree of parallelism.
+            new ExecutionDataflowBlockOptions
+            {
+               MaxDegreeOfParallelism = 12
+            });
+
+         var result = ActionBlocks.Select(action => action.Post(1000));
+
+         // no more to post 
+         // ActionBlock.Complete();
+         // result = ActionBlocks.Select(action => action.Complete());
+         // ActionBlocks.ForEach(action => action.Complete());
+         foreach (var item in ActionBlocks)
+         {
+            item.Complete();
+            item.Completion.Wait();
+         }
+
+         // Wait for all messages to propagate through the network.
+         // workerBlock.Completion.Wait();
+
+         while (Stopwatch.Elapsed.TotalMilliseconds <= 1000)
+         {
+            Thread.Sleep(100);
+         }
+
+         // Stop the timer and return the elapsed number of milliseconds.
+         // stopwatch.Stop();
+
+         return Stopwatch.Elapsed;
+      }
+
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
          _logger.LogInformation("Message from Http service - " + _http.SampleHttpMethod());
          _logger.LogInformation("Message from Grpc service - " + _grpc.SampleGrpcMethod());
 
         testRequest.CancellationTokenSource = new CancellationTokenSource();
-
-         if(!_testStateManager.AddTest(testRequest))
-         {
-           _logger.LogError($"Seems the test {testRequest.Guid} is already runing"); 
-           return default;
-         }
 
          // depending on the no of processors
          // runs so many in parallel
@@ -56,30 +98,40 @@ namespace PerfRunner.Services
 
          // Perform two dataflow computations and print the elapsed
          // time required for each.
-         var actionRunner = new ActionRunner<int>();
+         testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 1000 };
 
-         // Create an ActionBlock<int> that performs some work.
-         var actionBlock = new ActionBlock<int>(
-
-            // Simulate work by suspending the current thread.
-            millisecondsTimeout => SomeFunc(millisecondsTimeout),
-
-            // Specify a maximum degree of parallelism.
-            new ExecutionDataflowBlockOptions
-            {
-               MaxDegreeOfParallelism = processorCount
-            }
-               );
-
-         for (int iIndex = 0; iIndex < testRequest.Rate; iIndex++)
+         if(!_testStateManager.AddTest(testRequest))
          {
-            actionRunner.ActionBlocks.Add(actionBlock);
+           _logger.LogError($"Seems the test {testRequest.Guid} is already runing"); 
+           return default;
          }
 
          // keep runnung till cancelled from the client
-         while(!testRequest.CancellationTokenSource.IsCancellationRequested)
+         while (!testRequest.CancellationTokenSource.IsCancellationRequested)
          {
-            elapsed = await actionRunner.StartActionsPerSecondAsync();
+
+            // Create an ActionBlock<int> that performs some work.
+            var actionBlock = new ActionBlock<int>(
+
+               // Simulate work by suspending the current thread.
+               millisecondsTimeout => SomeFunc(millisecondsTimeout),
+
+               // Specify a maximum degree of parallelism.
+               new ExecutionDataflowBlockOptions
+               {
+                  MaxDegreeOfParallelism = processorCount
+               }
+                  );
+
+            for (int iIndex = 0; iIndex < testRequest.Rate; iIndex++)
+            {
+               testRequest.ActionRunner.ActionBlocks.Add(actionBlock);
+            }
+
+            // elapsed = await testRequest.ActionRunner.StartActionsPerSecondAsync();
+            elapsed = await StartActionsPerSecondAsync(testRequest.ActionRunner.ActionBlocks);
+
+            testRequest.ActionRunner.ActionBlocks.Clear();
 
             /*
             Console.WriteLine(
@@ -92,17 +144,17 @@ namespace PerfRunner.Services
          }
 
          // actionRunner.ActionBlocks.Select(item => item.Completion.Wait());
-         foreach (var item in actionRunner.ActionBlocks)
+         foreach (var item in testRequest.ActionRunner.ActionBlocks)
          {
             item.Completion.Wait();
          }
 
          // actionRunner.ActionBlock.Completion.Wait();
-         actionRunner.Stopwatch.Stop();
+         testRequest.ActionRunner.Stopwatch.Stop();
 
-         Console.WriteLine(
+         _logger.LogInformation(
             "After completion, Elapsed = {0} ms",
-            (int)actionRunner.Stopwatch.Elapsed.TotalMilliseconds);
+            (int)testRequest.ActionRunner.Stopwatch.Elapsed.TotalMilliseconds);
 
          var reply = new TestReply { Message = $"Hi {testRequest.Name}" };
 
@@ -111,8 +163,7 @@ namespace PerfRunner.Services
 
       public override async Task<StopTestReply> StopTest(StopTestRequest stopTestRequest, ServerCallContext context)
       {
-        _testStateManager.Tests.Where(test => test.Key.ToString().
-        Equals(stopTestRequest.Guid)).First().Value.CancellationTokenSource.Cancel();
+        _testStateManager.GetTest(stopTestRequest.Guid)?.CancellationTokenSource.Cancel();
 
          return new StopTestReply { Status = true };
       }
@@ -132,8 +183,23 @@ namespace PerfRunner.Services
 
       public override async Task<UpdateRateReply> UpdateRate(UpdateRateRequest updateRateRequest, ServerCallContext context)
       {
-        // lets update rate
-        // _cancelTokenSourceAllTests.Cancel();
+         // lets update rate
+         // _cancelTokenSourceAllTests.Cancel();
+         var test = _testStateManager.GetTest(updateRateRequest.Guid);
+         test.Rate = updateRateRequest.Rate;
+
+         // increase or decrease rate and since same action block add or - the same item
+         while (!test.ActionRunner.ActionBlocks.Count.Equals(updateRateRequest.Rate))
+         {
+            if (test.ActionRunner.ActionBlocks.Count > updateRateRequest.Rate)
+            {
+               test.ActionRunner.ActionBlocks.RemoveAt(0);
+            }
+            else
+            {
+               test.ActionRunner.ActionBlocks.Add(test.ActionRunner.ActionBlocks.First());
+            }
+         }
 
          return new UpdateRateReply { Status = true };
       }
