@@ -8,14 +8,12 @@ namespace PerfRunner.Services
    public class PerfService : Perf.PerfBase
    {
       private readonly ILogger<PerfService> _logger;
+
       private readonly IHttp _http;
+
       private readonly IGrpc _grpc;
 
-      private TestRequest _testRequest;
-
       private readonly TestStateManager _testStateManager;
-
-      private readonly CancellationTokenSource _cancelTokenSource;
 
       public Guid Guid = Guid.NewGuid();
 
@@ -46,14 +44,6 @@ namespace PerfRunner.Services
            return default;
          }
 
-         _testRequest = testRequest;
-
-        // _cancelTokenSourceAllTests = new CancellationTokenSource();
-        // testRequest.CancellationTokenSource = new CancellationTokenSource();
-        
-        // context.CancellationToken = cancellationTokenSource.Token;
-        // _ = ThreadPool.QueueUserWorkItem(new WaitCallback(SomeFunc), cancellationTokenSource);
-
          // depending on the no of processors
          // runs so many in parallel
          int processorCount = Environment.ProcessorCount;
@@ -67,15 +57,6 @@ namespace PerfRunner.Services
          // Perform two dataflow computations and print the elapsed
          // time required for each.
          var actionRunner = new ActionRunner<int>();
-
-         /*
-               List<string> list = new List<string>(){ "one", "six", "seven" };
-               var item = list.Where(item => item.Equals("one"));*/
-
-         // how many in milli seconds to wait
-         const int count = 1000;
-
-         const int noThreads = 10;
 
          // Create an ActionBlock<int> that performs some work.
          var actionBlock = new ActionBlock<int>(
@@ -130,16 +111,14 @@ namespace PerfRunner.Services
 
       public override async Task<StopTestReply> StopTest(StopTestRequest stopTestRequest, ServerCallContext context)
       {
-        // _testStateManager.Tests.Where(test => test.Key.ToString().
-        // Equals(stopTestRequest.Guid)).First().Value.CancellationTokenSource.Cancel();
-        _testRequest.CancellationTokenSource.Cancel();
+        _testStateManager.Tests.Where(test => test.Key.ToString().
+        Equals(stopTestRequest.Guid)).First().Value.CancellationTokenSource.Cancel();
 
          return new StopTestReply { Status = true };
       }
 
       public override async Task<StopAllTestsReply> StopAllTests(StopAllTestsRequest stopAllTestsRequest, ServerCallContext context)
       {
-        // lets fetch all tests from test state manager
          foreach (var test in _testStateManager.Tests)
          {
             test.Value.CancellationTokenSource.Cancel();
