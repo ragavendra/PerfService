@@ -96,7 +96,7 @@ namespace PerfRunner.Services
          }
 
          // keep runnung till cancelled from the client
-         while(!_cancelTokenSource.IsCancellationRequested)
+         while(!testRequest.CancellationTokenSource.IsCancellationRequested)
          {
             elapsed = await actionRunner.StartActionsPerSecondAsync();
 
@@ -130,14 +130,16 @@ namespace PerfRunner.Services
 
       public override async Task<StopTestReply> StopTest(StopTestRequest stopTestRequest, ServerCallContext context)
       {
-        _testStateManager.Tests.Where(test => test.Key.ToString().
-        Equals(stopTestRequest.Guid)).First().Value.CancellationTokenSource.Cancel();
+        // _testStateManager.Tests.Where(test => test.Key.ToString().
+        // Equals(stopTestRequest.Guid)).First().Value.CancellationTokenSource.Cancel();
+        _testRequest.CancellationTokenSource.Cancel();
 
          return new StopTestReply { Status = true };
       }
 
       public override async Task<StopAllTestsReply> StopAllTests(StopAllTestsRequest stopAllTestsRequest, ServerCallContext context)
       {
+        // lets fetch all tests from test state manager
          foreach (var test in _testStateManager.Tests)
          {
             test.Value.CancellationTokenSource.Cancel();
