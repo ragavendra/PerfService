@@ -34,51 +34,6 @@ namespace PerfRunner.Services
          _logger.LogInformation("Now in SomeFunc");
       }
 
-      // Initiates several computations by using dataflow and returns the elapsed
-      // time required to initiate the computations.
-      public async Task<TimeSpan> StartActionsPerSecondAsync(IList<ActionBlock<int>> ActionBlocks)
-      {
-         // Compute the time that it takes for several messages to
-         // flow through the dataflow block.
-         // Stopwatch stopwatch = new();
-
-         Stopwatch.Start();
-
-         var workerBlock = new ActionBlock<int>(
-            // Simulate work by suspending the current thread.
-            millisecondsTimeout => SomeFunc(millisecondsTimeout),
-            // Specify a maximum degree of parallelism.
-            new ExecutionDataflowBlockOptions
-            {
-               MaxDegreeOfParallelism = 12
-            });
-
-         var result = ActionBlocks.Select(action => action.Post(1000));
-
-         // no more to post 
-         // ActionBlock.Complete();
-         // result = ActionBlocks.Select(action => action.Complete());
-         // ActionBlocks.ForEach(action => action.Complete());
-         foreach (var item in ActionBlocks)
-         {
-            item.Complete();
-            item.Completion.Wait();
-         }
-
-         // Wait for all messages to propagate through the network.
-         // workerBlock.Completion.Wait();
-
-         while (Stopwatch.Elapsed.TotalMilliseconds <= 1000)
-         {
-            Thread.Sleep(100);
-         }
-
-         // Stop the timer and return the elapsed number of milliseconds.
-         // stopwatch.Stop();
-
-         return Stopwatch.Elapsed;
-      }
-
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
          _logger.LogInformation("Message from Http service - " + _http.SampleHttpMethod());
@@ -128,8 +83,7 @@ namespace PerfRunner.Services
                testRequest.ActionRunner.ActionBlocks.Add(actionBlock);
             }
 
-            // elapsed = await testRequest.ActionRunner.StartActionsPerSecondAsync();
-            elapsed = await StartActionsPerSecondAsync(testRequest.ActionRunner.ActionBlocks);
+            elapsed = await testRequest.ActionRunner.StartActionsPerSecondAsync();
 
             testRequest.ActionRunner.ActionBlocks.Clear();
 

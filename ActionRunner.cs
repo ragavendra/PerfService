@@ -25,12 +25,6 @@ internal class ActionRunner<T>
 
    public Stopwatch Stopwatch { get; set; } = new();
 
-   private void SomeFunc(int millisecondsTimeout)
-   {
-      Thread.Sleep(millisecondsTimeout);
-      // _logger.LogInformation("Now in SomeFunc");
-   }
-
    // Initiates several computations by using dataflow and returns the elapsed
    // time required to initiate the computations.
    public async Task <TimeSpan> StartActionsPerSecondAsync()
@@ -40,15 +34,6 @@ internal class ActionRunner<T>
       // Stopwatch stopwatch = new();
 
       Stopwatch.Start();
-
-      var workerBlock = new ActionBlock<int>(
-         // Simulate work by suspending the current thread.
-         millisecondsTimeout => SomeFunc(millisecondsTimeout),
-         // Specify a maximum degree of parallelism.
-         new ExecutionDataflowBlockOptions
-         {
-            MaxDegreeOfParallelism = 12
-         });
 
       var result = ActionBlocks.Select(action => action.Post(TypeValue));
 
