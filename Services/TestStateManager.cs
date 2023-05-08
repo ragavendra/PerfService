@@ -28,5 +28,10 @@ namespace PerfRunner.Services
          return Tests.TryAdd(Guid.Parse(testRequest.Guid), testRequest);
       }
 
+      public bool RemoveTest(string guid)
+      {
+         return Tests.TryRemove(Guid.Parse(guid), out _);
+      }
+
    }
 }

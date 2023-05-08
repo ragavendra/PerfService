@@ -117,9 +117,11 @@ namespace PerfRunner.Services
 
       public override async Task<StopTestReply> StopTest(StopTestRequest stopTestRequest, ServerCallContext context)
       {
-        _testStateManager.GetTest(stopTestRequest.Guid)?.CancellationTokenSource.Cancel();
+        var test = _testStateManager.GetTest(stopTestRequest.Guid);
+        test?.CancellationTokenSource.Cancel();
+        var resp = _testStateManager.RemoveTest(test.Guid);
 
-         return new StopTestReply { Status = true };
+         return new StopTestReply { Status = resp };
       }
 
       public override async Task<StopAllTestsReply> StopAllTests(StopAllTestsRequest stopAllTestsRequest, ServerCallContext context)
