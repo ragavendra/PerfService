@@ -19,12 +19,13 @@ namespace PerfRunner
       /// </summary>
       public static async Task Main(string[] args)
       {
+        /*
          var logDirName = $"{DateTime.UtcNow:yyyy.MM.dd_HH.mm.ss}";
          var logOutputDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "logs", logDirName));
          if (!Directory.Exists(logOutputDir))
          {
             Directory.CreateDirectory(logOutputDir);
-         }
+         }*/
 
          var builder = WebApplication.CreateBuilder(args);
          // builder.Services.AddScoped<IHttp, Http>();

@@ -33,7 +33,8 @@ namespace PerfRunner.Services
       private void SomeFunc(int millisecondsTimeout)
       {
          Thread.Sleep(millisecondsTimeout);
-         _logger.LogInformation("Now in SomeFunc - " + Guid);
+         _logger.LogInformation("NowI in SomeFunc - " + Guid);
+         Console.WriteLine("Now in SomeFunc - " + Guid);
       }
 
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
@@ -56,7 +57,7 @@ namespace PerfRunner.Services
          // Perform two dataflow computations and print the elapsed
          // time required for each.
          // testRequest.ActionRunner = new ActionRunner<int>((ILogger<ActionRunner<int>>)_logger){ TypeValue = 1000 };
-         testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 1000 };
+         testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 10 };
 
          if(!_testStateManager.AddTest(testRequest))
          {
@@ -69,7 +70,7 @@ namespace PerfRunner.Services
          {
 
             // Create an ActionBlock<int> that performs some work.
-            var actionBlock = new ActionBlock<int>(
+            testRequest.ActionRunner.ActionBlock = new ActionBlock<int>(
 
                // Simulate work by suspending the current thread.
                millisecondsTimeout => SomeFunc(millisecondsTimeout),
@@ -81,14 +82,15 @@ namespace PerfRunner.Services
                }
                   );
 
+            /*
             for (int iIndex = 0; iIndex < testRequest.Rate; iIndex++)
             {
                testRequest.ActionRunner.ActionBlocks.Add(actionBlock);
-            }
+            }*/
 
-            elapsed = await testRequest.ActionRunner.StartActionsPerSecondAsync();
+            elapsed = await testRequest.ActionRunner.StartActionsPerSecondAsync(testRequest.Rate);
 
-            testRequest.ActionRunner.ActionBlocks.Clear();
+            // testRequest.ActionRunner.ActionBlocks.Clear();
 
             /*
             Console.WriteLine(
@@ -101,10 +103,12 @@ namespace PerfRunner.Services
          }
 
          // actionRunner.ActionBlocks.Select(item => item.Completion.Wait());
+         /*
          foreach (var item in testRequest.ActionRunner.ActionBlocks)
          {
             item.Completion.Wait();
-         }
+         }*/
+         // testRequest.ActionRunner.ActionBlock.Completion.Wait();
 
          // actionRunner.ActionBlock.Completion.Wait();
          testRequest.ActionRunner.Stopwatch.Stop();

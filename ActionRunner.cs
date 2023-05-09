@@ -19,6 +19,9 @@ and start the test first.
 // when using dataflow.
 internal class ActionRunner<T>
 {
+
+   public ActionBlock<T> ActionBlock { get; set; }
+
    public IList<ActionBlock<T>> ActionBlocks { get; set; } = new List<ActionBlock<T>>();
 
    public T TypeValue { get; set; }
@@ -39,7 +42,7 @@ internal class ActionRunner<T>
 
    // Initiates several computations by using dataflow and returns the elapsed
    // time required to initiate the computations.
-   public async Task <TimeSpan> StartActionsPerSecondAsync()
+   public async Task <TimeSpan> StartActionsPerSecondAsync(int rate)
    {
       // Compute the time that it takes for several messages to
       // flow through the dataflow block.
@@ -47,17 +50,23 @@ internal class ActionRunner<T>
 
       Stopwatch.Start();
 
-      var result = ActionBlocks.Select(action => action.Post(TypeValue));
+      // var result = ActionBlocks.Select(action => action.Post(TypeValue));
+      while(rate-- > 0)
+      {
+         ActionBlock.Post(TypeValue);
+      }
 
       // no more to post 
       // ActionBlock.Complete();
       // result = ActionBlocks.Select(action => action.Complete());
       // ActionBlocks.ForEach(action => action.Complete());
+      /*
       foreach (var item in ActionBlocks)
       {
          item.Complete();
          item.Completion.Wait();
-      }
+      }*/
+      ActionBlock.Complete();
 
       // Wait for all messages to propagate through the network.
       // workerBlock.Completion.Wait();
@@ -65,6 +74,8 @@ internal class ActionRunner<T>
       while (Stopwatch.Elapsed.TotalMilliseconds <= 1000) { 
          Thread.Sleep(100);
       }
+
+      ActionBlock.Completion.Wait();
 
       // Stop the timer and return the elapsed number of milliseconds.
       // stopwatch.Stop();
