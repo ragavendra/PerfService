@@ -31,7 +31,7 @@ namespace PerfRunner.Services
       private void SomeFunc(int millisecondsTimeout)
       {
          Thread.Sleep(millisecondsTimeout);
-         _logger.LogInformation("Now in SomeFunc");
+         _logger.LogInformation("Now in SomeFunc - " + Guid);
       }
 
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
@@ -53,6 +53,7 @@ namespace PerfRunner.Services
 
          // Perform two dataflow computations and print the elapsed
          // time required for each.
+         // testRequest.ActionRunner = new ActionRunner<int>((ILogger<ActionRunner<int>>)_logger){ TypeValue = 1000 };
          testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 1000 };
 
          if(!_testStateManager.AddTest(testRequest))

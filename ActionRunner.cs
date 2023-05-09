@@ -25,6 +25,18 @@ internal class ActionRunner<T>
 
    public Stopwatch Stopwatch { get; set; } = new();
 
+   private readonly ILogger<ActionRunner<T>> _logger;
+
+   public ActionRunner(ILogger<ActionRunner<T>> logger)
+   {
+      _logger = logger;
+   }
+
+   public ActionRunner()
+   {
+      // _logger = new Logger<ActionRunner<T>>();
+   }
+
    // Initiates several computations by using dataflow and returns the elapsed
    // time required to initiate the computations.
    public async Task <TimeSpan> StartActionsPerSecondAsync()
