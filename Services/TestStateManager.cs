@@ -15,8 +15,8 @@ namespace PerfRunner.Services
       private readonly ILogger<TestStateManager> _logger;
 
       //return the first test
-      public TestRequest? GetTest(string guid) => Tests.Where(test => test.Key.ToString().
-        Equals(guid)).First().Value;
+      public TestRequest? GetTest(string guid) => Tests.First(test => test.Key.ToString().
+         Equals(guid)).Value;
 
       public TestStateManager(ILogger<TestStateManager> logger)
       {

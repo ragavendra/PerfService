@@ -1,5 +1,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks.Dataflow;
+using System.Linq.Expressions;
+using System;
 using Grpc.Core;
 using PerfRunner.Network;
 using PerfRunner.V1;
@@ -140,23 +142,31 @@ namespace PerfRunner.Services
 
       public override async Task<UpdateRateReply> UpdateRate(UpdateRateRequest updateRateRequest, ServerCallContext context)
       {
-         // lets update rate
-         // _cancelTokenSourceAllTests.Cancel();
-         var test = _testStateManager.GetTest(updateRateRequest.Guid);
-         test.Rate = updateRateRequest.Rate;
-
-         // increase or decrease rate and since same action block add or - the same item
-         while (!test.ActionRunner.ActionBlocks.Count.Equals(updateRateRequest.Rate))
+         try
          {
-            if (test.ActionRunner.ActionBlocks.Count > updateRateRequest.Rate)
+            // lets update rate
+            // _cancelTokenSourceAllTests.Cancel();
+            var test = _testStateManager.GetTest(updateRateRequest.Guid);
+            test.Rate = updateRateRequest.Rate;
+
+            // increase or decrease rate and since same action block add or - the same item
+            while (!test.ActionRunner.ActionBlocks.Count.Equals(updateRateRequest.Rate))
             {
-               test.ActionRunner.ActionBlocks.RemoveAt(0);
-            }
-            else
-            {
-               test.ActionRunner.ActionBlocks.Add(test.ActionRunner.ActionBlocks.First());
+               if (test.ActionRunner.ActionBlocks.Count > updateRateRequest.Rate)
+               {
+                  test.ActionRunner.ActionBlocks.RemoveAt(0);
+               }
+               else
+               {
+                  test.ActionRunner.ActionBlocks.Add(test.ActionRunner.ActionBlocks.First());
+               }
             }
          }
+         catch(Exception ex)
+         {
+            _logger.LogError($"Unable to update rate - {ex.Message}");
+         }
+
 
          return new UpdateRateReply { Status = true };
       }
