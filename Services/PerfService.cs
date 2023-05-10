@@ -34,7 +34,7 @@ namespace PerfRunner.Services
       {
          Thread.Sleep(millisecondsTimeout);
          _logger.LogInformation("NowI in SomeFunc - " + Guid);
-         Console.WriteLine("Now in SomeFunc - " + Guid);
+         // Console.WriteLine("Now in SomeFunc - " + Guid);
       }
 
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
@@ -52,7 +52,7 @@ namespace PerfRunner.Services
          // Print the number of processors on this computer.
          Console.WriteLine("Processor count = {0}.", processorCount);
 
-         TimeSpan elapsed;
+         TimeSpan elapsed = TimeSpan.MinValue;
 
          // Perform two dataflow computations and print the elapsed
          // time required for each.
@@ -111,11 +111,11 @@ namespace PerfRunner.Services
          // testRequest.ActionRunner.ActionBlock.Completion.Wait();
 
          // actionRunner.ActionBlock.Completion.Wait();
-         testRequest.ActionRunner.Stopwatch.Stop();
+         // testRequest.ActionRunner.Stopwatch.Stop();
 
          _logger.LogInformation(
             "After completion, Elapsed = {0} ms",
-            (int)testRequest.ActionRunner.Stopwatch.Elapsed.TotalMilliseconds);
+            (int)elapsed.TotalMilliseconds);
 
          var reply = new TestReply { Message = $"Hi {testRequest.Name}" };
 
@@ -153,6 +153,7 @@ namespace PerfRunner.Services
             var test = _testStateManager.GetTest(updateRateRequest.Guid);
             test.Rate = updateRateRequest.Rate;
 
+            /*
             // increase or decrease rate and since same action block add or - the same item
             while (!test.ActionRunner.ActionBlocks.Count.Equals(updateRateRequest.Rate))
             {
@@ -164,7 +165,7 @@ namespace PerfRunner.Services
                {
                   test.ActionRunner.ActionBlocks.Add(test.ActionRunner.ActionBlocks.First());
                }
-            }
+            }*/
          }
          catch(Exception ex)
          {

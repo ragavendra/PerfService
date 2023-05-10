@@ -48,7 +48,8 @@ internal class ActionRunner<T>
       // flow through the dataflow block.
       // Stopwatch stopwatch = new();
 
-      Stopwatch.Start();
+      var sw = new Stopwatch();
+      sw.Start();
 
       // var result = ActionBlocks.Select(action => action.Post(TypeValue));
       while(rate-- > 0)
@@ -71,15 +72,19 @@ internal class ActionRunner<T>
       // Wait for all messages to propagate through the network.
       // workerBlock.Completion.Wait();
 
-      while (Stopwatch.Elapsed.TotalMilliseconds <= 1000) { 
+      while (sw.Elapsed.TotalMilliseconds <= 1000) { 
          Thread.Sleep(100);
       }
 
-      ActionBlock.Completion.Wait();
+      // ActionBlock.Completion.Wait();
 
       // Stop the timer and return the elapsed number of milliseconds.
       // stopwatch.Stop();
+      sw.Stop();
+      Console.WriteLine(
+         "After complete, Elapsed = {0} ms",
+         (int)sw.Elapsed.TotalMilliseconds);
 
-      return Stopwatch.Elapsed;
+      return sw.Elapsed;
    }
 }
