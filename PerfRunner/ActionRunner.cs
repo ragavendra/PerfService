@@ -85,8 +85,7 @@ public class ActionRunner<T>
       // stopwatch.Stop();
       sw.Stop();
       Console.WriteLine(
-         "After complete, Elapsed = {0} ms",
-         (int)sw.Elapsed.TotalMilliseconds);
+         $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds} ms for {Guid}");
 
       return sw.Elapsed;
    }

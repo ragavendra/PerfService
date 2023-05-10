@@ -19,7 +19,7 @@ namespace PerfRunner.Services
 
       private readonly TestStateManager _testStateManager;
 
-      private readonly ActionRunner<TestBase> _actionRunner;
+      private readonly ActionRunner<ITestBase> _actionRunner;
 
       public Guid Guid = Guid.NewGuid();
 
@@ -30,7 +30,7 @@ namespace PerfRunner.Services
          IHttp http,
          IGrpc grpc,
          TestStateManager testStateManager,
-         ActionRunner<TestBase> actionRunner)
+         ActionRunner<ITestBase> actionRunner)
       {
          _logger = logger;
          _http = http;
@@ -83,10 +83,10 @@ namespace PerfRunner.Services
          {
 
             // Create an ActionBlock<int> that performs some work.
-            testRequest.ActionRunner.ActionBlock = new ActionBlock<TestBase>(
+            testRequest.ActionRunner.ActionBlock = new ActionBlock<ITestBase>(
 
                // Simulate work by suspending the current thread.
-               testBase => testBase.RunTest(),
+               testBase => testBase.RunTest(Guid),
 
                // Specify a maximum degree of parallelism.
                new ExecutionDataflowBlockOptions

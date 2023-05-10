@@ -5,7 +5,7 @@ using PerfRunner.V1;
 namespace PerfRunner.Tests
 {
    // Static class to maintain or manage test(s).
-   public class TestBase
+   public class TestBase : ITestBase
    {
       public Guid Guid = Guid.NewGuid();
 
@@ -18,10 +18,10 @@ namespace PerfRunner.Tests
          _logger = logger;
       }
 
-      public virtual void RunTest()
+      public virtual void RunTest(Guid guid)
       {
          // _logger?.LogInformation($"Running {nameof(this.GetType)} now.");
-         Console.WriteLine($"Running {GetType().Name} now.");
+         Console.WriteLine($"Running {GetType().Name} now for {guid}.");
          // throw new NotImplementedException();
       }
    }

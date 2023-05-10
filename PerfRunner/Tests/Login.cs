@@ -17,9 +17,9 @@ namespace PerfRunner.Tests
          _logger = logger;
       }*/
 
-      public override void RunTest()
+      public override void RunTest(Guid guid)
       {
-         _logger?.LogInformation($"Running {nameof(this.GetType)} now.");
+         _logger?.LogInformation($"Running {this.GetType} now for {guid}.");
          // Console.WriteLine($"Running {nameof(this.GetType)} now.");
       }
    }

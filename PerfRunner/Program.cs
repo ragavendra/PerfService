@@ -72,7 +72,7 @@ namespace PerfRunner
          builder.Services.AddScoped<IHttp, Http>();
          builder.Services.AddScoped<IGrpc, Network.Grpc>();
          // builder.Services.AddTransient<ActionRunner<int>>();
-         builder.Services.AddTransient<ActionRunner<TestBase>>();
+         builder.Services.AddTransient<ActionRunner<ITestBase>>();
          // builder.Services.AddTransient<TestStateManager>();
          builder.Services.AddSingleton<TestStateManager>();
          var app = builder.Build();

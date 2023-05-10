@@ -17,7 +17,7 @@ namespace PerfRunner.V1
     /// </summary>
     internal CancellationTokenSource CancellationTokenSource { get; set; }
 
-    internal ActionRunner<TestBase> ActionRunner { get; set; }
+    internal ActionRunner<ITestBase> ActionRunner { get; set; }
 
   }
 }
