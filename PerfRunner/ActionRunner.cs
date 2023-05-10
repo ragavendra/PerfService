@@ -17,8 +17,10 @@ and start the test first.
 
 // Demonstrates how to specify the maximum degree of parallelism
 // when using dataflow.
-internal class ActionRunner<T>
+public class ActionRunner<T>
 {
+
+   public Guid Guid = Guid.NewGuid();
 
    public ActionBlock<T> ActionBlock { get; set; }
 
@@ -35,10 +37,11 @@ internal class ActionRunner<T>
       _logger = logger;
    }
 
+/*
    public ActionRunner()
    {
       // _logger = new Logger<ActionRunner<T>>();
-   }
+   }*/
 
    // Initiates several computations by using dataflow and returns the elapsed
    // time required to initiate the computations.

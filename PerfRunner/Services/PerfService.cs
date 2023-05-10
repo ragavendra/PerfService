@@ -18,16 +18,24 @@ namespace PerfRunner.Services
 
       private readonly TestStateManager _testStateManager;
 
+      private readonly ActionRunner<int> _actionRunner;
+
       public Guid Guid = Guid.NewGuid();
 
       public Stopwatch Stopwatch { get; set; } = new();
 
-      public PerfService(ILogger<PerfService> logger, IHttp http, IGrpc grpc, TestStateManager testStateManager)
+      public PerfService(
+         ILogger<PerfService> logger,
+         IHttp http,
+         IGrpc grpc,
+         TestStateManager testStateManager,
+         ActionRunner<int> actionRunner)
       {
          _logger = logger;
          _http = http;
          _grpc = grpc;
          _testStateManager = testStateManager;
+         _actionRunner = actionRunner;
       }
 
       private void SomeFunc(int millisecondsTimeout)
@@ -57,7 +65,9 @@ namespace PerfRunner.Services
          // Perform two dataflow computations and print the elapsed
          // time required for each.
          // testRequest.ActionRunner = new ActionRunner<int>((ILogger<ActionRunner<int>>)_logger){ TypeValue = 1000 };
-         testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 10 };
+         // testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 10 };
+         _actionRunner.TypeValue = 10;
+         testRequest.ActionRunner = _actionRunner;
 
          if(!_testStateManager.AddTest(testRequest))
          {
