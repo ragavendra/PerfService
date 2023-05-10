@@ -122,6 +122,7 @@ var rep = await cli.PingAsync(new PingRequest { Name = "PingCli" });
 var cli = new Perf.PerfClient(channel);
 
 var testRequest = new TestRequest { Name = "FirstTest", Guid = Guid.NewGuid().ToString(), Rate = 3 };
+testRequest.Actions.Add(new ActionOption(){Name = "Login"});
 
 // not wait for task to complete
 var rep = cli.RunTestAsync(testRequest);
@@ -130,6 +131,7 @@ var rep = cli.RunTestAsync(testRequest);
 Thread.Sleep(3_000);
 
 var testRequest2 = new TestRequest { Name = "SecondTest", Guid = Guid.NewGuid().ToString(), Rate = 7 };
+testRequest2.Actions.Add(new ActionOption(){Name = "TestBase"});
 
 // not wait for task to complete
 var rep2 = cli.RunTestAsync(testRequest2);

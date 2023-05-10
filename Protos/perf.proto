@@ -1,5 +1,9 @@
 syntax = "proto3";
 
+import "google/protobuf/duration.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/wrappers.proto";
+
 option csharp_namespace = "PerfRunner.V1";
 
 package perf;
@@ -44,6 +48,26 @@ message TestRequest {
 
     // rate at which the test should run per second
     int32 rate = 3;
+
+    //list of actions
+    repeated ActionOption actions = 4;
+}
+
+// actions
+message ActionOption {
+
+    // guid of the test
+    string guid = 1;
+    
+    // name of the test
+    string name = 2;
+
+    // rate at which the test should run per second
+    int32 rate = 3;
+
+    // duration for which the test should run
+    google.protobuf.Duration duration = 4;
+
 }
 
 //message ping reply

@@ -6,6 +6,7 @@ using Grpc.Core;
 using PerfRunner.Network;
 using PerfRunner.V1;
 using PerfRunner.Tests;
+using System.Reflection;
 
 namespace PerfRunner.Services
 {
@@ -22,6 +23,15 @@ namespace PerfRunner.Services
       private readonly ActionRunner<ITestBase> _actionRunner;
 
       public Guid Guid = Guid.NewGuid();
+
+      /// <summary>
+      /// The set of actions created from <see cref="ITestBase"/>.
+      /// </summary>
+      internal static readonly List<Type> TestActionTypes = Assembly.GetExecutingAssembly()
+         .GetTypes()
+         .Where(t => typeof(ITestBase).IsAssignableFrom(t))
+         .OrderBy(t => t.FullName)
+         .ToList();
 
       public Stopwatch Stopwatch { get; set; } = new();
 
@@ -63,15 +73,33 @@ namespace PerfRunner.Services
 
          TimeSpan elapsed = TimeSpan.MinValue;
 
+         ITestBase typeVal_;
+
          // Perform two dataflow computations and print the elapsed
          // time required for each.
          // testRequest.ActionRunner = new ActionRunner<int>((ILogger<ActionRunner<int>>)_logger){ TypeValue = 1000 };
          // testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 10 };
          // _actionRunner.TypeValue = 10;
          // testRequest.ActionRunner = new ActionRunner<TestBase>();
-         _actionRunner.TypeValue = new Login();
+         // typeVal_.GetType().AssemblyQualifiedName
+         
+         // _actionRunner.TypeValue = new Login();
 
+         // Type ty = howMany.GetType();
          // "SomeStr"
+         // _actionRunner.TypeValue = Activator.CreateInstance(testRequest.Actions.FirstOrDefault());
+         // _actionRunner.TypeValue = 
+         // var inst = Activator.CreateInstance(testRequest.Actions.FirstOrDefault().Name, testRequest.Actions.FirstOrDefault().Name);
+         // var inst = Activator.CreateInstance("PerfRunner.Tests.Login", "Login");
+         var inst = Activator.CreateInstance(TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
+            .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())));
+
+         if(!(inst is ITestBase typeVal)){
+            _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");
+         }
+
+         _actionRunner.TypeValue = (ITestBase?)inst;
+
          testRequest.ActionRunner = _actionRunner;
 
          if(!_testStateManager.AddTest(testRequest))
