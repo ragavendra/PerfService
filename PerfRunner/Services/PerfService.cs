@@ -5,6 +5,7 @@ using System;
 using Grpc.Core;
 using PerfRunner.Network;
 using PerfRunner.V1;
+using PerfRunner.Tests;
 
 namespace PerfRunner.Services
 {
@@ -18,7 +19,7 @@ namespace PerfRunner.Services
 
       private readonly TestStateManager _testStateManager;
 
-      private readonly ActionRunner<int> _actionRunner;
+      private readonly ActionRunner<TestBase> _actionRunner;
 
       public Guid Guid = Guid.NewGuid();
 
@@ -29,7 +30,7 @@ namespace PerfRunner.Services
          IHttp http,
          IGrpc grpc,
          TestStateManager testStateManager,
-         ActionRunner<int> actionRunner)
+         ActionRunner<TestBase> actionRunner)
       {
          _logger = logger;
          _http = http;
@@ -66,7 +67,9 @@ namespace PerfRunner.Services
          // time required for each.
          // testRequest.ActionRunner = new ActionRunner<int>((ILogger<ActionRunner<int>>)_logger){ TypeValue = 1000 };
          // testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 10 };
-         _actionRunner.TypeValue = 10;
+         // _actionRunner.TypeValue = 10;
+         // testRequest.ActionRunner = new ActionRunner<TestBase>();
+         _actionRunner.TypeValue = new TestBase();
          testRequest.ActionRunner = _actionRunner;
 
          if(!_testStateManager.AddTest(testRequest))
@@ -80,10 +83,10 @@ namespace PerfRunner.Services
          {
 
             // Create an ActionBlock<int> that performs some work.
-            testRequest.ActionRunner.ActionBlock = new ActionBlock<int>(
+            testRequest.ActionRunner.ActionBlock = new ActionBlock<TestBase>(
 
                // Simulate work by suspending the current thread.
-               millisecondsTimeout => SomeFunc(millisecondsTimeout),
+               testBase => testBase.RunTest(),
 
                // Specify a maximum degree of parallelism.
                new ExecutionDataflowBlockOptions
@@ -92,24 +95,7 @@ namespace PerfRunner.Services
                }
                   );
 
-            /*
-            for (int iIndex = 0; iIndex < testRequest.Rate; iIndex++)
-            {
-               testRequest.ActionRunner.ActionBlocks.Add(actionBlock);
-            }*/
-
             elapsed = await testRequest.ActionRunner.StartActionsPerSecondAsync(testRequest.Rate);
-
-            // testRequest.ActionRunner.ActionBlocks.Clear();
-
-            /*
-            Console.WriteLine(
-               "Degree of parallelism = {0}; message count = {1}; " +
-                  "elapsed time = {2}ms.",
-               processorCount,
-               actionRunner.ActionBlocks.Count,
-               (int)elapsed.TotalMilliseconds);*/
-
          }
 
          // actionRunner.ActionBlocks.Select(item => item.Completion.Wait());

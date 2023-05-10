@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
 using PerfRunner.Network;
 using PerfRunner.Services;
+using PerfRunner.Tests;
 
 namespace PerfRunner
 {
@@ -70,7 +71,8 @@ namespace PerfRunner
          builder.Services.AddGrpc();
          builder.Services.AddScoped<IHttp, Http>();
          builder.Services.AddScoped<IGrpc, Network.Grpc>();
-         builder.Services.AddTransient<ActionRunner<int>>();
+         // builder.Services.AddTransient<ActionRunner<int>>();
+         builder.Services.AddTransient<ActionRunner<TestBase>>();
          // builder.Services.AddTransient<TestStateManager>();
          builder.Services.AddSingleton<TestStateManager>();
          var app = builder.Build();

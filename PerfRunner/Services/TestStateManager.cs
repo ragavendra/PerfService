@@ -5,7 +5,7 @@ using PerfRunner.V1;
 namespace PerfRunner.Services
 {
    // Static class to maintain or manage test(s).
-   public class TestStateManager : Perf.PerfBase
+   public class TestStateManager
    {
       public Guid Guid = Guid.NewGuid();
 
