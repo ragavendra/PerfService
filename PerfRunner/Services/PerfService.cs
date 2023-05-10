@@ -69,7 +69,9 @@ namespace PerfRunner.Services
          // testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 10 };
          // _actionRunner.TypeValue = 10;
          // testRequest.ActionRunner = new ActionRunner<TestBase>();
-         _actionRunner.TypeValue = new TestBase();
+         _actionRunner.TypeValue = new Login();
+
+         // "SomeStr"
          testRequest.ActionRunner = _actionRunner;
 
          if(!_testStateManager.AddTest(testRequest))
