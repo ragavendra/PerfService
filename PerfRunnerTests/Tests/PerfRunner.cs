@@ -11,15 +11,26 @@ namespace PerfRunnerTests.Tests
    [TestFixture]
    public class PerfRunner
    {
-        private Perf.PerfClient? PerfClient { get; set; }
+      private Perf.PerfClient? PerfClient { get; set; }
 
       [OneTimeSetUp]
       public void OneTimeSetup()
       {
          Console.WriteLine("In One time Setup now.");
-          var host_ = "http://localhost:5277";
-          var channel = GrpcChannel.ForAddress(host_);
-          PerfClient = new Perf.PerfClient(channel);
+         Console.WriteLine("Make sure the perf runner service is up and running");
+
+         var host_ = "http://localhost:5277";
+         var channel = GrpcChannel.ForAddress(host_);
+         PerfClient = new Perf.PerfClient(channel);
+         try
+         {
+            PingReply pingReply = PerfClient.Ping(new PingRequest() { Name = "Check availability!" });
+         }
+         catch (Exception ex)
+         {
+            Console.WriteLine("Perf runner service is not available, aborting test run.");
+            throw;
+         }
       }
 
       [SetUp]
@@ -57,10 +68,10 @@ namespace PerfRunnerTests.Tests
          Console.WriteLine("In test 2 now");
       }
 
-      [Test]
-      public void Test3()
+      [TestCase(1, "someStr", 3)]
+      public void Test3(int no, string str, int no_)
       {
-         Console.WriteLine("In test 3 now");
+         Console.WriteLine($"In test 3 now with params {no} {str} {no_}");
       }
    }
 }
