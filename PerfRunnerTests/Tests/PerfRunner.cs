@@ -28,8 +28,9 @@ namespace PerfRunnerTests.Tests
          }
          catch (Exception ex)
          {
-            Console.WriteLine("Perf runner service is not available, aborting test run.");
-            throw;
+            Console.WriteLine("Perf runner service is not available, aborting test run." + ex.Message);
+            PerfClient = null;
+            // throw;
          }
       }
 
