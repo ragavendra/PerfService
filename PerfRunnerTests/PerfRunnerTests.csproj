@@ -9,14 +9,21 @@
 
   <ItemGroup>
   <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+  <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
+  <PackageReference Include="nunit" Version="3.13.3" />
+  <PackageReference Include="nunit3testadapter" Version="4.4.2" />
   <!-- Protobuf Include="Protos\greet.proto" GrpsServices="Client" / -->
   <Protobuf Include="..\Protos\perf.proto" GrpsServices="Client" />
     <PackageReference Include="Google.Protobuf" Version="3.22.3" />
-    <PackageReference Include="Grpc.Net.Client" Version="2.52.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.53.0" />
     <PackageReference Include="Grpc.Tools" Version="2.54.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PerfRunner\PerfRunner.csproj" />
   </ItemGroup>
 
 </Project>

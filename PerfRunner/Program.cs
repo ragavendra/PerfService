@@ -29,6 +29,7 @@ namespace PerfRunner
          }*/
 
          var builder = WebApplication.CreateBuilder(args);
+         // builder.WebHost.UseStartup<AppStart>();
          // builder.Services.AddScoped<IHttp, Http>();
 
          // generic type
