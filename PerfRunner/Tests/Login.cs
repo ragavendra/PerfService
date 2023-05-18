@@ -23,7 +23,6 @@ namespace PerfRunner.Tests
          // _httpClient = httpClient;
       }
 
-
       /*
             private readonly ILogger<Login> _logger;
 

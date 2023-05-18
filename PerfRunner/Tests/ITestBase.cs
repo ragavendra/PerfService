@@ -7,6 +7,8 @@ namespace PerfRunner.Tests
 {
     public interface ITestBase
     {
+      public HttpClient _httpClient { get; set; }
+
       public void RunTest(Guid guid);
     }
 }

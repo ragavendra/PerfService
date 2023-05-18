@@ -22,9 +22,9 @@ namespace PerfRunner.Services
 
       private readonly ActionRunner<ITestBase> _actionRunner;
 
-      public Guid Guid = Guid.NewGuid();
+      public readonly ITestBase _testbase;
 
-      public readonly HttpClient _httpClient = null!;
+      public Guid Guid = Guid.NewGuid();
 
       /// <summary>
       /// The set of actions created from <see cref="ITestBase"/>.
@@ -43,14 +43,14 @@ namespace PerfRunner.Services
          IGrpc grpc,
          TestStateManager testStateManager,
          ActionRunner<ITestBase> actionRunner,
-         HttpClient httpClient)
+         ITestBase testBase)
       {
          _logger = logger;
          _http = http;
          _grpc = grpc;
          _testStateManager = testStateManager;
          _actionRunner = actionRunner;
-         _httpClient = httpClient;
+         _testbase = testBase;
       }
 
       private void SomeFunc(int millisecondsTimeout)
@@ -79,6 +79,12 @@ namespace PerfRunner.Services
 
          ITestBase typeVal_;
 
+         //lets get all the types of ITestBase
+         var type = typeof(ITestBase);
+         var types = AppDomain.CurrentDomain.GetAssemblies()
+             .SelectMany(s => s.GetTypes())
+             .Where(p => type.IsAssignableFrom(p));
+
          // Perform two dataflow computations and print the elapsed
          // time required for each.
          // testRequest.ActionRunner = new ActionRunner<int>((ILogger<ActionRunner<int>>)_logger){ TypeValue = 1000 };
@@ -86,7 +92,7 @@ namespace PerfRunner.Services
          // _actionRunner.TypeValue = 10;
          // testRequest.ActionRunner = new ActionRunner<TestBase>();
          // typeVal_.GetType().AssemblyQualifiedName
-         
+
          // _actionRunner.TypeValue = new Login();
 
          // Type ty = howMany.GetType();
@@ -97,7 +103,7 @@ namespace PerfRunner.Services
          // var inst = Activator.CreateInstance("PerfRunner.Tests.Login", "Login");
          var inst = Activator.CreateInstance(
             TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
-               .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())), _httpClient);
+               .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())), _testbase._httpClient);
 
          if(!(inst is ITestBase typeVal)){
             _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");

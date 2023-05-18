@@ -11,9 +11,9 @@ namespace PerfRunner.Tests
 
       public readonly ILogger<TestBase> _logger;
 
-      public readonly HttpClient _httpClient = null!;
+      public HttpClient _httpClient { get; set; } = null!;
 
-      // public TestBase() { }
+      public TestBase() { }
 
       public TestBase(HttpClient httpClient)
       {
