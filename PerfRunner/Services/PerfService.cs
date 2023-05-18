@@ -24,6 +24,8 @@ namespace PerfRunner.Services
 
       public Guid Guid = Guid.NewGuid();
 
+      public readonly HttpClient _httpClient = null!;
+
       /// <summary>
       /// The set of actions created from <see cref="ITestBase"/>.
       /// </summary>
@@ -40,13 +42,15 @@ namespace PerfRunner.Services
          IHttp http,
          IGrpc grpc,
          TestStateManager testStateManager,
-         ActionRunner<ITestBase> actionRunner)
+         ActionRunner<ITestBase> actionRunner,
+         HttpClient httpClient)
       {
          _logger = logger;
          _http = http;
          _grpc = grpc;
          _testStateManager = testStateManager;
          _actionRunner = actionRunner;
+         _httpClient = httpClient;
       }
 
       private void SomeFunc(int millisecondsTimeout)
@@ -91,8 +95,9 @@ namespace PerfRunner.Services
          // _actionRunner.TypeValue = 
          // var inst = Activator.CreateInstance(testRequest.Actions.FirstOrDefault().Name, testRequest.Actions.FirstOrDefault().Name);
          // var inst = Activator.CreateInstance("PerfRunner.Tests.Login", "Login");
-         var inst = Activator.CreateInstance(TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
-            .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())));
+         var inst = Activator.CreateInstance(
+            TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
+               .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())), _httpClient);
 
          if(!(inst is ITestBase typeVal)){
             _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");

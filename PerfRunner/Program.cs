@@ -76,6 +76,15 @@ namespace PerfRunner
          builder.Services.AddTransient<ActionRunner<ITestBase>>();
          // builder.Services.AddTransient<TestStateManager>();
          builder.Services.AddSingleton<TestStateManager>();
+
+         // add typed http client factory
+         builder.Services.AddHttpClient<PerfService>(client => {
+            client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
+
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga");
+         });
+
+
          var app = builder.Build();
 
          // this server instance mapping to only one service to handle the gRPC calls

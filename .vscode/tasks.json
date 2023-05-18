@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/PerfRunner.csproj",
+                "${workspaceFolder}/PerfRunner/PerfRunner.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/PerfRunner.csproj",
+                "${workspaceFolder}/PerfRunner/PerfRunner.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/PerfRunner.csproj"
+                "${workspaceFolder}/PerfRunner/PerfRunner.csproj"
             ],
             "problemMatcher": "$msCompile"
         }

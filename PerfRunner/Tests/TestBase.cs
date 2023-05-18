@@ -5,17 +5,25 @@ using PerfRunner.V1;
 namespace PerfRunner.Tests
 {
    // Static class to maintain or manage test(s).
-   public class TestBase : ITestBase
+   public class TestBase : ITestBase, IDisposable
    {
       public Guid Guid = Guid.NewGuid();
 
       public readonly ILogger<TestBase> _logger;
 
-      public TestBase() { }
+      public readonly HttpClient _httpClient = null!;
 
-      public TestBase(ILogger<TestBase> logger)
+      // public TestBase() { }
+
+      public TestBase(HttpClient httpClient)
+      {
+         _httpClient = httpClient;
+      }
+
+      public TestBase(ILogger<TestBase> logger, HttpClient httpClient)
       {
          _logger = logger;
+         _httpClient = httpClient;
       }
 
       public virtual void RunTest(Guid guid)
@@ -24,5 +32,7 @@ namespace PerfRunner.Tests
          Console.WriteLine($"Running {GetType().Name} now for {guid}.");
          // throw new NotImplementedException();
       }
+
+      public void Dispose() => _httpClient?.Dispose();
    }
 }
