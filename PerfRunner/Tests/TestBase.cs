@@ -20,11 +20,12 @@ namespace PerfRunner.Tests
          _httpClient = httpClient;
       }
 
+/*
       public TestBase(ILogger<TestBase> logger, HttpClient httpClient)
       {
          _logger = logger;
          _httpClient = httpClient;
-      }
+      }*/
 
       public virtual void RunTest(Guid guid)
       {

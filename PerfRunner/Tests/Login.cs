@@ -11,11 +11,12 @@ namespace PerfRunner.Tests
    {
       public Guid Guid = Guid.NewGuid();
 
+/*
       public Login(ILogger<TestBase> logger, HttpClient httpClient) : base(logger, httpClient)
       {
          // _logger = logger;
          // _httpClient = httpClient;
-      }
+      }*/
 
       public Login(HttpClient httpClient) : base(httpClient)
       {
