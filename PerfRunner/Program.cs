@@ -73,14 +73,14 @@ namespace PerfRunner
          builder.Services.AddScoped<IHttp, Http>();
          builder.Services.AddScoped<IGrpc, Network.Grpc>();
          
-         builder.Services.AddScoped<ITestBase, TestBase>();
+         // builder.Services.AddScoped<ITestBase, TestBase>();
          // builder.Services.AddTransient<ActionRunner<int>>();
          builder.Services.AddTransient<ActionRunner<ITestBase>>();
          // builder.Services.AddTransient<TestStateManager>();
          builder.Services.AddSingleton<TestStateManager>();
 
          // add typed http client factory
-         builder.Services.AddHttpClient<TestBase>(client => {
+         builder.Services.AddHttpClient<ITestBase, TestBase>(client => {
             client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
 
             client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga");
