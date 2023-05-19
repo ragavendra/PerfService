@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using Grpc.Core;
+using PerfRunner.Services;
 using PerfRunner.V1;
 
 namespace PerfRunner.Tests
@@ -27,10 +28,10 @@ namespace PerfRunner.Tests
          _httpClient = httpClient;
       }*/
 
-      public virtual void RunTest(Guid guid)
+      public virtual void RunTest(Guid guid, ILogger<PerfService> logger)
       {
-         // _logger?.LogInformation($"Running {nameof(this.GetType)} now.");
-         Console.WriteLine($"Running {GetType().Name} now for {guid}.");
+         logger?.LogInformation($"Running {nameof(this.GetType)} now.");
+         // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
          // throw new NotImplementedException();
       }
 

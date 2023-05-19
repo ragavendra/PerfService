@@ -3,6 +3,7 @@ using Grpc.Core;
 using PerfRunner.V1;
 using System.Text.Json;
 using PerfRunner.Models;
+using PerfRunner.Services;
 
 namespace PerfRunner.Tests
 {
@@ -32,16 +33,17 @@ namespace PerfRunner.Tests
                _logger = logger;
             }*/
 
-      public override async void RunTest(Guid guid)
+      public override async void RunTest(Guid guid, ILogger<PerfService> logger)
       {
-         _logger?.LogInformation($"Running {GetType().Name} now for {guid}.");
-         Console.WriteLine($"Running {GetType().Name} now for {guid}.");
+         logger?.LogInformation($"Running {GetType().Name} now for {guid}.");
+         // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
          var userId = 1;
          var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
             $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-         Console.WriteLine($"Title for todo item is {todos[3].title}.");
+         // Console.WriteLine($"Title for todo item is {todos[3].title}.");
+         logger?.LogInformation($"Title for todo item is {todos[3].title}.");
       }
    }
 }

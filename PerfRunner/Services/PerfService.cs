@@ -73,7 +73,8 @@ namespace PerfRunner.Services
          const int howMany = 12;
 
          // Print the number of processors on this computer.
-         Console.WriteLine("Processor count = {0}.", processorCount);
+         // Console.WriteLine("Processor count = {0}.", processorCount);
+         _logger?.LogInformation("Processor count = {0}.", processorCount);
 
          TimeSpan elapsed = TimeSpan.MinValue;
 
@@ -127,7 +128,7 @@ namespace PerfRunner.Services
             testRequest.ActionRunner.ActionBlock = new ActionBlock<ITestBase>(
 
                // Simulate work by suspending the current thread.
-               testBase => testBase.RunTest(Guid),
+               testBase => testBase.RunTest(Guid, _logger),
 
                // Specify a maximum degree of parallelism.
                new ExecutionDataflowBlockOptions

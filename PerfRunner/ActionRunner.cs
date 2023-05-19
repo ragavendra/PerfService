@@ -84,7 +84,9 @@ public class ActionRunner<T>
       // Stop the timer and return the elapsed number of milliseconds.
       // stopwatch.Stop();
       sw.Stop();
-      Console.WriteLine(
+      // Console.WriteLine(
+         // $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds} ms for {Guid}");
+      _logger?.LogInformation(
          $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds} ms for {Guid}");
 
       return sw.Elapsed;
