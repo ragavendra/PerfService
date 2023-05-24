@@ -1,0 +1,87 @@
+﻿@page "/"
+@using Grpc.Net.Client;
+@using PerfRunner.V1;
+@inject ILogger<Index> Logger
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to Perf Loader.
+
+<SurveyPrompt Title="How is Blazor working for you?" />
+<EditForm Model="@testRequest">
+    <InputText @bind-Value=testRequest.Name></InputText>
+
+    <InputNumber @bind-Value=testRequest.Rate></InputNumber>
+
+Actions: 
+@foreach (var item in testRequest.Actions)
+{
+    <br>
+    <label>Name: @item.Name</label>
+    <label>Rate: @item.Rate</label>
+}
+<br>
+ <InputText @bind-Value=testRequest.Actions.Last().Name></InputText>
+ <InputNumber @bind-Value=testRequest.Actions.Last().Rate></InputNumber>   
+ <!-- InputNumber @bind-Value=item.Duration></InputNumber -->
+ <button @onclick="() => testRequest.Actions.Add(testRequest.Actions.Last())">+</button>   
+ <button @onclick="() => testRequest.Actions.RemoveAt(testRequest.Actions.Count - 1)">-</button>
+ <button @onclick="() => StartTestAsync()">Start Test</button>
+
+ <button @onclick="() => StopAllTestsAsync()">Stop All Tests</button>
+</EditForm>
+
+@code {
+
+    private TestRequest testRequest = new TestRequest() { Name = "Test Name", Guid = Guid.NewGuid().ToString(), Rate = 3 };
+    // Actions.Add(new ActionOption() { Name = "Login"}});
+
+    private Perf.PerfClient PerfClient { get; set; }
+
+    private IList<string> RunningTests { get; set; } = new List<string>();
+
+    protected override void OnInitialized()
+    {
+        ActionOption actionOption = new ActionOption() { Name = "Login",
+        Rate = 3, Guid = Guid.NewGuid().ToString() };
+        testRequest.Actions.Add(actionOption);
+        
+        /*
+        actionOption = new ActionOption() { Name = "Login1",
+        Rate = 1, Guid = Guid.NewGuid().ToString() };
+        testRequest.Actions.Add(actionOption);*/
+        var host_ = "http://localhost:5277";
+        var channel = GrpcChannel.ForAddress(host_);
+        PerfClient = new Perf.PerfClient(channel);
+    }
+
+    private void SomeFunc(ActionOption actionOption)
+    {
+        testRequest.Actions.Add(actionOption);
+
+    }
+
+    private async void StartTestAsync()
+    {
+        Logger.LogInformation("Starting test " + testRequest.Name);
+
+        // not wait for task to complete
+        var rep = PerfClient.RunTestAsync(testRequest);
+        RunningTests.Add(testRequest.Guid);
+    }
+
+    private async void StopAllTestsAsync()
+    {
+        foreach (var item in RunningTests)
+        {
+            Logger.LogInformation("Stopping test " + item);
+
+            // not wait for task to complete
+            var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item });
+            // RunningTests.Remove(item);
+        }
+    }
+}
+

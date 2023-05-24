@@ -5,29 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Perf Runner",
+            "name": ".NET Core Launch (web)",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceFolder}/PerfRunner/bin/Debug/net6.0/PerfRunner.dll",
+            "program": "${workspaceFolder}/bin/Debug/net6.0/PerfLoader.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/PerfRunner",
-            "stopAtEntry": false,
-            "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            },
-            "sourceFileMap": {
-                "/Views": "${workspaceFolder}/Views"
-            }
-        },
-        {
-            "name": "Perf Loader",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "build",
-            "program": "${workspaceFolder}/PerfLoader/bin/Debug/net6.0/PerfLoader.dll",
-            "args": [],
-            "cwd": "${workspaceFolder}/PerfLoader",
+            "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "serverReadyAction": {
                 "action": "openExternally",

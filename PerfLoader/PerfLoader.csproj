@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>d88c8fd6-06bb-41a5-878f-cc9ba6c1ffaa</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="GoogleAuthenticator" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.15" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Protobuf Include="..\Protos\perf.proto" GrpcServices="Client" />
+  </ItemGroup>
+
+</Project>
