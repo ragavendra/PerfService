@@ -162,9 +162,21 @@ namespace PerfRunner.Services
 
       public override async Task<StopTestReply> StopTest(StopTestRequest stopTestRequest, ServerCallContext context)
       {
-        var test = _testStateManager.GetTest(stopTestRequest.Guid);
-        test?.CancellationTokenSource.Cancel();
-        var resp = _testStateManager.RemoveTest(test.Guid);
+         bool resp = false;
+         try
+         {
+            var test = _testStateManager.GetTest(stopTestRequest.Guid);
+            test?.CancellationTokenSource.Cancel();
+            resp = _testStateManager.RemoveTest(test.Guid);
+         }
+         catch (InvalidOperationException ex)
+         {
+            _logger.LogError($"Issue stopping test - {ex.Message} .");
+         }
+         catch (Exception ex)
+         {
+            _logger.LogError($"Issue stopping test ex - {ex.Message} .");
+         }
 
          return new StopTestReply { Status = resp };
       }
