@@ -4,12 +4,11 @@ using PerfRunner.V1;
 using System.Text.Json;
 using PerfRunner.Models;
 using PerfRunner.Services;
-using Microsoft.AspNetCore.Mvc;
 
 namespace PerfRunner.Tests
 {
    // Static class to maintain or manage test(s).
-   public class Login : TestBase
+   public class TodoItems : TestBase
    {
       public Guid Guid = Guid.NewGuid();
 
@@ -20,7 +19,7 @@ namespace PerfRunner.Tests
          // _httpClient = httpClient;
       }*/
 
-      public Login(HttpClient httpClient) : base(httpClient)
+      public TodoItems(HttpClient httpClient) : base(httpClient)
       {
          // _logger = logger;
          // _httpClient = httpClient;
@@ -45,17 +44,6 @@ namespace PerfRunner.Tests
 
          // Console.WriteLine($"Title for todo item is {todos[3].title}.");
          logger?.LogInformation($"Title for todo item is {todos[3].title}.");
-      }
-
-   }
-
-   public class SomeContr : Controller
-   {
-      HttpClient httpClient1 = new HttpClient();
-
-      public OkObjectResult SomeMethod()
-      {
-         return Ok(httpClient1?.GetStringAsync("/someep"));
       }
    }
 }

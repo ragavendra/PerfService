@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Server.Kestrel.Https;
 using PerfRunner.Network;
 using PerfRunner.Services;
 using PerfRunner.Tests;
+using Polly;
+using Polly.Extensions.Http;
 
 namespace PerfRunner
 {
@@ -69,6 +71,16 @@ namespace PerfRunner
          var funcSrvc = serviceProvider.GetRequiredService<Func<IHttp>>();
          funcSrvc().SampleHttpMethod();
 
+         var retryPolicy = HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .WaitAndRetryAsync(new[]
+               {
+                  TimeSpan.FromSeconds(1),
+                  TimeSpan.FromSeconds(5),
+                  TimeSpan.FromSeconds(10)
+               });
+         var noOpPolicy = Policy.NoOpAsync().AsAsyncPolicy<HttpResponseMessage>();
+
          builder.Services.AddGrpc();
          builder.Services.AddScoped<IHttp, Http>();
          builder.Services.AddScoped<IGrpc, Network.Grpc>();
@@ -80,18 +92,31 @@ namespace PerfRunner
          builder.Services.AddSingleton<TestStateManager>();
 
          // add typed http client factory
-         builder.Services.AddHttpClient<ITestBase, TestBase>(client => {
+         builder.Services.AddHttpClient<ITestBase, TestBase>(client =>
+         {
             client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
 
             client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga");
-         });
+         })
+            .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(
+               new[]
+                  {
+                     TimeSpan.FromSeconds(1),
+                     TimeSpan.FromSeconds(5),
+                     TimeSpan.FromSeconds(10)
+                  },
+               (exception, timeSpan, retryCount, context) => Console.WriteLine($"Some issue with http conn - {exception.Result}")))
+            .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
+               handledEventsAllowedBeforeBreaking: 3,
+               durationOfBreak: TimeSpan.FromSeconds(30)
+            ));
 
-/*
-         builder.Services.AddHttpClient<PerfService>(client => {
-            client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
+         /*
+                  builder.Services.AddHttpClient<PerfService>(client => {
+                     client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
 
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga-perfSrvc");
-         });*/
+                     client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga-perfSrvc");
+                  });*/
 
          var app = builder.Build();
 
