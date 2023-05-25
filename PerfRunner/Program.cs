@@ -91,13 +91,16 @@ namespace PerfRunner
          // builder.Services.AddTransient<TestStateManager>();
          builder.Services.AddSingleton<TestStateManager>();
 
-         // add typed http client factory
+         // add typed http client factory         
          builder.Services.AddHttpClient<ITestBase, TestBase>(client =>
          {
             client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
 
             client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga");
          })
+         // since non Get calls can be idempotent, using retry only for gets
+            .AddPolicyHandler(request => request.Method == HttpMethod.Get ? retryPolicy : noOpPolicy);
+         /*
             .AddTransientHttpErrorPolicy(builder => builder.WaitAndRetryAsync(
                new[]
                   {
@@ -109,7 +112,7 @@ namespace PerfRunner
             .AddTransientHttpErrorPolicy(builder => builder.CircuitBreakerAsync(
                handledEventsAllowedBeforeBreaking: 3,
                durationOfBreak: TimeSpan.FromSeconds(30)
-            ));
+            ));*/
 
          /*
                   builder.Services.AddHttpClient<PerfService>(client => {
