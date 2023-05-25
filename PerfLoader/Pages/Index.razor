@@ -10,32 +10,40 @@
 Welcome to Perf Loader.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
-<EditForm Model="@testRequest">
-    <InputText @bind-Value=testRequest.Name></InputText>
+<EditForm Model="@TestRequest">
+    <InputText @bind-Value=TestRequest.Name></InputText>
 
-    <InputNumber @bind-Value=testRequest.Rate></InputNumber>
+    <InputNumber @bind-Value=TestRequest.Rate></InputNumber>
 
 Actions: 
-@foreach (var item in testRequest.Actions)
+@foreach (var item in TestRequest.Actions)
 {
     <br>
     <label>Name: @item.Name</label>
     <label>Rate: @item.Rate</label>
 }
 <br>
- <InputText @bind-Value=testRequest.Actions.Last().Name></InputText>
- <InputNumber @bind-Value=testRequest.Actions.Last().Rate></InputNumber>   
+ <InputText @bind-Value=TestRequest.Actions.Last().Name></InputText>
+ <InputNumber @bind-Value=TestRequest.Actions.Last().Rate></InputNumber>   
  <!-- InputNumber @bind-Value=item.Duration></InputNumber -->
- <button @onclick="() => testRequest.Actions.Add(testRequest.Actions.Last())">+</button>   
- <button @onclick="() => testRequest.Actions.RemoveAt(testRequest.Actions.Count - 1)">-</button>
+ <button @onclick="() => TestRequest.Actions.Add(TestRequest.Actions.Last())">+</button>   
+ <button @onclick="() => TestRequest.Actions.RemoveAt(TestRequest.Actions.Count - 1)">-</button>
  <button @onclick="() => StartTestAsync()">Start Test</button>
 
  <button @onclick="() => StopAllTestsAsync()">Stop All Tests</button>
 </EditForm>
 
+Running Tests:
+@foreach (var item in RunningTests)
+{
+ <br>
+ <label>@item</label>
+ <button @onclick="() => StopTest(item)">Stop</button>
+}
+
 @code {
 
-    private TestRequest testRequest = new TestRequest() { Name = "Test Name", Guid = Guid.NewGuid().ToString(), Rate = 3 };
+    private TestRequest TestRequest { get; set; }
     // Actions.Add(new ActionOption() { Name = "Login"}});
 
     private Perf.PerfClient PerfClient { get; set; }
@@ -44,9 +52,7 @@ Actions:
 
     protected override void OnInitialized()
     {
-        ActionOption actionOption = new ActionOption() { Name = "Login",
-        Rate = 3, Guid = Guid.NewGuid().ToString() };
-        testRequest.Actions.Add(actionOption);
+        NewTest();
         
         /*
         actionOption = new ActionOption() { Name = "Login1",
@@ -57,19 +63,37 @@ Actions:
         PerfClient = new Perf.PerfClient(channel);
     }
 
-    private void SomeFunc(ActionOption actionOption)
+    private void NewTest()
     {
-        testRequest.Actions.Add(actionOption);
 
+        TestRequest = new TestRequest() { Name = "Test Name", Guid = Guid.NewGuid().ToString(), Rate = 3 };
+
+        ActionOption actionOption = new ActionOption()
+            {
+                Name = "Login",
+                Rate = 3,
+                Guid = Guid.NewGuid().ToString()
+            };
+        TestRequest.Actions.Add(actionOption);
     }
 
     private async void StartTestAsync()
     {
-        Logger.LogInformation("Starting test " + testRequest.Name);
+        Logger.LogInformation("Starting test " + TestRequest.Name);
 
         // not wait for task to complete
-        var rep = PerfClient.RunTestAsync(testRequest);
-        RunningTests.Add(testRequest.Guid);
+        var rep = PerfClient.RunTestAsync(TestRequest);
+        RunningTests.Add(TestRequest.Guid);
+
+        NewTest();
+   }
+
+    private void StopTest(string guid)
+    {
+        var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
+        
+        // StateHasChanged();
+        RunningTests.Remove(guid);
     }
 
     private async void StopAllTestsAsync()
@@ -82,6 +106,8 @@ Actions:
             var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item });
             // RunningTests.Remove(item);
         }
+
+        RunningTests.Clear();
     }
 }
 
