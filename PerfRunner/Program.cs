@@ -81,6 +81,9 @@ namespace PerfRunner
                });
          var noOpPolicy = Policy.NoOpAsync().AsAsyncPolicy<HttpResponseMessage>();
 
+         var circuitBreaker = HttpPolicyExtensions.HandleTransientHttpError().CircuitBreakerAsync(3, TimeSpan.FromSeconds(60));
+         var bulkHead = Policy.BulkheadAsync(6).AsAsyncPolicy<HttpResponseMessage>();
+
          builder.Services.AddGrpc();
          builder.Services.AddScoped<IHttp, Http>();
          builder.Services.AddScoped<IGrpc, Network.Grpc>();
