@@ -75,6 +75,22 @@ Running Tests:
                 Guid = Guid.NewGuid().ToString()
             };
         TestRequest.Actions.Add(actionOption);
+
+        actionOption = new ActionOption()
+            {
+                Name = "LoginHttp",
+                Rate = 3,
+                Guid = Guid.NewGuid().ToString()
+            };
+        TestRequest.Actions.Add(actionOption);
+
+        actionOption = new ActionOption()
+            {
+                Name = "LoginGrpc",
+                Rate = 3,
+                Guid = Guid.NewGuid().ToString()
+            };
+        TestRequest.Actions.Add(actionOption);
     }
 
     private async void StartTestAsync()

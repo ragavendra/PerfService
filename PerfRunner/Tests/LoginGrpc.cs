@@ -9,7 +9,7 @@ using static WebApp.V1.WebApp;
 namespace PerfRunner.Tests
 {
    // Static class to maintain or manage test(s).
-   public class Login : TestBase
+   public class LoginGrpc : TestBase
    {
       public Guid Guid = Guid.NewGuid();
 
@@ -20,7 +20,7 @@ namespace PerfRunner.Tests
                // _httpClient = httpClient;
             }*/
 
-      public Login(HttpClient httpClient, WebAppClient webApp) : base(httpClient, webApp)
+      public LoginGrpc(HttpClient httpClient, WebAppClient webApp) : base(httpClient, webApp)
       {
          // _logger = logger;
          // _httpClient = httpClient;
@@ -38,13 +38,6 @@ namespace PerfRunner.Tests
       {
          logger?.LogInformation($"Running {GetType().Name} now for {guid}.");
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
-
-         var userId = 1;
-         var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
-            $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
-         // Console.WriteLine($"Title for todo item is {todos[3].title}.");
-         logger?.LogInformation($"Title for todo item is {todos[3].title}.");
 
          try
          {

@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+option csharp_namespace = "WebApp.V1";
+
+package webapp;
+
+// Perf service definition.
+service WebApp {
+
+    // Senda a ping response
+    rpc Ping (PingRequest) returns (PingReply);
+}
+
+// request with user id
+message PingRequest {
+    string name = 1;
+}
+
+//message ping reply
+message PingReply {
+    string message = 1;
+}
+

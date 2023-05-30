@@ -9,7 +9,7 @@ using static WebApp.V1.WebApp;
 namespace PerfRunner.Tests
 {
    // Static class to maintain or manage test(s).
-   public class Login : TestBase
+   public class LoginHttp : TestBase
    {
       public Guid Guid = Guid.NewGuid();
 
@@ -20,7 +20,7 @@ namespace PerfRunner.Tests
                // _httpClient = httpClient;
             }*/
 
-      public Login(HttpClient httpClient, WebAppClient webApp) : base(httpClient, webApp)
+      public LoginHttp(HttpClient httpClient, WebAppClient webApp) : base(httpClient, webApp)
       {
          // _logger = logger;
          // _httpClient = httpClient;
@@ -45,23 +45,6 @@ namespace PerfRunner.Tests
 
          // Console.WriteLine($"Title for todo item is {todos[3].title}.");
          logger?.LogInformation($"Title for todo item is {todos[3].title}.");
-
-         try
-         {
-
-            var request = new WebApp.V1.PingRequest() { Name = "hi from Login" };
-            // trying rpc to the webapp
-            WebApp.V1.PingReply call = await _grpcClient.PingAsync(request);
-
-            logger.LogInformation($"Reply from WebApp is {call.Message}");
-
-         }
-         catch (System.Exception)
-         {
-
-            // throw;
-            logger.LogInformation($"Obviously here! not implemented yet");
-         }
 
       }
    }

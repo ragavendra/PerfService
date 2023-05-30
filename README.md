@@ -28,3 +28,29 @@ Unit tests for the `PerfRunner` to be kept updated with any new features added t
 1. Abitlity to create and run http test(s).
 2. UI to run, view and stop test(s).
 3. Ability to update rate per sec during test run.
+4. Abitlity to create and run gRPC test(s).
+
+### Sample commands
+`$ grpcurl -plaintext localhost:5277 describe
+perf.Perf is a service:
+service Perf {
+  rpc Ping ( .perf.PingRequest ) returns ( .perf.PingReply );
+  rpc RunTest ( .perf.TestRequest ) returns ( .perf.TestReply );
+  rpc StopAllTests ( .perf.StopAllTestsRequest ) returns ( .perf.StopAllTestsReply );
+  rpc StopTest ( .perf.StopTestRequest ) returns ( .perf.StopTestReply );
+  rpc UpdateRate ( .perf.UpdateRateRequest ) returns ( .perf.UpdateRateReply );
+}
+grpc.reflection.v1alpha.ServerReflection is a service:
+service ServerReflection {
+  rpc ServerReflectionInfo ( stream .grpc.reflection.v1alpha.ServerReflectionRequest ) returns ( stream .grpc.reflection.v1alpha.ServerReflectionResponse );
+}`
+
+`
+$ grpcurl -plaintext localhost:5277 describe perf.TestRequest
+perf.TestRequest is a message:
+message TestRequest {
+  string guid = 1;
+  string name = 2;
+  int32 rate = 3;
+  repeated .perf.ActionOption actions = 4;
+}`

@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using Grpc.Core;
 using PerfRunner.Services;
 using PerfRunner.V1;
+using static WebApp.V1.WebApp;
 
 namespace PerfRunner.Tests
 {
@@ -14,11 +15,14 @@ namespace PerfRunner.Tests
 
       public HttpClient _httpClient { get; set; } = null!;
 
+      public WebAppClient _grpcClient { get; set; } = null!;
+
       public TestBase() { }
 
-      public TestBase(HttpClient httpClient)
+      public TestBase(HttpClient httpClient, WebAppClient webAppClient)
       {
          _httpClient = httpClient;
+         _grpcClient = webAppClient;
       }
 
 /*

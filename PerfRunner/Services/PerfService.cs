@@ -104,7 +104,9 @@ namespace PerfRunner.Services
          // var inst = Activator.CreateInstance("PerfRunner.Tests.Login", "Login");
          var inst = Activator.CreateInstance(
             TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
-               .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())), _testbase._httpClient);
+               .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())),
+            _testbase._httpClient,
+            _testbase._grpcClient);
 
          if(!(inst is ITestBase typeVal)){
             _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");

@@ -8,9 +8,17 @@
 
   <ItemGroup>
     <Protobuf Include="..\Protos\perf.proto" GrpcServices="Server" />
+    <Protobuf Include="Protos\webapp.proto" GrpcServices="Client" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.23.2" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.53.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.53.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.54.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="stylecop" Version="6.2.0" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
   </ItemGroup>

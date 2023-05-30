@@ -4,9 +4,11 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Server.Kestrel.Https;
+using Microsoft.Extensions.DependencyInjection;
 using PerfRunner.Network;
 using PerfRunner.Services;
 using PerfRunner.Tests;
+using static WebApp.V1.WebApp;
 
 namespace PerfRunner
 {
@@ -79,11 +81,17 @@ namespace PerfRunner
          // builder.Services.AddTransient<TestStateManager>();
          builder.Services.AddSingleton<TestStateManager>();
 
+         // builder.Services.AddTransient<ITestBase, TestBase>();
+
          // add typed http client factory
          builder.Services.AddHttpClient<ITestBase, TestBase>(client => {
             client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
 
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga");
+            client.DefaultRequestHeaders.UserAgent.ParseAdd("dotnet-raga");
+         });
+
+         builder.Services.AddGrpcClient<WebAppClient>(client => {
+            client.Address = new Uri("https://localhost:7234");
          });
 
 /*
@@ -92,6 +100,7 @@ namespace PerfRunner
 
             client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga-perfSrvc");
          });*/
+         builder.Services.AddGrpcReflection();
 
          var app = builder.Build();
 
@@ -99,6 +108,12 @@ namespace PerfRunner
          // app.MapGrpcService<PingService>();
          app.MapGrpcService<PerfService>();
          app.MapGet("/", () => "Comm with gRPC should be made through gRPC clients.");
+
+         var env = app.Environment;
+
+         if(env.IsDevelopment()){
+            app.MapGrpcReflectionService();
+         }
 
          app.Run();
 
