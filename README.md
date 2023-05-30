@@ -21,7 +21,6 @@ Front end or the web interface to initiate performance test run(s) and control o
 Unit tests for the `PerfRunner` to be kept updated with any new features added to the `PerfRunner` project.
 
 ### Planned features
-1. Account data support.
 2. Ability to transfer data across test(s).
 
 ### Existing features
@@ -29,9 +28,16 @@ Unit tests for the `PerfRunner` to be kept updated with any new features added t
 2. UI to run, view and stop test(s).
 3. Ability to update rate per sec during test run.
 4. Abitlity to create and run gRPC test(s).
+5. Account data support with `User` object having state has well. Each user have their own state and are in the queue per state and updated by the test(s) accordingly.
+6. User state management - as user queue per each state.
+7. Ability to transfer data across test(s) - can be achieved by adding new data properties to the `User` object itself, say like the phone number, library card number, health number and so on. This is updated and be used by each test(s) accordingly.
+
+### Sample Web app
+For this use case, I am using the Bowling alley web app, assuming when a user goes to the ally, he has to say, get autheneticated, next wait for the lane and if lane is available, play can be initiated. For each stage, state can be represented, which is defined in `UserState`.
 
 ### Sample commands
-`$ grpcurl -plaintext localhost:5277 describe
+```
+$ grpcurl -plaintext localhost:5277 describe
 perf.Perf is a service:
 service Perf {
   rpc Ping ( .perf.PingRequest ) returns ( .perf.PingReply );
@@ -43,9 +49,10 @@ service Perf {
 grpc.reflection.v1alpha.ServerReflection is a service:
 service ServerReflection {
   rpc ServerReflectionInfo ( stream .grpc.reflection.v1alpha.ServerReflectionRequest ) returns ( stream .grpc.reflection.v1alpha.ServerReflectionResponse );
-}`
+}
+```
 
-`
+```
 $ grpcurl -plaintext localhost:5277 describe perf.TestRequest
 perf.TestRequest is a message:
 message TestRequest {
@@ -53,4 +60,5 @@ message TestRequest {
   string name = 2;
   int32 rate = 3;
   repeated .perf.ActionOption actions = 4;
-}`
+}
+```

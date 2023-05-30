@@ -43,7 +43,8 @@ namespace PerfRunner.Services
          IGrpc grpc,
          TestStateManager testStateManager,
          ActionRunner<ITestBase> actionRunner,
-         ITestBase testBase)
+         ITestBase testBase,
+         UserManager userManager)
       {
          _logger = logger;
          _http = http;
@@ -51,6 +52,7 @@ namespace PerfRunner.Services
          _testStateManager = testStateManager;
          _actionRunner = actionRunner;
          _testbase = testBase;
+         _testbase.UserManager = userManager;
       }
 
       private void SomeFunc(int millisecondsTimeout)
@@ -106,7 +108,8 @@ namespace PerfRunner.Services
             TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
                .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())),
             _testbase._httpClient,
-            _testbase._grpcClient);
+            _testbase._grpcClient,
+            _testbase.UserManager);
 
          if(!(inst is ITestBase typeVal)){
             _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");

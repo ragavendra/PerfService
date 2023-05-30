@@ -20,7 +20,7 @@ namespace PerfRunner.Tests
                // _httpClient = httpClient;
             }*/
 
-      public LoginGrpc(HttpClient httpClient, WebAppClient webApp) : base(httpClient, webApp)
+      public LoginGrpc(HttpClient httpClient, WebAppClient webApp, UserManager userManager) : base(httpClient, webApp, userManager)
       {
          // _logger = logger;
          // _httpClient = httpClient;

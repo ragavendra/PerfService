@@ -9,7 +9,7 @@ using static WebApp.V1.WebApp;
 namespace PerfRunner.Tests
 {
    // Static class to maintain or manage test(s).
-   public class Login : TestBase
+   public class PlayBowling : TestBase
    {
       public Guid Guid = Guid.NewGuid();
 
@@ -20,7 +20,7 @@ namespace PerfRunner.Tests
                // _httpClient = httpClient;
             }*/
 
-      public Login(HttpClient httpClient, WebAppClient webApp, UserManager userManager) : base(httpClient, webApp, userManager)
+      public PlayBowling(HttpClient httpClient, WebAppClient webApp, UserManager userManager) : base(httpClient, webApp, userManager)
       {
          // _logger = logger;
          // _httpClient = httpClient;
@@ -39,34 +39,27 @@ namespace PerfRunner.Tests
          logger?.LogInformation($"Running {GetType().Name} now for {guid}.");
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
-         var user = UserManager?.CheckOutUser(UserState.Ready);
+         // get auth user 
+         var user = UserManager?.CheckOutUser(UserState.Authenticated);
          logger?.LogInformation($"User is {user?.Email}.");
 
          var userId = 1;
          var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
             $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-         // Console.WriteLine($"Title for todo item is {todos[3].title}.");
-         logger?.LogInformation($"Title for todo item is {todos[3].title}.");
+         // replace with actual http or rpc call to check lane availability
+         // if available set to playing
+         var rndFlag = (new Random()).Next();
 
-         try
+         if (rndFlag % 2 == 0)
          {
-
-            var request = new WebApp.V1.PingRequest() { Name = "hi from Login" };
-            // trying rpc to the webapp
-            WebApp.V1.PingReply call = await _grpcClient.PingAsync(request);
-
-            logger.LogInformation($"Reply from WebApp is {call.Message}");
-
+            user.State = UserState.Playing;
          }
-         catch (System.Exception)
+         else
          {
-
-            // throw;
-            logger.LogInformation($"Obviously here! not implemented yet");
+            user.State = UserState.Waiting;
          }
 
-         user.State = UserState.Authenticated;
          UserManager?.CheckInUser(user);
          // logger?.LogInformation($"User is {user?.Email}.");
 

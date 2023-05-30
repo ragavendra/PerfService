@@ -80,6 +80,7 @@ namespace PerfRunner
          builder.Services.AddTransient<ActionRunner<ITestBase>>();
          // builder.Services.AddTransient<TestStateManager>();
          builder.Services.AddSingleton<TestStateManager>();
+         builder.Services.AddSingleton<UserManager>();
 
          // builder.Services.AddTransient<ITestBase, TestBase>();
 
