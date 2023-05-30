@@ -20,7 +20,7 @@ namespace PerfRunner.Tests
                // _httpClient = httpClient;
             }*/
 
-      public LoginHttp(HttpClient httpClient, WebAppClient webApp) : base(httpClient, webApp)
+      public LoginHttp(HttpClient httpClient, WebAppClient webApp, UserManager userManager) : base(httpClient, webApp, userManager)
       {
          // _logger = logger;
          // _httpClient = httpClient;

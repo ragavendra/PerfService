@@ -9,11 +9,20 @@ namespace PerfRunner
 {
     public class UserManager
    {
-      public ConcurrentQueue<User> Users { get; set; }
+      private ConcurrentQueue<User> Users { get; set; } = new ConcurrentQueue<User>(){};
 
-      public UserManager(){}
+      public UserFormatInfo UserFormatInfo { get; set; } = new UserFormatInfo();
 
-      public UserManager(UserSource userSource)
+      public UserManager()
+      {
+         // let me load pre conf users for now
+         if (Users?.Count <= 0)
+         {
+            LoadUsers();
+         }
+      }
+
+      public void UserManager_(UserSource userSource)
       {
         switch(userSource)
          {
@@ -29,11 +38,12 @@ namespace PerfRunner
 
       public void LoadUsers()
       {
-        var totalUsers = 1000;
-        while (totalUsers-- <= 0)
+        var totalUsers = UserFormatInfo?.TotalUsers;
+        var accountIndex = UserFormatInfo?.UserStartIndex;
+        while (totalUsers-- >= 0)
          {
             var user = new User();
-            user.Email = string.Format("abc_{0:D7}@somecompany.co", totalUsers);
+            user.Email = string.Format(UserFormatInfo!.UserAccountFormat, accountIndex++);
             user.State = UserState.Ready;
             AddUser(user);
          }
@@ -42,9 +52,12 @@ namespace PerfRunner
       public User? GetUser()
       {
          User user;
-         if (Users.TryDequeue(out user))
+         if (Users?.Count > 0)
          {
-            return user;
+            if (Users.TryDequeue(out user))
+            {
+               return user;
+            }
          }
 
          return null;

@@ -13,6 +13,8 @@ namespace PerfRunner.Tests
 
       public WebAppClient _grpcClient { get; set; }
 
+      public UserManager UserManager { get; set; }
+
       public void RunTest(Guid guid, ILogger<PerfService> logger);
     }
 }
