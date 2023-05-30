@@ -7,16 +7,31 @@ using PerfRunner.Models;
 
 namespace PerfRunner
 {
+    // User mgmt for Users, keep this as light as possible
+    // One User instance per user, so millions can have millions
+    // need to check the performance as well.
     public class UserManager
    {
-      private ConcurrentQueue<User> Users { get; set; } = new ConcurrentQueue<User>(){};
+      private readonly ILogger<UserManager> _logger;
+
+      private ConcurrentQueue<User> Users_ { get; set; } = new ConcurrentQueue<User>(){};
+
+      private ConcurrentDictionary<UserState, ConcurrentQueue<User>> Users
+      = new ConcurrentDictionary<UserState, ConcurrentQueue<User>>();
 
       public UserFormatInfo UserFormatInfo { get; set; } = new UserFormatInfo();
 
-      public UserManager()
+      public UserManager(ILogger<UserManager> logger)
       {
+         _logger = logger;
+
+         Users.TryAdd(UserState.Ready, new ConcurrentQueue<User>());
+         Users.TryAdd(UserState.Authenticated, new ConcurrentQueue<User>());
+         Users.TryAdd(UserState.Playing, new ConcurrentQueue<User>());
+         Users.TryAdd(UserState.Waiting, new ConcurrentQueue<User>());
+
          // let me load pre conf users for now
-         if (Users?.Count <= 0)
+         // if (Users?.Count <= 0)
          {
             LoadUsers();
          }
@@ -36,6 +51,7 @@ namespace PerfRunner
 
       }
 
+      // load users to ready state
       public void LoadUsers()
       {
         var totalUsers = UserFormatInfo?.TotalUsers;
@@ -45,10 +61,11 @@ namespace PerfRunner
             var user = new User();
             user.Email = string.Format(UserFormatInfo!.UserAccountFormat, accountIndex++);
             user.State = UserState.Ready;
-            AddUser(user);
+            CheckInUser(user);
          }
       }
 
+/*
       public User? GetUser()
       {
          User user;
@@ -61,9 +78,41 @@ namespace PerfRunner
          }
 
          return null;
+      }*/
+
+      public User CheckOutUser(UserState userState)
+      {
+         User user;
+         var queue = GetUserQueue(userState);
+         if (queue?.Count > 0)
+         {
+            if (queue.TryDequeue(out user))
+            {
+               return user;
+            }
+            else
+            {
+               _logger.LogTrace($"No more users in {userState} .");
+            }
+         }
+
+         return null;
       }
 
-      public void AddUser(User user) => Users.Enqueue(user);
+      public bool CheckInUser(User user)
+      {
+         var queue = GetUserQueue(user.State);
+         queue.Enqueue(user);
+         return true;
+      }
+
+      // public void AddUser(User user) => Users.Enqueue(user);
+
+      public ConcurrentQueue<User> GetUserQueue(UserState userState)
+      {
+         Users.TryGetValue(userState, out var queue);
+         return queue;
+      }
    }
 
    public enum UserSource{
