@@ -161,13 +161,12 @@ namespace PerfRunner.Services
                }
             }
 
-            Action RunAction = RunAct;
-            actions[i++] = RunAction;
+            actions[i++] = RunAct;
             // tasks[i++] = Task.Run(() => RunAct());
          }
 
          // await Task.WhenAll(tasks);
-         Parallel.Invoke(actions[0], actions[1]);
+         Parallel.Invoke(actions);
 
          // actionRunner.ActionBlocks.Select(item => item.Completion.Wait());
          /*
