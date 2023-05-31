@@ -27,6 +27,8 @@ public class ActionRunner<T>
    public IList<ActionBlock<T>> ActionBlocks { get; set; } = new List<ActionBlock<T>>();
 
    public T TypeValue { get; set; }
+   
+   public IList<T> TypeValues { get; set; }
 
    public Stopwatch Stopwatch { get; set; } = new();
 
@@ -90,5 +92,10 @@ public class ActionRunner<T>
          $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds} ms for {Guid}");
 
       return sw.Elapsed;
+   }
+
+   public object CloneObj()
+   {
+      return MemberwiseClone();
    }
 }

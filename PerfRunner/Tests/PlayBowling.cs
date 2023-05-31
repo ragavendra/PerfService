@@ -41,28 +41,31 @@ namespace PerfRunner.Tests
 
          // get auth user 
          var user = UserManager?.CheckOutUser(UserState.Authenticated);
-         logger?.LogInformation($"User is {user?.Email}.");
 
-         var userId = 1;
-         var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
-            $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
-         // replace with actual http or rpc call to check lane availability
-         // if available set to playing
-         var rndFlag = (new Random()).Next();
-
-         if (rndFlag % 2 == 0)
+         if(user != null)
          {
-            user.State = UserState.Playing;
-         }
-         else
-         {
-            user.State = UserState.Waiting;
-         }
+            logger?.LogInformation($"User is {user?.Email}.");
 
-         UserManager?.CheckInUser(user);
-         // logger?.LogInformation($"User is {user?.Email}.");
+            var userId = 1;
+            var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
+               $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
+            // replace with actual http or rpc call to check lane availability
+            // if available set to playing
+            var rndFlag = (new Random()).Next();
+
+            if (rndFlag % 2 == 0)
+            {
+               user.State = UserState.Playing;
+            }
+            else
+            {
+               user.State = UserState.Waiting;
+            }
+
+            UserManager?.CheckInUser(user);
+            // logger?.LogInformation($"User is {user?.Email}.");
+         }
       }
    }
 }

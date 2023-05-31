@@ -104,20 +104,27 @@ namespace PerfRunner.Services
          // _actionRunner.TypeValue = 
          // var inst = Activator.CreateInstance(testRequest.Actions.FirstOrDefault().Name, testRequest.Actions.FirstOrDefault().Name);
          // var inst = Activator.CreateInstance("PerfRunner.Tests.Login", "Login");
-         var inst = Activator.CreateInstance(
-            TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
-               .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())),
-            _testbase._httpClient,
-            _testbase._grpcClient,
-            _testbase.UserManager);
 
-         if(!(inst is ITestBase typeVal)){
-            _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");
+         foreach (var action_ in testRequest.Actions)
+         {
+            var inst = Activator.CreateInstance(
+               TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
+                  .EndsWith("." + action_.Name.ToLowerInvariant())),
+               _testbase._httpClient,
+               _testbase._grpcClient,
+               _testbase.UserManager);
+
+            if (!(inst is ITestBase typeVal))
+            {
+               _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");
+            }
+
+            var actionRunner = (ActionRunner<ITestBase>)_actionRunner.CloneObj();
+
+            actionRunner.TypeValue = (ITestBase?)inst;
+
+            testRequest.ActionRunners.Add(actionRunner);
          }
-
-         _actionRunner.TypeValue = (ITestBase?)inst;
-
-         testRequest.ActionRunner = _actionRunner;
 
          if(!_testStateManager.AddTest(testRequest))
          {
@@ -125,25 +132,42 @@ namespace PerfRunner.Services
            return default;
          }
 
-         // keep runnung till cancelled from the client
-         while (!testRequest.CancellationTokenSource.IsCancellationRequested)
+         Action[] actions = new Action[testRequest.ActionRunners.Count];
+         int i = 0;
+
+         foreach (var actionRunner in testRequest.ActionRunners)
          {
 
-            // Create an ActionBlock<int> that performs some work.
-            testRequest.ActionRunner.ActionBlock = new ActionBlock<ITestBase>(
-
-               // Simulate work by suspending the current thread.
-               testBase => testBase.RunTest(Guid, _logger),
-
-               // Specify a maximum degree of parallelism.
-               new ExecutionDataflowBlockOptions
+            async void RunAct() 
+            {
+               // keep runnung till cancelled from the client
+               while (!testRequest.CancellationTokenSource.IsCancellationRequested)
                {
-                  MaxDegreeOfParallelism = processorCount
-               }
-                  );
 
-            elapsed = await testRequest.ActionRunner.StartActionsPerSecondAsync(testRequest.Rate);
+                  // Create an ActionBlock<int> that performs some work.
+                  actionRunner.ActionBlock = new ActionBlock<ITestBase>(
+
+                     // Simulate work by suspending the current thread.
+                     testBase => testBase.RunTest(Guid, _logger),
+
+                     // Specify a maximum degree of parallelism.
+                     new ExecutionDataflowBlockOptions
+                     {
+                        MaxDegreeOfParallelism = processorCount
+                     }
+                        );
+
+                  elapsed = await actionRunner.StartActionsPerSecondAsync(testRequest.Rate);
+               }
+            }
+
+            Action RunAction = RunAct;
+            actions[i++] = RunAction;
+            // tasks[i++] = Task.Run(() => RunAct());
          }
+
+         // await Task.WhenAll(tasks);
+         Parallel.Invoke(actions[0], actions[1]);
 
          // actionRunner.ActionBlocks.Select(item => item.Completion.Wait());
          /*

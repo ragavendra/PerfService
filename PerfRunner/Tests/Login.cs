@@ -40,35 +40,38 @@ namespace PerfRunner.Tests
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
          var user = UserManager?.CheckOutUser(UserState.Ready);
-         logger?.LogInformation($"User is {user?.Email}.");
-
-         var userId = 1;
-         var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
-            $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
-
-         // Console.WriteLine($"Title for todo item is {todos[3].title}.");
-         logger?.LogInformation($"Title for todo item is {todos[3].title}.");
-
-         try
+         if (user != null)
          {
+            logger?.LogInformation($"User is {user?.Email}.");
 
-            var request = new WebApp.V1.PingRequest() { Name = "hi from Login" };
-            // trying rpc to the webapp
-            WebApp.V1.PingReply call = await _grpcClient.PingAsync(request);
+            var userId = 1;
+            var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
+               $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-            logger.LogInformation($"Reply from WebApp is {call.Message}");
+            // Console.WriteLine($"Title for todo item is {todos[3].title}.");
+            logger?.LogInformation($"Title for todo item is {todos[3].title}.");
 
+            try
+            {
+
+               var request = new WebApp.V1.PingRequest() { Name = "hi from Login" };
+               // trying rpc to the webapp
+               WebApp.V1.PingReply call = await _grpcClient.PingAsync(request);
+
+               logger.LogInformation($"Reply from WebApp is {call.Message}");
+
+            }
+            catch (System.Exception)
+            {
+
+               // throw;
+               logger.LogInformation($"Obviously here! not implemented yet");
+            }
+
+            user.State = UserState.Authenticated;
+            UserManager?.CheckInUser(user);
+            // logger?.LogInformation($"User is {user?.Email}.");
          }
-         catch (System.Exception)
-         {
-
-            // throw;
-            logger.LogInformation($"Obviously here! not implemented yet");
-         }
-
-         user.State = UserState.Authenticated;
-         UserManager?.CheckInUser(user);
-         // logger?.LogInformation($"User is {user?.Email}.");
 
       }
    }

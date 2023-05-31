@@ -19,5 +19,7 @@ namespace PerfRunner.V1
 
     internal ActionRunner<ITestBase> ActionRunner { get; set; }
 
+    internal List<ActionRunner<ITestBase>> ActionRunners { get; set; } = new List<ActionRunner<ITestBase>>();
+
   }
 }
