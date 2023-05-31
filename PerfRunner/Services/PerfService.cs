@@ -135,10 +135,10 @@ namespace PerfRunner.Services
          Action[] actions = new Action[testRequest.ActionRunners.Count];
          int i = 0;
 
-         foreach (var actionRunner in testRequest.ActionRunners)
+         Parallel.ForEach(testRequest.ActionRunners, actionRunner =>
          {
 
-            async void RunAct() 
+            async void RunAct()
             {
                // keep runnung till cancelled from the client
                while (!testRequest.CancellationTokenSource.IsCancellationRequested)
@@ -161,12 +161,13 @@ namespace PerfRunner.Services
                }
             }
 
-            actions[i++] = RunAct;
+            RunAct();
+            // actions[i++] = RunAct;
             // tasks[i++] = Task.Run(() => RunAct());
-         }
+         });
 
          // await Task.WhenAll(tasks);
-         Parallel.Invoke(actions);
+         // Parallel.Invoke(actions);
 
          // actionRunner.ActionBlocks.Select(item => item.Completion.Wait());
          /*
