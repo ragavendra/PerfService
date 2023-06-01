@@ -29,6 +29,7 @@ namespace PerfRunnerTests.Tests
 
       // Worker is a bg srvc in client, which in turn makes the gRPC 
       // call to the PerfRunner and gets the respo
+      // the ping reply is mocked here and is returned
       [Fact]
       public async Task RunGreeterMock()
       {
@@ -52,6 +53,41 @@ namespace PerfRunnerTests.Tests
 
          // Assert.Pass();
          // return rep_;
+      }
+
+      [Fact]
+      public async Task TypeTest()
+      {
+        var mock = new Mock<ILoveThisLibrary>();
+
+        mock.Setup(library => library.DownloadExists("1.0.0")).Returns(false);
+
+        var lovable = mock.Object;
+
+        bool dload = lovable.DownloadExists("1.0.0");
+        dload = lovable.DownloadExists("1.0.0.");
+
+        // Assert
+        // if call was made atleast once with that set of args
+        mock.Verify(libr => libr.DownloadExists("1.0.0"), Times.AtMostOnce());
+        // Mock.Get(lovable).Verify(libr => libr.DownloadExists())
+         // Assert.Pass();
+         // return rep_;
+      }
+
+      [Fact]
+      public async Task TypeTestLinq()
+      {
+        ILoveThisLibrary lovable = Mock.Of<ILoveThisLibrary>(lon => lon.DownloadExists("1.0.0") == true);
+
+        bool dload = lovable.DownloadExists("1.0.0");
+        // dload = lovable.DownloadExists("1.0.0.");
+
+        // Assert
+        Assert.True(dload);
+
+        Mock.Get(lovable).Verify(lib => lib.DownloadExists("1.0.0"));
+        Mock.Get(lovable).Verify(lib => lib.DownloadExists("1.0.0"), Times.AtLeastOnce());
       }
 
     }
