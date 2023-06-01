@@ -22,6 +22,8 @@ namespace PerfRunner.Services
 
       private readonly ActionRunner<ITestBase> _actionRunner;
 
+      public readonly IConfiguration _configuration;
+
       public readonly ITestBase _testbase;
 
       public Guid Guid = Guid.NewGuid();
@@ -44,7 +46,8 @@ namespace PerfRunner.Services
          TestStateManager testStateManager,
          ActionRunner<ITestBase> actionRunner,
          ITestBase testBase,
-         UserManager userManager)
+         UserManager userManager,
+         IConfiguration configuration)
       {
          _logger = logger;
          _http = http;
@@ -53,6 +56,7 @@ namespace PerfRunner.Services
          _actionRunner = actionRunner;
          _testbase = testBase;
          _testbase.UserManager = userManager;
+         _configuration = configuration;
       }
 
       private void SomeFunc(int millisecondsTimeout)
@@ -64,6 +68,7 @@ namespace PerfRunner.Services
 
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
+         _logger.LogInformation("Config - " + _configuration["SomeApp:Host"]);
          _logger.LogInformation("Message from Http service - " + _http.SampleHttpMethod());
          _logger.LogInformation("Message from Grpc service - " + _grpc.SampleGrpcMethod());
 
@@ -131,9 +136,26 @@ namespace PerfRunner.Services
            _logger.LogError($"Seems the test {testRequest.Guid} is already runing"); 
            return default;
          }
-
+         /*
          Action[] actions = new Action[testRequest.ActionRunners.Count];
-         int i = 0;
+         Func<string, string> some;
+
+         string someMethod(string name)
+         {
+            return "hi " + name;
+         }
+
+         void someMethod_()
+         {
+
+         }
+
+         actions[0] = someMethod_;
+
+         some = someMethod;
+         var resp = some("Ankalu");
+
+         int i = 0;*/
 
          Parallel.ForEach(testRequest.ActionRunners, actionRunner =>
          {
