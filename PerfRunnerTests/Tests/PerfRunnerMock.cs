@@ -30,6 +30,7 @@ namespace PerfRunnerTests.Tests
       // Worker is a bg srvc in client, which in turn makes the gRPC 
       // call to the PerfRunner and gets the respo
       // the ping reply is mocked here and is returned
+      // Actually testing the Worker bg service only.
       [Fact]
       public async Task RunGreeterMock()
       {
