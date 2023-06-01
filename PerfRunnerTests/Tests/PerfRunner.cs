@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Grpc.Net.Client;
 using PerfRunner.V1;
 using NUnit.Framework;
+using Moq;
+using PerfRunnerTests.Tests.Client.Helpers;
 
 namespace PerfRunnerTests.Tests
 {
@@ -46,6 +48,30 @@ namespace PerfRunnerTests.Tests
           var testRequest = new TestRequest { Name = "FirstTest", Guid = Guid.NewGuid().ToString(), Rate = 3 };
           testRequest.Actions.Add(new ActionOption() { Name = "Login" });
 
+          // not wait for task to complete
+          var rep = PerfClient.RunTestAsync(testRequest);
+          Assert.IsTrue(rep.ResponseAsync.Result.Status, "Test was not able to be started.");
+
+          var rep_ = await PerfClient.StopTestAsync(new StopTestRequest { Guid = testRequest.Guid });
+          Assert.IsTrue(rep.ResponseAsync.Result.Status, $"Test { testRequest.Guid } was not able to be stopped.");
+
+         // Assert.Pass();
+         // return rep_;
+      }
+
+      [Test(Description = "Run a perf test in the mock Runner Service")]
+      public async Task RunPerfTest_()
+      {
+          var testRequest = new TestRequest { Name = "FirstTest", Guid = Guid.NewGuid().ToString(), Rate = 3 };
+          testRequest.Actions.Add(new ActionOption() { Name = "Login" });
+
+/*
+          var mockReply = CallHelpers.CreateAsyncUnaryCall(new PingReply { Message = "Reply here" });
+
+          var mockClient = new Mock<Perf.PerfClient>();
+          mockClient.Setup(mock => mock.PingAsync(It.IsAny<PingRequest>(), null, null,
+          CancellationToken.None)).Returns(mockReply);
+*/
           // not wait for task to complete
           var rep = PerfClient.RunTestAsync(testRequest);
           Assert.IsTrue(rep.ResponseAsync.Result.Status, "Test was not able to be started.");
