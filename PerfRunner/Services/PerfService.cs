@@ -1,9 +1,6 @@
 using System.Diagnostics;
 using System.Threading.Tasks.Dataflow;
-using System.Linq.Expressions;
-using System;
 using Grpc.Core;
-using PerfRunner.Network;
 using PerfRunner.V1;
 using PerfRunner.Tests;
 using System.Reflection;
@@ -55,7 +52,6 @@ namespace PerfRunner.Services
       {
          Thread.Sleep(millisecondsTimeout);
          _logger.LogInformation("NowI in SomeFunc - " + Guid);
-         // Console.WriteLine("Now in SomeFunc - " + Guid);
       }
 
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
@@ -67,10 +63,8 @@ namespace PerfRunner.Services
          // depending on the no of processors
          // runs so many in parallel
          int processorCount = Environment.ProcessorCount;
-         const int howMany = 12;
 
          // Print the number of processors on this computer.
-         // Console.WriteLine("Processor count = {0}.", processorCount);
          _logger?.LogInformation("Processor count = {0}.", processorCount);
 
          TimeSpan elapsed = TimeSpan.MinValue;
@@ -82,23 +76,6 @@ namespace PerfRunner.Services
          var types = AppDomain.CurrentDomain.GetAssemblies()
              .SelectMany(s => s.GetTypes())
              .Where(p => type.IsAssignableFrom(p));
-
-         // Perform two dataflow computations and print the elapsed
-         // time required for each.
-         // testRequest.ActionRunner = new ActionRunner<int>((ILogger<ActionRunner<int>>)_logger){ TypeValue = 1000 };
-         // testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 10 };
-         // _actionRunner.TypeValue = 10;
-         // testRequest.ActionRunner = new ActionRunner<TestBase>();
-         // typeVal_.GetType().AssemblyQualifiedName
-
-         // _actionRunner.TypeValue = new Login();
-
-         // Type ty = howMany.GetType();
-         // "SomeStr"
-         // _actionRunner.TypeValue = Activator.CreateInstance(testRequest.Actions.FirstOrDefault());
-         // _actionRunner.TypeValue = 
-         // var inst = Activator.CreateInstance(testRequest.Actions.FirstOrDefault().Name, testRequest.Actions.FirstOrDefault().Name);
-         // var inst = Activator.CreateInstance("PerfRunner.Tests.Login", "Login");
 
          foreach (var action_ in testRequest.Actions)
          {
@@ -126,26 +103,6 @@ namespace PerfRunner.Services
            _logger.LogError($"Seems the test {testRequest.Guid} is already runing"); 
            return default;
          }
-         /*
-         Action[] actions = new Action[testRequest.ActionRunners.Count];
-         Func<string, string> some;
-
-         string someMethod(string name)
-         {
-            return "hi " + name;
-         }
-
-         void someMethod_()
-         {
-
-         }
-
-         actions[0] = someMethod_;
-
-         some = someMethod;
-         var resp = some("Ankalu");
-
-         int i = 0;*/
 
          Parallel.ForEach(testRequest.ActionRunners, actionRunner =>
          {
@@ -174,23 +131,7 @@ namespace PerfRunner.Services
             }
 
             RunAct();
-            // actions[i++] = RunAct;
-            // tasks[i++] = Task.Run(() => RunAct());
          });
-
-         // await Task.WhenAll(tasks);
-         // Parallel.Invoke(actions);
-
-         // actionRunner.ActionBlocks.Select(item => item.Completion.Wait());
-         /*
-         foreach (var item in testRequest.ActionRunner.ActionBlocks)
-         {
-            item.Completion.Wait();
-         }*/
-         // testRequest.ActionRunner.ActionBlock.Completion.Wait();
-
-         // actionRunner.ActionBlock.Completion.Wait();
-         // testRequest.ActionRunner.Stopwatch.Stop();
 
          _logger.LogInformation(
             "After completion, Elapsed = {0} ms",
@@ -228,9 +169,6 @@ namespace PerfRunner.Services
          {
             test.Value.CancellationTokenSource.Cancel();
          }
-
-        // lets try cancel
-        // _cancelTokenSourceAllTests.Cancel();
 
          return new StopAllTestsReply { Status = true };
       }
