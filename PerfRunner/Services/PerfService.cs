@@ -47,13 +47,7 @@ namespace PerfRunner.Services
          _testbase.UserManager = userManager;
          _configuration = configuration;
       }
-
-      private void SomeFunc(int millisecondsTimeout)
-      {
-         Thread.Sleep(millisecondsTimeout);
-         _logger.LogInformation("NowI in SomeFunc - " + Guid);
-      }
-
+ 
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
          _logger.LogInformation("Config - " + _configuration["SomeApp:Host"]);
@@ -104,42 +98,41 @@ namespace PerfRunner.Services
            return default;
          }
 
-         Parallel.ForEach(testRequest.ActionRunners, actionRunner =>
-         {
-
-            async void RunAct()
+         Parallel.ForEach(
+            testRequest.ActionRunners,
+            actionRunner =>
             {
-               // keep runnung till cancelled from the client
-               while (!testRequest.CancellationTokenSource.IsCancellationRequested)
+               async void RunAct()
                {
+                  // keep runnung till cancelled from the client
+                  while (!testRequest.CancellationTokenSource.IsCancellationRequested)
+                  {
 
-                  // Create an ActionBlock<int> that performs some work.
-                  actionRunner.ActionBlock = new ActionBlock<ITestBase>(
+                     // Create an ActionBlock<int> that performs some work.
+                     actionRunner.ActionBlock = new ActionBlock<ITestBase>(
 
-                     // Simulate work by suspending the current thread.
-                     testBase => testBase.RunTest(Guid, _logger),
+                        // Simulate work by suspending the current thread.
+                        testBase => testBase.RunTest(Guid, _logger),
 
-                     // Specify a maximum degree of parallelism.
-                     new ExecutionDataflowBlockOptions
-                     {
-                        MaxDegreeOfParallelism = processorCount
-                     }
-                        );
+                        // Specify a maximum degree of parallelism.
+                        new ExecutionDataflowBlockOptions
+                        {
+                           MaxDegreeOfParallelism = processorCount
+                        }
+                           );
 
-                  elapsed = await actionRunner.StartActionsPerSecondAsync(testRequest.Rate);
+                     elapsed = await actionRunner.StartActionsPerSecondAsync(testRequest.Rate);
+                  }
                }
-            }
 
-            RunAct();
-         });
+               RunAct();
+            });
 
          _logger.LogInformation(
             "After completion, Elapsed = {0} ms",
             (int)elapsed.TotalMilliseconds);
 
-         var reply = new TestReply { Message = $"Hi {testRequest.Name}" };
-
-         return reply;
+         return new TestReply { Message = $"Hi {testRequest.Name}" };
       }
 
       public override async Task<StopTestReply> StopTest(StopTestRequest stopTestRequest, ServerCallContext context)
