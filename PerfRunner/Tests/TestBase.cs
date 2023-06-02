@@ -11,6 +11,8 @@ namespace PerfRunner.Tests
    {
       public Guid Guid = Guid.NewGuid();
 
+      public bool _disposed;
+
       public readonly ILogger<TestBase> _logger;
 
       public HttpClient _httpClient { get; set; } = null!;
@@ -28,20 +30,38 @@ namespace PerfRunner.Tests
          UserManager = userManager;
       }
 
-/*
-      public TestBase(ILogger<TestBase> logger, HttpClient httpClient)
-      {
-         _logger = logger;
-         _httpClient = httpClient;
-      }*/
-
       public virtual void RunTest(Guid guid, ILogger<PerfService> logger)
       {
          logger?.LogInformation($"Running {nameof(this.GetType)} now.");
-         // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
-         // throw new NotImplementedException();
       }
 
-      public void Dispose() => _httpClient?.Dispose();
+      public void Dispose()
+      {
+         Dispose(false);
+
+         // tell the GC to not dispose this?
+         GC.SuppressFinalize(this);
+
+      }
+
+      public void Dispose(bool disposing)
+      {
+         if(_disposed)
+         {
+            return;
+         }
+
+         if(disposing)
+         {
+            //dispose mgd resources
+
+         }
+
+         //dispose un mgd resources
+         _httpClient?.Dispose();
+         // _grpcClient?.Dispose();
+
+         _disposed = true;
+      }
    }
 }

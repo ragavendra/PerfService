@@ -14,11 +14,8 @@ namespace PerfRunner
 {
     public static class Program
    {
-
-      private static X509Certificate2 _serverCertificate;
-
       /// <summary>
-      /// Sample.
+      /// PE for the Perf Runner or Srvc.
       /// </summary>
       public static async Task Main(string[] args)
       {
@@ -31,58 +28,11 @@ namespace PerfRunner
          }*/
 
          var builder = WebApplication.CreateBuilder(args);
-         // builder.WebHost.UseStartup<AppStart>();
-         // builder.Services.AddScoped<IHttp, Http>();
-
-         // generic type
-         // Type openGenType = typeof(List<>);
-         // Type closedGenType = openGenType.MakeGenericType(typeof(string));
-         // builder.Services.AddScoped(openGenType, provider => Activator.CreateInstance(closedGenType));
-
-         // resolve other service dynamically at run time
-         // builder.Services.AddSingleton<IServiceProvider>(provider => provider);
-
-         var services = new ServiceCollection();
-         services.AddScoped<IHttp, Http>();
-         
-         // services.AddScoped(openGenType, provider => Activator.CreateInstance(closedGenType));
-         // services.AddSingleton<IServiceProvider>(provider => provider);
-         services.AddTransient(provider => new Lazy<IHttp>(provider.GetRequiredService<IHttp>));
-         services.AddTransient(provider => new Func<IHttp>(provider.GetRequiredService<IHttp>));
-
-         var serviceProvider = services.BuildServiceProvider();
-
-         var service = serviceProvider.GetRequiredService<IHttp>();
-         service.SampleHttpMethod();
-
-        /*
-         var list = (System.Collections.IList)serviceProvider.GetRequiredService(closedGenType);
-         list.Add("one");
-         list.Add("seven");
-         list.Add("six");
-
-         var serviceProvider_ = serviceProvider.GetRequiredService<IServiceProvider>();
-         var service_ = serviceProvider_.GetRequiredService<IHttp>();
-         service_.SomeMethod(); */
-
-         var lazySrvc = serviceProvider.GetRequiredService<Lazy<IHttp>>();
-         lazySrvc.Value.SampleHttpMethod();
-
-         var funcSrvc = serviceProvider.GetRequiredService<Func<IHttp>>();
-         funcSrvc().SampleHttpMethod();
 
          builder.Services.AddGrpc();
-         builder.Services.AddScoped<IHttp, Http>();
-         builder.Services.AddScoped<IGrpc, Network.Grpc>();
-         
-         // builder.Services.AddScoped<ITestBase, TestBase>();
-         // builder.Services.AddTransient<ActionRunner<int>>();
          builder.Services.AddTransient<ActionRunner<ITestBase>>();
-         // builder.Services.AddTransient<TestStateManager>();
          builder.Services.AddSingleton<TestStateManager>();
          builder.Services.AddSingleton<UserManager>();
-
-         // builder.Services.AddTransient<ITestBase, TestBase>();
 
          // add typed http client factory
          builder.Services.AddHttpClient<ITestBase, TestBase>(client => {
@@ -91,22 +41,14 @@ namespace PerfRunner
             client.DefaultRequestHeaders.UserAgent.ParseAdd("dotnet-raga");
          });
 
-         builder.Services.AddGrpcClient<WebAppClient>(client => {
-            client.Address = new Uri("https://localhost:7234");
-         });
+         // web app cli where the test(s) aim to make gRPC calls, can be stubbed or mocked 
+         builder.Services.AddGrpcClient<WebAppClient>(client =>
+            client.Address = new Uri("https://localhost:7234"));
 
-/*
-         builder.Services.AddHttpClient<PerfService>(client => {
-            client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
-
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("dottnet-raga-perfSrvc");
-         });*/
+         // support for cli calls
          builder.Services.AddGrpcReflection();
 
          var app = builder.Build();
-
-         // this server instance mapping to only one service to handle the gRPC calls
-         // app.MapGrpcService<PingService>();
          app.MapGrpcService<PerfService>();
          app.MapGet("/", () => "Comm with gRPC should be made through gRPC clients.");
 
@@ -117,30 +59,7 @@ namespace PerfRunner
          }
 
          app.Run();
-
       }
 
-      /// <summary>Sample.</summary>
-      public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-           .ConfigureWebHostDefaults(
-              webBuilder =>
-              {
-                 webBuilder
-                    .ConfigureKestrel(
-                       options => options.ConfigureHttpsDefaults(
-                          adapterOptions =>
-                          {
-                              adapterOptions.ClientCertificateMode = ClientCertificateMode.RequireCertificate;
-                              adapterOptions.ClientCertificateValidation +=
-                              (certificate, chain, errors) => certificate.Thumbprint == _serverCertificate.Thumbprint;
-                              adapterOptions.ServerCertificate = _serverCertificate;
-                           }))
-                    .UseUrls("https://*:9001") // default, can be overridden by command line, e.g. --urls "https://*:1234"
-                    .UseConfiguration(new ConfigurationBuilder().AddCommandLine(args).Build())
-                 // .UseStartup<Startup>()
-                    .ConfigureLogging(logging => logging.ClearProviders().SetMinimumLevel(LogLevel.Trace));
-                 // .UseNLog();
-              });
    }
 }

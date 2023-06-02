@@ -14,10 +14,6 @@ namespace PerfRunner.Services
    {
       private readonly ILogger<PerfService> _logger;
 
-      private readonly IHttp _http;
-
-      private readonly IGrpc _grpc;
-
       private readonly TestStateManager _testStateManager;
 
       private readonly ActionRunner<ITestBase> _actionRunner;
@@ -41,8 +37,6 @@ namespace PerfRunner.Services
 
       public PerfService(
          ILogger<PerfService> logger,
-         IHttp http,
-         IGrpc grpc,
          TestStateManager testStateManager,
          ActionRunner<ITestBase> actionRunner,
          ITestBase testBase,
@@ -50,8 +44,6 @@ namespace PerfRunner.Services
          IConfiguration configuration)
       {
          _logger = logger;
-         _http = http;
-         _grpc = grpc;
          _testStateManager = testStateManager;
          _actionRunner = actionRunner;
          _testbase = testBase;
@@ -69,8 +61,6 @@ namespace PerfRunner.Services
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
          _logger.LogInformation("Config - " + _configuration["SomeApp:Host"]);
-         _logger.LogInformation("Message from Http service - " + _http.SampleHttpMethod());
-         _logger.LogInformation("Message from Grpc service - " + _grpc.SampleGrpcMethod());
 
         testRequest.CancellationTokenSource = new CancellationTokenSource();
 
