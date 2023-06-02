@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using PerfRunner.Models;
 
-namespace PerfRunner
+namespace PerfRunner.Services
 {
     // User mgmt for Users, keep this as light as possible
     // One User instance per user, so millions can have millions

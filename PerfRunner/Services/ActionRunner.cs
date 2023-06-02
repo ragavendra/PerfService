@@ -1,4 +1,4 @@
-﻿namespace PerfRunner;
+﻿namespace PerfRunner.Services;
 
 using System;
 using System.Diagnostics;

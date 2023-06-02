@@ -3,6 +3,7 @@
 // </copyright>
 
 // ReSharper disable once CheckNamespace
+using PerfRunner.Services;
 using PerfRunner.Tests;
 
 namespace PerfRunner.V1

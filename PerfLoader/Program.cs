@@ -31,7 +31,7 @@ builder.Services.AddHttpClient();
 builder.Services.AddScoped<HttpClient>();
 
 // try with a service - bg - in turn calls the Grpc to the server
-builder.Services.AddHostedService<Worker>();
+// builder.Services.AddHostedService<Worker>();
 
 // 
 var app = builder.Build();
