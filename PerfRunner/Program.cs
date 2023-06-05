@@ -19,6 +19,42 @@ namespace PerfRunner
       /// </summary>
       public static async Task Main(string[] args)
       {
+         // using System;
+         // using System.Linq;
+
+         using var db = new LoggingContext();
+
+         // Note: This sample requires the database to be created before running.
+         Console.WriteLine($"Database path: {db.DbPath}.");
+
+         // Create
+         Console.WriteLine("Inserting a new log");
+         db.Add(new Log { Url = "http://blogs.msdn.com/adonet" });
+         db.SaveChanges();
+
+         // Read
+         Console.WriteLine("Querying for a log");
+         var blog = db.Logs
+             .OrderBy(b => b.LogId);
+             // .First();
+
+             foreach(var entry in blog)
+             {
+               Console.WriteLine("Entry is: " + entry.Url);
+
+             }
+
+         // Update
+         Console.WriteLine("Updating the blog and adding a post");
+         blog.Last().Url = "https://devblogs.microsoft.com/dotnet";
+         blog.Last().Entries.Add(
+             new Entry { Title = "Hello World", Content = "I wrote an app using EF Core!" });
+         db.SaveChanges();
+
+         // Delete
+         // Console.WriteLine("Delete the blog");
+         // db.Remove(blog);
+         // db.SaveChanges();
         /*
          var logDirName = $"{DateTime.UtcNow:yyyy.MM.dd_HH.mm.ss}";
          var logOutputDir = Path.GetFullPath(Path.Combine(AppContext.BaseDirectory, "logs", logDirName));
