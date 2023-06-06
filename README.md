@@ -21,7 +21,9 @@ Front end or the web interface to initiate performance test run(s) and control o
 Unit tests for the `PerfRunner` to be kept updated with any new features added to the `PerfRunner` project.
 
 ### Planned features
-1. Support for flag for equal or uneven load distribution per second. Migrate to use Semaphore to use limited no. of threads per second instead of manual control.
+1. Support for flag for equal or uneven load distribution per second.
+2. Migrate to use Semaphore to use limited no. of threads per second instead of manual control.
+3. Try using interface inherit implementation. 
 
 ### Existing features
 1. Abitlity to create and run http test(s).
