@@ -22,6 +22,7 @@ namespace PerfRunner
          // using System;
          // using System.Linq;
 
+/*
          using var db = new LoggingContext();
 
          // Note: This sample requires the database to be created before running.
@@ -49,7 +50,7 @@ namespace PerfRunner
          blog.Last().Url = "https://devblogs.microsoft.com/dotnet";
          blog.Last().Entries.Add(
              new Entry { Title = "Hello World", Content = "I wrote an app using EF Core!" });
-         db.SaveChanges();
+         db.SaveChanges();*/
 
          // Delete
          // Console.WriteLine("Delete the blog");
@@ -69,6 +70,8 @@ namespace PerfRunner
          builder.Services.AddTransient<ActionRunner<ITestBase>>();
          builder.Services.AddSingleton<TestStateManager>();
          builder.Services.AddSingleton<UserManager>();
+
+         builder.Services.AddSingleton<LoggingContext>();
 
          // add typed http client factory
          builder.Services.AddHttpClient<ITestBase, TestBase>(client => {

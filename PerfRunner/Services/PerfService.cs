@@ -15,6 +15,8 @@ namespace PerfRunner.Services
 
       private readonly ActionRunner<ITestBase> _actionRunner;
 
+      private readonly LoggingContext _loggingContext;
+
       public readonly IConfiguration _configuration;
 
       public readonly ITestBase _testbase;
@@ -38,7 +40,8 @@ namespace PerfRunner.Services
          ActionRunner<ITestBase> actionRunner,
          ITestBase testBase,
          UserManager userManager,
-         IConfiguration configuration)
+         IConfiguration configuration,
+         LoggingContext loggingContext)
       {
          _logger = logger;
          _testStateManager = testStateManager;
@@ -46,6 +49,12 @@ namespace PerfRunner.Services
          _testbase = testBase;
          _testbase.UserManager = userManager;
          _configuration = configuration;
+         _loggingContext = loggingContext;
+
+         // add new Log with entries added later*
+         _loggingContext.Add(new Log { Url = "http://blogs.msdn.com/adonet" });
+         _loggingContext.SaveChanges();
+
       }
  
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
@@ -60,6 +69,29 @@ namespace PerfRunner.Services
 
          // Print the number of processors on this computer.
          _logger?.LogInformation("Processor count = {0}.", processorCount);
+
+         // Note: This sample requires the database to be created before running.
+         // Console.WriteLine($"Database path: {db.DbPath}.");
+
+         // Create
+         // Console.WriteLine("Inserting a new log");
+         // Read
+         // Console.WriteLine("Querying for a log");
+         var entries = _loggingContext.Logs
+             .OrderBy(b => b.LogId);
+             // .First();
+
+         // Update Log or add new entry to it
+         // Console.WriteLine("Updating the blog and adding a post");
+         entries.Last().Url = "https://devblogs.microsoft.com/dotnet";
+         entries.Last().Entries.Add(
+             new Entry { Title = "Hello World", Content = "PerfSrvc - I wrote an app using EF Core!" });
+         _loggingContext.SaveChanges();
+
+         foreach (var item in entries)
+         {
+            _logger?.LogInformation("Entry is " + item.LogId); 
+         }
 
          TimeSpan elapsed = TimeSpan.MinValue;
 
