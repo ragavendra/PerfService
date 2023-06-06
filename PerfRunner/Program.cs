@@ -35,8 +35,10 @@ namespace PerfRunner
          builder.Services.AddSingleton<UserManager>();
 
          // scoped - same instance in the lifetime of the call
-         builder.Services.AddTransient<ISample, Sample>();
+         builder.Services.AddScoped<ISample, Sample>();
          // transient - new instance for every class
+
+         builder.Services.AddScoped<SampleTwo>();
 
          // add typed http client factory
          builder.Services.AddHttpClient<ITestBase, TestBase>(client => {

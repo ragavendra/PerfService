@@ -5,13 +5,13 @@ using System.Threading.Tasks;
 
 namespace PerfRunner.Services
 {
-    public class Sample : ISample
+    public class SampleTwo
     {
-        public ILogger<Sample> _logger;
+        public ILogger<SampleTwo> _logger;
 
         public Guid Id = Guid.NewGuid();
 
-        public Sample(ILogger<Sample> logger, SampleTwo sampleTwo){
+        public SampleTwo(ILogger<SampleTwo> logger){
             _logger = logger;
         }
         
