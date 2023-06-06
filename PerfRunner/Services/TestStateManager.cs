@@ -19,7 +19,7 @@ namespace PerfRunner.Services
       public TestRequest? GetTest(string guid) => Tests.First(test => test.Key.ToString().
          Equals(guid)).Value;
 
-      public TestStateManager(ILogger<TestStateManager> logger)
+      public TestStateManager(ILogger<TestStateManager> logger, ISample sample)
       {
          _logger = logger;
       }

@@ -21,7 +21,7 @@ namespace PerfRunner.Services
 
       public UserFormatInfo UserFormatInfo { get; set; } = new UserFormatInfo();
 
-      public UserManager(ILogger<UserManager> logger)
+      public UserManager(ILogger<UserManager> logger, ISample sample)
       {
          _logger = logger;
 

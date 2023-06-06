@@ -38,7 +38,8 @@ namespace PerfRunner.Services
          ActionRunner<ITestBase> actionRunner,
          ITestBase testBase,
          UserManager userManager,
-         IConfiguration configuration)
+         IConfiguration configuration,
+         ISample sample)
       {
          _logger = logger;
          _testStateManager = testStateManager;
