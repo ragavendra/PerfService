@@ -19,7 +19,7 @@ namespace PerfRunner.Models
       // public string Email { get { return _email; } set { if(value.Length > 3 ) { _email = value; } } }
       public string Email { get { return _email; } }
 
-      public UserState State { get { return _state; } protected set { if(typeof(UserState).Equals(value)) { _state = value; } }}
+      public UserState State { get { return _state; } set { if(typeof(UserState).Equals(value)) { _state = value; } }}
 
       public User(string email, UserState state){
          _email = email;
