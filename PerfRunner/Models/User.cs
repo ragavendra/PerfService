@@ -11,14 +11,15 @@ namespace PerfRunner.Models
    public class User : IUser
    {
       private readonly string _email;
-      private readonly UserState _state;
+
+      private UserState _state;
 
       public Guid Guid { get; } = Guid.NewGuid(); 
 
       // public string Email { get { return _email; } set { if(value.Length > 3 ) { _email = value; } } }
       public string Email { get { return _email; } }
 
-      public UserState State { get { return _state; }}
+      public UserState State { get { return _state; } protected set { if(typeof(UserState).Equals(value)) { _state = value; } }}
 
       public User(string email, UserState state){
          _email = email;
