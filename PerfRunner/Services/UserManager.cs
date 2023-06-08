@@ -54,13 +54,11 @@ namespace PerfRunner.Services
       // load users to ready state
       public void LoadUsers()
       {
-        var totalUsers = UserFormatInfo?.TotalUsers;
-        var accountIndex = UserFormatInfo?.UserStartIndex;
-        while (totalUsers-- >= 0)
+         var totalUsers = UserFormatInfo?.TotalUsers;
+         var accountIndex = UserFormatInfo?.UserStartIndex;
+         while (totalUsers-- >= 0)
          {
-            var user = new User();
-            user.Email = string.Format(UserFormatInfo!.UserAccountFormat, accountIndex++);
-            user.State = UserState.Ready;
+            var user = new User(string.Format(UserFormatInfo!.UserAccountFormat, accountIndex++), UserState.Ready);
             CheckInUser(user);
          }
       }

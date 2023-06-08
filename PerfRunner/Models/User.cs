@@ -10,15 +10,19 @@ namespace PerfRunner.Models
    // ally.
    public class User : IUser
    {
-      public Guid Guid { get; set; }
+      private readonly string _email;
+      private readonly UserState _state;
 
-      public string Email { get; set; }
+      public Guid Guid { get; } = Guid.NewGuid(); 
 
-      public UserState State { get; set; }
+      // public string Email { get { return _email; } set { if(value.Length > 3 ) { _email = value; } } }
+      public string Email { get { return _email; } }
 
-      public User(){
-         Guid = Guid.NewGuid();
-         State = UserState.Ready;
+      public UserState State { get { return _state; }}
+
+      public User(string email, UserState state){
+         _email = email;
+         _state = state;
       }
    }
 }
