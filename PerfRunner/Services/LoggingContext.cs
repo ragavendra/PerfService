@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace PerfRunner.Services
 {
 
-   public class LoggingContext : DbContext
+   public class LoggingContext : DbContext, ILoggingContext
    {
       public DbSet<Log> Logs { get; set; }
       public DbSet<Entry> Entries { get; set; }
