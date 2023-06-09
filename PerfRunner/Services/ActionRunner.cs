@@ -34,9 +34,12 @@ public class ActionRunner<T>
 
    private readonly ILogger<ActionRunner<T>> _logger;
 
-   public ActionRunner(ILogger<ActionRunner<T>> logger)
+   public ActionRunner(ILogger<ActionRunner<T>> logger, ISampleScoped sampleScoped, ISampleSingleton sampleSingleton)
    {
       _logger = logger;
+
+      // check if scoped has same instance throughout vs transient
+      // putting here (Transient) as Singletons cannot load scoped DI
    }
 
    // Initiates several computations by using dataflow and returns the elapsed

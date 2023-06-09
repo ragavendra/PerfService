@@ -39,7 +39,9 @@ namespace PerfRunner.Services
          ITestBase testBase,
          UserManager userManager,
          IConfiguration configuration,
-         ISample sample)
+         ISampleSingleton sampleSingleton,
+         ISampleScoped sampleScoped,
+         ISampleTransient sampleTransient)
       {
          _logger = logger;
          _testStateManager = testStateManager;

@@ -22,6 +22,8 @@ namespace PerfRunner.Services
       public TestStateManager(ILogger<TestStateManager> logger)
       {
          _logger = logger;
+
+         // check if scoped has same instance throughout vs transient
       }
 
       public bool AddTest(TestRequest testRequest)

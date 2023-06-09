@@ -9,4 +9,19 @@ namespace PerfRunner.Services
     {
         
     }
+
+    public interface ISampleTransient : ISample
+    {
+        
+    }
+
+    public interface ISampleScoped : ISample
+    {
+        
+    }
+
+    public interface ISampleSingleton : ISample
+    {
+        
+    }
 }
