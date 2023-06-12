@@ -80,9 +80,14 @@ namespace PerfRunner.Services
                _testbase._grpcClient,
                _testbase.UserManager);
 
+            // throw new TestRequestException("test message");
+
+            // not going here
             if (!(inst is ITestBase typeVal))
             {
-               _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");
+               var message = $"Does test actions {testRequest.Actions.FirstOrDefault()} exist?";
+               _logger.LogError(message);
+               throw new TestRequestException(message);
             }
 
             var actionRunner = (ActionRunner<ITestBase>)_actionRunner.CloneObj();
