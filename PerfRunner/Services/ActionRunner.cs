@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
+using PerfRunner.Tests;
 using PerfRunner.V1;
 
 /* Sample output:
@@ -45,7 +46,7 @@ public class ActionRunner<T> : IActionRunner<T>
 
    // Initiates several computations by using dataflow and returns the elapsed
    // time required to initiate the computations.
-   public async Task<TimeSpan> StartActionsPerSecondAsync(int rate)
+   public async Task<TimeSpan> StartActionsPerSecondAsync(int rate, ActionBlock<T> actionBlock)
    {
       // Compute the time that it takes for several messages to
       // flow through the dataflow block.
@@ -59,7 +60,7 @@ public class ActionRunner<T> : IActionRunner<T>
 
       while (rate-- > 0)
       {
-         ActionBlock.Post(TypeValue);
+         actionBlock.Post(TypeValue);
 
          if (_loadDistribution?.Equals(LoadDistribution.Uneven) == true)
          {

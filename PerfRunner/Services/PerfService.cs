@@ -110,7 +110,7 @@ namespace PerfRunner.Services
                   {
 
                      // Create an ActionBlock<int> that performs some work.
-                     actionRunner.ActionBlock = new ActionBlock<ITestBase>(
+                     var actionBlock = new ActionBlock<ITestBase>(
 
                         // Simulate work by suspending the current thread.
                         testBase => testBase.RunTest(Guid, _logger),
@@ -122,7 +122,7 @@ namespace PerfRunner.Services
                         }
                            );
 
-                     elapsed = await actionRunner.StartActionsPerSecondAsync(testRequest.Rate);
+                     elapsed = await actionRunner.StartActionsPerSecondAsync(testRequest.Rate, actionBlock);
                   }
                }
 
