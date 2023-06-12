@@ -60,18 +60,20 @@ public class ActionRunner<T> : IActionRunner<T>
 
       while (rate-- > 0)
       {
-         Thread.Sleep(remaining);
          ActionBlock.Post(TypeValue);
          _logger?.LogInformation(
-            $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds} ms."
+            $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds} ms, waited for remain - {remaining} ms. and divisor - {divisor} ms"
          );
-         
-         remaining = divisor;
 
+         Thread.Sleep(remaining);
+
+         // remaining = divisor;
          if (_loadDistribution?.Equals(LoadDistribution.Uneven) == true)
          {
             var rand = new Random();
             divisor = rand.Next(divisor_);
+
+            // _logger?.LogInformation($"Divisor - {divisor} .");
             remaining = divisor_ - divisor;
          }
          else
