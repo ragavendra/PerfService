@@ -70,6 +70,12 @@ message ActionOption {
 
 }
 
+enum LoadDistribution
+{
+    Even = 0;
+    Uneven = 1;
+}
+
 //message ping reply
 message TestReply {
 

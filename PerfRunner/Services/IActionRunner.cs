@@ -10,9 +10,4 @@ namespace PerfRunner.Services
         
     }
 
-    public enum LoadDistribution
-    {
-        Even,
-        Uneven
-    }
 }

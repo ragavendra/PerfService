@@ -4,6 +4,7 @@ using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
+using PerfRunner.V1;
 
 /* Sample output:
 Processor count = 4.
