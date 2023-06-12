@@ -53,21 +53,26 @@ public class ActionRunner<T> : IActionRunner<T>
       sw.Start();
 
       var divisor = 0;
+      var remaining = 0;
 
       // get rate by 1000 ms to post in intervals
-      divisor = 1000 / rate;
+      var divisor_ = 1000 / rate;
 
       while (rate-- > 0)
       {
+         Thread.Sleep(remaining);
          ActionBlock.Post(TypeValue);
+         remaining = divisor;
 
          if (_loadDistribution?.Equals(LoadDistribution.Uneven) == true)
          {
             var rand = new Random();
-            divisor = rand.Next(divisor);
+            divisor = rand.Next(divisor_);
+            remaining = divisor_ - divisor;
          }
 
          Thread.Sleep(divisor);
+         // divisor = divisor_;
       }
 
       // no more to post 
