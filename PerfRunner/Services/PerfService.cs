@@ -71,6 +71,7 @@ namespace PerfRunner.Services
              .SelectMany(s => s.GetTypes())
              .Where(p => type.IsAssignableFrom(p));
 
+         // load actions
          foreach (var action_ in testRequest.Actions)
          {
             var inst = Activator.CreateInstance(
@@ -94,6 +95,8 @@ namespace PerfRunner.Services
 
             actionRunner.TypeValue = (ITestBase?)inst;
 
+            actionRunner.Rate = action_.Rate;
+
             testRequest.ActionRunners.Add(actionRunner);
          }
 
@@ -107,7 +110,7 @@ namespace PerfRunner.Services
             testRequest.ActionRunners,
             actionRunner =>
             {
-               actionRunner.LoadDistribution_ = LoadDistribution.Uneven;
+               actionRunner.LoadDistribution_ = LoadDistribution.Even;
                async void RunAct()
                {
                   // keep runnung till cancelled from the client
@@ -127,7 +130,18 @@ namespace PerfRunner.Services
                         }
                            );
 
-                     elapsed = await actionRunner.StartActionsPerSecondAsync(testRequest.Rate);
+                     var rate = 0;
+
+                     if (actionRunner.Rate.Equals(0))
+                     {
+                        rate = testRequest.Rate;
+                     }
+                     else
+                     {
+                        rate = actionRunner.Rate;
+                     }
+
+                     elapsed = await actionRunner.StartActionsPerSecondAsync(rate);
                   }
                }
 

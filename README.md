@@ -33,6 +33,7 @@ Unit tests for the `PerfRunner` to be kept updated with any new features added t
 6. User state management - as user queue per each state.
 7. Ability to transfer data across test(s) - can be achieved by adding new data properties to the `User` object itself, say like the phone number, library card number, health number and so on. This is updated and be used by each test(s) accordingly by dequeing that state queue with the user with that updated data. Say the user just registeted at the front desk with payment, library no, his state is now authenticated and library no. is the new data and he is in the authenticated state queue. Whenever its his turn, that user gets popped from that queue. 
 8. Support for flag for equal or uneven load distribution per second.
+8a. If each action has a rate that is used for rate otherwise default to test rate.
 
 ### Planned features - Loader
 1. Update/ Edit test params during run like rate, distribution.

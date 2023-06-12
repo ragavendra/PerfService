@@ -22,9 +22,24 @@ public class ActionRunner<T> : IActionRunner<T>
 {
    private LoadDistribution? _loadDistribution;
 
-   public LoadDistribution? LoadDistribution_ { get { return _loadDistribution; } set { _loadDistribution = value; } }
+   private int _rate;
 
    public Guid Guid = Guid.NewGuid();
+
+
+   public LoadDistribution? LoadDistribution_ { get { return _loadDistribution; } set { _loadDistribution = value; } }
+
+   public int Rate
+   {
+      get { return _rate; }
+      set
+      {
+         if (value > 0)
+         {
+            _rate = value;
+         }
+      }
+   }
 
    public ActionBlock<T> ActionBlock { get; set; }
 
