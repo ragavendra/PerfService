@@ -62,6 +62,10 @@ public class ActionRunner<T> : IActionRunner<T>
       {
          Thread.Sleep(remaining);
          ActionBlock.Post(TypeValue);
+         _logger?.LogInformation(
+            $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds} ms."
+         );
+         
          remaining = divisor;
 
          if (_loadDistribution?.Equals(LoadDistribution.Uneven) == true)
@@ -69,6 +73,10 @@ public class ActionRunner<T> : IActionRunner<T>
             var rand = new Random();
             divisor = rand.Next(divisor_);
             remaining = divisor_ - divisor;
+         }
+         else
+         {
+            divisor = divisor_;
          }
 
          Thread.Sleep(divisor);
