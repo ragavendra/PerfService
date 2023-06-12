@@ -102,6 +102,7 @@ namespace PerfRunner.Services
             testRequest.ActionRunners,
             actionRunner =>
             {
+               actionRunner.LoadDistribution_ = LoadDistribution.Uneven;
                async void RunAct()
                {
                   // keep runnung till cancelled from the client

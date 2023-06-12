@@ -17,8 +17,11 @@ and start the test first.
 
 // Demonstrates how to specify the maximum degree of parallelism
 // when using dataflow.
-public class ActionRunner<T>
+public class ActionRunner<T> : IActionRunner<T>
 {
+   private LoadDistribution? _loadDistribution;
+
+   public LoadDistribution? LoadDistribution_ { get { return _loadDistribution; } set { _loadDistribution = value; } }
 
    public Guid Guid = Guid.NewGuid();
 
@@ -48,9 +51,22 @@ public class ActionRunner<T>
       var sw = new Stopwatch();
       sw.Start();
 
+      var divisor = 0;
+
+      // get rate by 1000 ms to post in intervals
+      divisor = 1000 / rate;
+
       while (rate-- > 0)
       {
          ActionBlock.Post(TypeValue);
+
+         if (_loadDistribution?.Equals(LoadDistribution.Uneven) == true)
+         {
+            var rand = new Random();
+            divisor = rand.Next(divisor);
+         }
+
+         Thread.Sleep(divisor);
       }
 
       // no more to post 

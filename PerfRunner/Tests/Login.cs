@@ -56,9 +56,9 @@ namespace PerfRunner.Tests
 
                var request = new WebApp.V1.PingRequest() { Name = "hi from Login" };
                // trying rpc to the webapp
-               WebApp.V1.PingReply call = await _grpcClient.PingAsync(request);
+               // WebApp.V1.PingReply call = await _grpcClient.PingAsync(request);
 
-               logger.LogInformation($"Reply from WebApp is {call.Message}");
+               // logger.LogInformation($"Reply from WebApp is {call.Message}");
 
             }
             catch (System.Exception)
