@@ -11,9 +11,9 @@ namespace PerfRunner.Services
    {
       private readonly ILogger<PerfService> _logger;
 
-      private readonly TestStateManager _testStateManager;
+      private readonly ITestStateManager _testStateManager;
 
-      private readonly ActionRunner<ITestBase> _actionRunner;
+      private readonly IActionRunner<ITestBase> _actionRunner;
 
       public readonly IConfiguration _configuration;
 
@@ -34,10 +34,10 @@ namespace PerfRunner.Services
 
       public PerfService(
          ILogger<PerfService> logger,
-         TestStateManager testStateManager,
-         ActionRunner<ITestBase> actionRunner,
+         ITestStateManager testStateManager,
+         IActionRunner<ITestBase> actionRunner,
          ITestBase testBase,
-         UserManager userManager,
+         IUserManager userManager,
          IConfiguration configuration)
       {
          _logger = logger;

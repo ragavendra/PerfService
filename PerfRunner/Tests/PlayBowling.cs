@@ -20,7 +20,7 @@ namespace PerfRunner.Tests
                // _httpClient = httpClient;
             }*/
 
-      public PlayBowling(HttpClient httpClient, WebAppClient webApp, UserManager userManager) : base(httpClient, webApp, userManager)
+      public PlayBowling(HttpClient httpClient, WebAppClient webApp, IUserManager userManager) : base(httpClient, webApp, userManager)
       {
          // _logger = logger;
          // _httpClient = httpClient;

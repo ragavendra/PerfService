@@ -11,7 +11,7 @@ namespace PerfRunner.Services
       public Guid Guid = Guid.NewGuid();
 
       // lets have test guid and its options here
-      public readonly ConcurrentDictionary<Guid, TestRequest> Tests = new ConcurrentDictionary<Guid, TestRequest>();
+      public ConcurrentDictionary<Guid, TestRequest> Tests { get; set; } = new ConcurrentDictionary<Guid, TestRequest>();
 
       private readonly ILogger<TestStateManager> _logger;
 

@@ -52,7 +52,7 @@ namespace PerfRunner.Services
       }
 
       // load users to ready state
-      public void LoadUsers()
+      private void LoadUsers()
       {
          var totalUsers = UserFormatInfo?.TotalUsers;
          var accountIndex = UserFormatInfo?.UserStartIndex;
@@ -106,7 +106,7 @@ namespace PerfRunner.Services
 
       // public void AddUser(User user) => Users.Enqueue(user);
 
-      public ConcurrentQueue<User> GetUserQueue(UserState userState)
+      private ConcurrentQueue<User> GetUserQueue(UserState userState)
       {
          Users.TryGetValue(userState, out var queue);
          return queue;

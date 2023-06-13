@@ -19,11 +19,11 @@ namespace PerfRunner.Tests
 
       public WebAppClient _grpcClient { get; set; } = null!;
 
-      public UserManager UserManager { get; set; }
+      public IUserManager UserManager { get; set; }
 
       public TestBase() { }
 
-      public TestBase(HttpClient httpClient, WebAppClient webAppClient, UserManager userManager)
+      public TestBase(HttpClient httpClient, WebAppClient webAppClient, IUserManager userManager)
       {
          _httpClient = httpClient;
          _grpcClient = webAppClient;
