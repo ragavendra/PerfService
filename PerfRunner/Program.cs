@@ -30,9 +30,9 @@ namespace PerfRunner
          var builder = WebApplication.CreateBuilder(args);
 
          builder.Services.AddGrpc();
-         builder.Services.AddTransient<ActionRunner<ITestBase>>();
-         builder.Services.AddSingleton<TestStateManager>();
-         builder.Services.AddSingleton<UserManager>();
+         builder.Services.AddTransient<IActionRunner<ITestBase>, ActionRunner<ITestBase>>();
+         builder.Services.AddSingleton<ITestStateManager, TestStateManager>();
+         builder.Services.AddSingleton<IUserManager, UserManager>();
 
          // add typed http client factory
          builder.Services.AddHttpClient<ITestBase, TestBase>(client => {

@@ -10,7 +10,7 @@ namespace PerfRunner.Services
     // User mgmt for Users, keep this as light as possible
     // One User instance per user, so millions can have millions
     // need to check the performance as well.
-    public class UserManager
+    public class UserManager : IUserManager
    {
       private readonly ILogger<UserManager> _logger;
 
