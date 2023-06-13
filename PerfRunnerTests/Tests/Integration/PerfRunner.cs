@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace PerfRunnerTests.Tests.Integration
 {
    [TestFixture]
-   public class PerfLoader_
+   public class PerfRunner_
    {
       private Perf.PerfClient? PerfClient { get; set; }
 
