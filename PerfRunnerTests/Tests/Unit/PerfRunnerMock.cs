@@ -23,22 +23,21 @@ namespace PerfRunnerTests.Tests.Unit
    public class PerfRunnerMock
    {
       [Fact]
-      public async Task MockPerfServiceTests()
+      public async Task RunTestWhenTestIsRunning()
       {
          // Arrange
          // var mockTestStateMgr = new Mock<ITestStateManager>();
-         var mockTestStateMgr = new Mock<TestStateManager>();
-         // mockTestStateMgr.Setup(m => m.AddTest(It.IsAny<TestRequest>())).Returns(true);
+         var mockTestStateMgr = new Mock<ITestStateManager>();
 
          // var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
-         var mockActionRunner = new Mock<ActionRunner<ITestBase>>();
+         var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
          // mockActionRunner.Setup(m => m.StartActionsPerSecondAsync(It.IsAny<int>())).ReturnsAsync(It.IsAny<TimeSpan>());
 
          var mockLogger = new Mock<ILogger<PerfService>>();
 
          var mockTestBase = new Mock<ITestBase>();
 
-         var mockUserManager = new Mock<UserManager>();
+         var mockUserManager = new Mock<IUserManager>();
 
          var mockConf = new Mock<IConfiguration>();
 
@@ -53,9 +52,44 @@ namespace PerfRunnerTests.Tests.Unit
          var httpContext = new DefaultHttpContext();
          var serverCallContext = TestServerCallContext.Create();
 
-         var res = service.RunTest(new TestRequest() { Name = "Some" }, serverCallContext);
-         Assert.Equal("Hi Some", res.Result.Message);
-         // , "Response do not match");
+         var res = await service.RunTest(new TestRequest() { Name = "Some" }, serverCallContext);
+         Assert.Equal("Hi Some returned - Seems the test  is already runing.", res.Message);
+      }
+
+      [Fact]
+      public async Task MockRunTest()
+      {
+         // Arrange
+         // var mockTestStateMgr = new Mock<ITestStateManager>();
+         var mockTestStateMgr = new Mock<ITestStateManager>();
+         mockTestStateMgr.Setup(m => m.AddTest(It.IsAny<TestRequest>())).Returns(true);
+
+         // var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
+         var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
+         // mockActionRunner.Setup(m => m.StartActionsPerSecondAsync(It.IsAny<int>())).ReturnsAsync(It.IsAny<TimeSpan>());
+
+         var mockLogger = new Mock<ILogger<PerfService>>();
+
+         var mockTestBase = new Mock<ITestBase>();
+
+         var mockUserManager = new Mock<IUserManager>();
+
+         var mockConf = new Mock<IConfiguration>();
+
+         var service = new PerfService(
+            mockLogger.Object,
+            mockTestStateMgr.Object,
+            mockActionRunner.Object,
+            mockTestBase.Object,
+            mockUserManager.Object,
+            mockConf.Object);
+
+         var httpContext = new DefaultHttpContext();
+         var serverCallContext = TestServerCallContext.Create();
+
+         // var req = It.IsAny<TestRequest>();
+         var res = await service.RunTest(new TestRequest(){ Name = "Some" }, serverCallContext);
+         Assert.Equal("Hi Some", res.Message);
       }
 
       [Fact]

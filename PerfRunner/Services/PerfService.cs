@@ -102,8 +102,9 @@ namespace PerfRunner.Services
 
          if(!_testStateManager.AddTest(testRequest))
          {
-           _logger.LogError($"Seems the test {testRequest.Guid} is already runing"); 
-           return default;
+            var message = $"Seems the test {testRequest.Guid} is already runing.";
+           _logger.LogError(message);
+            return new TestReply { Message = $"Hi {testRequest.Name} returned - {message}" };
          }
 
          Parallel.ForEach(
