@@ -91,7 +91,7 @@ namespace PerfRunner.Services
                throw new TestRequestException(message);
             }
 
-            var actionRunner = (ActionRunner<ITestBase>)_actionRunner.CloneObj();
+            var actionRunner = (IActionRunner<ITestBase>)_actionRunner.CloneObj();
 
             actionRunner.TypeValue = (ITestBase?)inst;
 

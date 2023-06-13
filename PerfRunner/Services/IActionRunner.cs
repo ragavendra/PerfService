@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
+using PerfRunner.V1;
 
 namespace PerfRunner.Services
 {
@@ -12,6 +13,8 @@ namespace PerfRunner.Services
       public int Rate { get; set; }
 
       public ActionBlock<T> ActionBlock { get; set; }
+
+      public LoadDistribution? LoadDistribution_ { get; set; }
 
       public T TypeValue { get; set; }
 

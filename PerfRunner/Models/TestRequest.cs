@@ -18,9 +18,9 @@ namespace PerfRunner.V1
     /// </summary>
     internal CancellationTokenSource CancellationTokenSource { get; set; }
 
-    internal ActionRunner<ITestBase> ActionRunner { get; set; }
+    internal IActionRunner<ITestBase> ActionRunner { get; set; }
 
-    internal List<ActionRunner<ITestBase>> ActionRunners { get; set; } = new List<ActionRunner<ITestBase>>();
+    internal List<IActionRunner<ITestBase>> ActionRunners { get; set; } = new List<IActionRunner<ITestBase>>();
 
   }
 }
