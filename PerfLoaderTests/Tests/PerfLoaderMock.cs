@@ -7,10 +7,11 @@ using PerfLoader;
 using PerfRunner.V1;
 using PerfRunnerTests.Tests.Client.Helpers;
 using Xunit;
+// using PerfRunner.Services;
 
 namespace PerfRunnerTests.Tests
 {
-    public class PerfRunnerMock
+    public class PerfLoaderMock
     {
 
       // [Test(Description = "Run a perf test in the mock Runner Service")]

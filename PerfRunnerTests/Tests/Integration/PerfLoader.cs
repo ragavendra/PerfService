@@ -1,17 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Grpc.Net.Client;
+// extern alias CustomTypes;
 using PerfRunner.V1;
+using PerfLoader;
+using Grpc.Net.Client;
 using NUnit.Framework;
-using Moq;
-using PerfRunnerTests.Tests.Client.Helpers;
 
-namespace PerfRunnerTests.Tests
+namespace PerfRunnerTests.Tests.Integration
 {
    [TestFixture]
-   public class PerfRunner
+   public class PerfLoader_
    {
       private Perf.PerfClient? PerfClient { get; set; }
 

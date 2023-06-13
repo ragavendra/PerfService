@@ -29,9 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\PerfRunner\PerfRunner.csproj">
-    <Aliases>CustomTypes</Aliases>
-    </ProjectReference>
+    <!-- ProjectReference Include="..\PerfRunner\PerfRunner.csproj" / -->
     <ProjectReference Include="..\PerfLoader\PerfLoader.csproj" />
   </ItemGroup>
 
