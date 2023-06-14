@@ -50,7 +50,7 @@ namespace PerfRunner.Services
  
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
-         _logger.LogInformation("Config - " + _configuration["SomeApp:Host"]);
+         _logger.LogDebug("Config - " + _configuration["SomeApp:Host"]);
 
         testRequest.CancellationTokenSource = new CancellationTokenSource();
 
@@ -59,7 +59,7 @@ namespace PerfRunner.Services
          int processorCount = Environment.ProcessorCount;
 
          // Print the number of processors on this computer.
-         _logger?.LogInformation("Processor count = {0}.", processorCount);
+         _logger?.LogTrace("Processor count = {0}.", processorCount);
 
          TimeSpan elapsed = TimeSpan.MinValue;
 

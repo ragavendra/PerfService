@@ -76,7 +76,7 @@ public class ActionRunner<T> : IActionRunner<T>
       while (rate-- > 0)
       {
          ActionBlock.Post(TypeValue);
-         _logger?.LogInformation(
+         _logger?.LogDebug(
             $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds} ms, waited for remain - {remaining} ms. and divisor - {divisor} ms"
          );
 
