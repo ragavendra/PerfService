@@ -59,6 +59,7 @@ namespace PerfRunnerTests.Tests.Unit
          Assert.Equal("Hi Some returned - Seems the test  is already runing.", res.Message);
       }
 
+      // Not working completely as cloneobj mocking needs to be setup correctly.
       [Fact]
       public async Task MockRunTest()
       {
@@ -98,6 +99,7 @@ namespace PerfRunnerTests.Tests.Unit
          Assert.Equal("Hi Some", res.Message);
       }
 
+      // Not working completely as cloneobj mocking needs to be setup correctly.
       [Fact]
       public async Task MockRunParamsTest()
       {
