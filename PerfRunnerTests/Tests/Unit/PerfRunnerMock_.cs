@@ -65,7 +65,7 @@ namespace PerfRunnerTests.Tests.Unit
 
          // Assert
          Assert.Equal(false, res.Status);
-      }*/
+      }
 
-    }
+    }*/
 }
