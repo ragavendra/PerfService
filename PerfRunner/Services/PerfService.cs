@@ -21,15 +21,6 @@ namespace PerfRunner.Services
 
       public Guid Guid = Guid.NewGuid();
 
-      /// <summary>
-      /// The set of actions created from <see cref="ITestBase"/>.
-      /// </summary>
-      internal static readonly List<Type> TestActionTypes = Assembly.GetExecutingAssembly()
-         .GetTypes()
-         .Where(t => typeof(ITestBase).IsAssignableFrom(t))
-         .OrderBy(t => t.FullName)
-         .ToList();
-
       public Stopwatch Stopwatch { get; set; } = new();
 
       public PerfService(
@@ -52,7 +43,7 @@ namespace PerfRunner.Services
       {
          _logger.LogDebug("Config - " + _configuration["SomeApp:Host"]);
 
-        testRequest.CancellationTokenSource = new CancellationTokenSource();
+         testRequest.CancellationTokenSource = new CancellationTokenSource();
 
          // depending on the no of processors
          // runs so many in parallel
@@ -63,19 +54,36 @@ namespace PerfRunner.Services
 
          TimeSpan elapsed = TimeSpan.MinValue;
 
-         ITestBase typeVal_;
-
          //lets get all the types of ITestBase
          var type = typeof(ITestBase);
          var types = AppDomain.CurrentDomain.GetAssemblies()
-             .SelectMany(s => s.GetTypes())
-             .Where(p => type.IsAssignableFrom(p));
+            .SelectMany(s => s.GetTypes())
+            .Where(p => type.IsAssignableFrom(p));
+         // types.First().
+
+         bool contains = false;
 
          // load actions
          foreach (var action_ in testRequest.Actions)
          {
+            // check if the actions exist
+            foreach (var type_ in types)
+            {
+               if(type_.FullName.ToLowerInvariant().EndsWith("." + action_.Name.ToLowerInvariant()))
+               {
+                  contains = true;
+               } 
+            }
+
+            if(!contains)
+            {
+               throw new TestRequestException($"Unable to find {action_.Name} in Tests.");
+            }
+
+            contains = false;
+
             var inst = Activator.CreateInstance(
-               TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
+               types.First(action => action.FullName.ToLowerInvariant()
                   .EndsWith("." + action_.Name.ToLowerInvariant())),
                _testbase._httpClient,
                _testbase._grpcClient,
@@ -100,10 +108,10 @@ namespace PerfRunner.Services
             testRequest.ActionRunners.Add(actionRunner);
          }
 
-         if(!_testStateManager.AddTest(testRequest))
+         if (!_testStateManager.AddTest(testRequest))
          {
             var message = $"Seems the test {testRequest.Guid} is already runing.";
-           _logger.LogError(message);
+            _logger.LogError(message);
             return new TestReply { Message = $"Hi {testRequest.Name} returned - {message}" };
          }
 
