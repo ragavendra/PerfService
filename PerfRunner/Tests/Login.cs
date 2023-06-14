@@ -45,7 +45,7 @@ namespace PerfRunner.Tests
             logger?.LogDebug($"User is {user?.Email}.");
 
             var userId = 1;
-            var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
+            var todos = await HttpClient.GetFromJsonAsync<Todo[]>(
                $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
             // Console.WriteLine($"Title for todo item is {todos[3].title}.");

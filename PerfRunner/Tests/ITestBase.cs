@@ -9,9 +9,9 @@ namespace PerfRunner.Tests
 {
     public interface ITestBase
     {
-      public HttpClient _httpClient { get; set; }
+      public HttpClient HttpClient { get; set; }
 
-      public WebAppClient _grpcClient { get; set; }
+      public WebAppClient GrpcClient { get; set; }
 
       public IUserManager UserManager { get; set; }
 

@@ -85,8 +85,8 @@ namespace PerfRunner.Services
             var inst = Activator.CreateInstance(
                types.First(action => action.FullName.ToLowerInvariant()
                   .EndsWith("." + action_.Name.ToLowerInvariant())),
-               _testbase._httpClient,
-               _testbase._grpcClient,
+               _testbase.HttpClient,
+               _testbase.GrpcClient,
                _testbase.UserManager);
 
             // throw new TestRequestException("test message");

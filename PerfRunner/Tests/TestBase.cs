@@ -15,19 +15,24 @@ namespace PerfRunner.Tests
 
       public readonly ILogger<TestBase> _logger;
 
-      public HttpClient _httpClient { get; set; } = null!;
+      private HttpClient _httpClient;
 
-      public WebAppClient _grpcClient { get; set; } = null!;
+      private WebAppClient _grpcClient;
 
-      public IUserManager UserManager { get; set; }
+      private IUserManager _userManager;
 
-      public TestBase() { }
+      public IUserManager UserManager { get { return _userManager; } set { _userManager = value; } }
 
+      public HttpClient HttpClient { get { return _httpClient; } set { _httpClient = value; } }
+
+      public WebAppClient GrpcClient { get { return _grpcClient; } set { _grpcClient = value; } }
+
+      // public TestBase() { }
       public TestBase(HttpClient httpClient, WebAppClient webAppClient, IUserManager userManager)
       {
          _httpClient = httpClient;
          _grpcClient = webAppClient;
-         UserManager = userManager;
+         _userManager = userManager;
       }
 
       public virtual void RunTest(Guid guid, ILogger<PerfService> logger)
@@ -41,7 +46,6 @@ namespace PerfRunner.Tests
 
          // tell the GC to not dispose this?
          GC.SuppressFinalize(this);
-
       }
 
       public void Dispose(bool disposing)
