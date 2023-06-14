@@ -36,7 +36,7 @@ namespace PerfRunner.Tests
 
       public override async void RunTest(Guid guid, ILogger<PerfService> logger)
       {
-         logger?.LogInformation($"Running {GetType().Name} now for {guid}.");
+         logger?.LogDebug($"Running {GetType().Name} now for {guid}.");
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
          try
@@ -46,14 +46,14 @@ namespace PerfRunner.Tests
             // trying rpc to the webapp
             WebApp.V1.PingReply call = await _grpcClient.PingAsync(request);
 
-            logger.LogInformation($"Reply from WebApp is {call.Message}");
+            logger.LogDebug($"Reply from WebApp is {call.Message}");
 
          }
          catch (System.Exception)
          {
 
             // throw;
-            logger.LogInformation($"Obviously here! not implemented yet");
+            logger.LogDebug($"Obviously here! not implemented yet");
          }
 
       }

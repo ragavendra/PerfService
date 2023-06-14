@@ -36,7 +36,7 @@ namespace PerfRunner.Tests
 
       public override async void RunTest(Guid guid, ILogger<PerfService> logger)
       {
-         logger?.LogInformation($"Running {GetType().Name} now for {guid}.");
+         logger?.LogDebug($"Running {GetType().Name} now for {guid}.");
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
          var userId = 1;
@@ -44,7 +44,7 @@ namespace PerfRunner.Tests
             $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
          // Console.WriteLine($"Title for todo item is {todos[3].title}.");
-         logger?.LogInformation($"Title for todo item is {todos[3].title}.");
+         logger?.LogDebug($"Title for todo item is {todos[3].title}.");
 
       }
    }

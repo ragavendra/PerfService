@@ -36,7 +36,7 @@ namespace PerfRunner.Tests
 
       public override async void RunTest(Guid guid, ILogger<PerfService> logger)
       {
-         logger?.LogInformation($"Running {GetType().Name} now for {guid}.");
+         logger?.LogDebug($"Running {GetType().Name} now for {guid}.");
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
          // get auth user 
@@ -44,7 +44,7 @@ namespace PerfRunner.Tests
 
          if(user != null)
          {
-            logger?.LogInformation($"User is {user?.Email}.");
+            logger?.LogDebug($"User is {user?.Email}.");
 
             var userId = 1;
             var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
@@ -64,7 +64,7 @@ namespace PerfRunner.Tests
             }
 
             UserManager?.CheckInUser(user);
-            // logger?.LogInformation($"User is {user?.Email}.");
+            // logger?.LogDebug($"User is {user?.Email}.");
          }
       }
    }
