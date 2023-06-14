@@ -113,7 +113,7 @@ public class ActionRunner<T> : IActionRunner<T>
 
       sw.Stop();
 
-      _logger?.LogInformation(
+      _logger?.LogDebug(
          $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds} ms for {Guid}");
 
       return sw.Elapsed;

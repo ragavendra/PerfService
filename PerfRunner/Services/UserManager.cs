@@ -90,7 +90,7 @@ namespace PerfRunner.Services
             }
             else
             {
-               _logger.LogTrace($"No more users in {userState} .");
+               _logger.LogDebug($"No more users in {userState} .");
             }
          }
 

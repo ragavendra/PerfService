@@ -149,7 +149,7 @@ namespace PerfRunner.Services
                RunAct();
             });
 
-         _logger.LogInformation(
+         _logger.LogDebug(
             "After completion, Elapsed = {0} ms",
             (int)elapsed.TotalMilliseconds);
 

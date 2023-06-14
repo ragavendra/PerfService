@@ -32,7 +32,7 @@ namespace PerfRunner.Tests
 
       public virtual void RunTest(Guid guid, ILogger<PerfService> logger)
       {
-         logger?.LogInformation($"Running {nameof(this.GetType)} now.");
+         logger?.LogDebug($"Running {nameof(this.GetType)} now.");
       }
 
       public void Dispose()
