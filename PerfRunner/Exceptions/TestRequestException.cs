@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PerfRunner.Services
+namespace PerfRunner.Exceptions
 {
     public class TestRequestException : ApplicationException
     {

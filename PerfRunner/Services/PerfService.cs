@@ -4,6 +4,7 @@ using Grpc.Core;
 using PerfRunner.V1;
 using PerfRunner.Tests;
 using System.Reflection;
+using PerfRunner.Exceptions;
 
 namespace PerfRunner.Services
 {
