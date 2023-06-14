@@ -167,11 +167,15 @@ namespace PerfRunner.Services
          }
          catch (InvalidOperationException ex)
          {
-            _logger.LogError($"Issue stopping test - {ex.Message} .");
+            var message = $"Issue stopping test ex - {ex.Message} .";
+            _logger.LogError(message);
+            return new StopTestReply { Status = resp };
          }
          catch (Exception ex)
          {
-            _logger.LogError($"Issue stopping test ex - {ex.Message} .");
+            var message = $"Issue stopping test ex - {ex.Message} .";
+            _logger.LogError(message);
+            return new StopTestReply { Status = resp };
          }
 
          return new StopTestReply { Status = resp };
