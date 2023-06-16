@@ -162,7 +162,7 @@ namespace PerfRunnerTests.Tests.Unit
         // var service = new PerfService(new ILogger<PerfService>(), mockTestStateMgr.Object, mockActionRunner.Object);
       }
 
-      // Not working yet
+      // Not working yet - extended protobuf class cannot be loaded here
       [Fact]
       public async Task MockStopTest()
       {
@@ -179,8 +179,11 @@ namespace PerfRunnerTests.Tests.Unit
          var callContext = TestServerCallContext.Create(cancellationToken: cts.Token);
 
          var stopTestRequest = new StopTestRequest { Guid = testRequest.Guid };
-         mockTestStateMgr.Setup(m => m.GetTest(testRequest.Guid)).Returns(testRequest);
-         mockTestStateMgr.Setup(m => m.RemoveTest(testRequest.Guid)).Returns(true);
+         // mockTestStateMgr.Setup(m => m.GetTest(testRequest.Guid)).Returns(testRequest);
+         mockTestStateMgr.Setup(m => m.GetTest(It.IsAny<string>())).Returns(It.IsAny<TestRequest>);
+         
+         // mockTestStateMgr.Setup(m => m.GetTest(testRequest.Guid)?.CancellationTokenSource().Cancel).Returns(testRequest);
+         mockTestStateMgr.Setup(m => m.RemoveTest(It.IsAny<string>())).Returns(true);
 
          // var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
          var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
