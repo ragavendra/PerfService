@@ -29,6 +29,7 @@ namespace PerfRunnerTests.Tests.Unit
          // var mockTestStateMgr = new Mock<ITestStateManager>();
          var mockTestStateMgr = new Mock<ITestStateManager>();
 
+         // mockTestStateMgr.Setup(m => m.AddTest(It.IsAny<TestRequest>())).Returns(false);
          // var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
          var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
          // mockActionRunner.Setup(m => m.StartActionsPerSecondAsync(It.IsAny<int>())).ReturnsAsync(It.IsAny<TimeSpan>());
@@ -145,21 +146,6 @@ namespace PerfRunnerTests.Tests.Unit
 
          // Assert
          Assert.Equal("Hi Some", res.Message);
-      }
-
-
-
-      [Fact]
-      public async Task TestStateMgrMock()
-      {
-        // Arrange
-        var mockTestStateMgr = new Mock<ITestStateManager>();
-        // mockTestStateMgr.Setup(m => m.AddTest(It.IsAny<string>())).Returns(true);
-
-        var mockActionRunner = new Mock<IActionRunner<Login>>();
-        mockActionRunner.Setup(m => m.StartActionsPerSecondAsync(It.IsAny<int>())).ReturnsAsync(It.IsAny<TimeSpan>());
-
-        // var service = new PerfService(new ILogger<PerfService>(), mockTestStateMgr.Object, mockActionRunner.Object);
       }
 
       // Not working yet - extended protobuf class cannot be loaded here
