@@ -29,6 +29,8 @@ namespace PerfRunner
 
          var builder = WebApplication.CreateBuilder(args);
 
+         builder.Services.AddHostedService<Greeter>();
+
          builder.Services.AddGrpc();
          builder.Services.AddTransient<IActionRunner<ITestBase>, ActionRunner<ITestBase>>();
          builder.Services.AddSingleton<ITestStateManager, TestStateManager>();
