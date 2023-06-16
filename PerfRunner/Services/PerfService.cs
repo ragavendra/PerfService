@@ -8,8 +8,13 @@ using PerfRunner.Exceptions;
 
 namespace PerfRunner.Services
 {
+   /// <summary>
+   /// Main service loading the dependencies
+   /// </summary>
    public class PerfService : Perf.PerfBase
    {
+      #region Fields
+
       private readonly ILogger<PerfService> _logger;
 
       private readonly ITestStateManager _testStateManager;
@@ -19,6 +24,8 @@ namespace PerfRunner.Services
       public readonly IConfiguration _configuration;
 
       public readonly ITestBase _testbase;
+
+      #endregion
 
       public Guid Guid = Guid.NewGuid();
 
@@ -39,6 +46,8 @@ namespace PerfRunner.Services
          _testbase.UserManager = userManager;
          _configuration = configuration;
       }
+
+      #region Methods
  
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
@@ -231,5 +240,6 @@ namespace PerfRunner.Services
 
          return new UpdateRateReply { Status = true };
       }
+      #endregion 
    }
 }

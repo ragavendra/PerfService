@@ -4,8 +4,10 @@ using PerfRunner.V1;
 
 namespace PerfRunner.Services
 {
-   // Static class to maintain or manage test(s).
-   // Helps in maintaining the tests or update* them
+   ///<summary>
+   /// Static class to maintain or manage test(s).
+   /// Helps in maintaining the tests or update* them.
+   ///</summary>
    public class TestStateManager : ITestStateManager
    {
       public Guid Guid = Guid.NewGuid();
