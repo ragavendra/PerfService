@@ -60,6 +60,7 @@ namespace PerfRunnerTests.Tests.Unit
       }
 
       // Not working completely as cloneobj mocking needs to be setup correctly.
+      // AppDomain.GetCurrentDomain is not same when running test(s)
       [Fact]
       public async Task MockRunTest()
       {
@@ -92,8 +93,11 @@ namespace PerfRunnerTests.Tests.Unit
          var serverCallContext = TestServerCallContext.Create();
 
          // var req = It.IsAny<TestRequest>();
+         var testRequest = new TestRequest { Name = "Some", Guid = Guid.NewGuid().ToString(), Rate = 3 };
+         testRequest.Actions.Add(new ActionOption() { Name = "Login" });
+
          // Act
-         var res = await service.RunTest(new TestRequest(){ Name = "Some" }, serverCallContext);
+         var res = await service.RunTest(testRequest, serverCallContext);
          
          // Assert
          Assert.Equal("Hi Some", res.Message);
