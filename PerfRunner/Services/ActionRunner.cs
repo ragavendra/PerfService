@@ -47,13 +47,7 @@ public class ActionRunner<T> : IActionRunner<T>
 
    public ActionBlock<T> ActionBlock { get; set; }
 
-   public IList<ActionBlock<T>> ActionBlocks { get; set; } = new List<ActionBlock<T>>();
-
    public T TypeValue { get; set; }
-
-   public IList<T> TypeValues { get; set; }
-
-   public Stopwatch Stopwatch { get; set; } = new();
 
    private readonly ILogger<ActionRunner<T>> _logger;
 

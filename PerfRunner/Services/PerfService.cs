@@ -77,6 +77,7 @@ namespace PerfRunner.Services
 
          bool contains = false;
          Type actionType = null;
+         List<IActionRunner<ITestBase>> actionRunners = new List<IActionRunner<ITestBase>>();
 
          // load actions
          foreach (var action_ in testRequest.Actions)
@@ -145,7 +146,8 @@ namespace PerfRunner.Services
 
             actionRunner.Rate = action_.Rate;
 
-            testRequest.ActionRunners.Add(actionRunner);
+            // testRequest.ActionRunners.Add(actionRunner);
+            actionRunners.Add(actionRunner);
          }
 
          if (!_testStateManager.AddTest(testRequest))
@@ -156,7 +158,7 @@ namespace PerfRunner.Services
          }
 
          Parallel.ForEach(
-            testRequest.ActionRunners,
+            actionRunners,
             actionRunner =>
             {
                actionRunner.LoadDistribution_ = LoadDistribution.Even;
