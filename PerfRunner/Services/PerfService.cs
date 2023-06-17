@@ -23,6 +23,8 @@ namespace PerfRunner.Services
 
       public readonly IConfiguration _configuration;
 
+      public readonly IServiceScopeFactory _serviceScopeFactory;
+
       public readonly ITestBase _testbase;
 
       #endregion
@@ -37,7 +39,8 @@ namespace PerfRunner.Services
          IActionRunner<ITestBase> actionRunner,
          ITestBase testBase,
          IUserManager userManager,
-         IConfiguration configuration)
+         IConfiguration configuration,
+         IServiceScopeFactory serviceScopeFactory)
       {
          _logger = logger;
          _testStateManager = testStateManager;
@@ -45,6 +48,7 @@ namespace PerfRunner.Services
          _testbase = testBase;
          _testbase.UserManager = userManager;
          _configuration = configuration;
+         _serviceScopeFactory = serviceScopeFactory;
       }
 
       #region Methods
@@ -72,6 +76,7 @@ namespace PerfRunner.Services
          // types.First().
 
          bool contains = false;
+         Type actionType = null;
 
          // load actions
          foreach (var action_ in testRequest.Actions)
@@ -82,6 +87,7 @@ namespace PerfRunner.Services
                if(type_.FullName.ToLowerInvariant().EndsWith("." + action_.Name.ToLowerInvariant()))
                {
                   contains = true;
+                  actionType = type_;
                } 
             }
 
@@ -91,15 +97,39 @@ namespace PerfRunner.Services
             }
 
             contains = false;
+/*
+            using (IServiceScope scope = _serviceScopeFactory.CreateScope())
+            {
+               try
+               {
+                  _logger.LogInformation(
+                      "Starting scoped work, provider hash: {hash}.",
+                      scope.ServiceProvider.GetHashCode());
+
+                  // _actionRunner.TypeValue = 
+                  var test = scope.ServiceProvider.GetRequiredService<ITestBase>();
+                  // _actionRunner.TypeValue = (typeof(actionType)) test;
+                  // var next = await store.;
+                  // _logger.LogInformation("{next}", next);
+
+                  string some = "some";
+
+                  Convert.ChangeType(test, actionType.GetType());
+                  _actionRunner.TypeValue = test;
+                  // if(test is contains.GetType() a)
+               }
+               finally
+               {
+
+               }
+            }*/
 
             var inst = Activator.CreateInstance(
-               types.First(action => action.FullName.ToLowerInvariant()
-                  .EndsWith("." + action_.Name.ToLowerInvariant())),
+               actionType!,
                _testbase.HttpClient,
                _testbase.GrpcClient,
                _testbase.UserManager);
 
-            // throw new TestRequestException("test message");
 
             // not going here
             if (!(inst is ITestBase typeVal))
