@@ -21,8 +21,8 @@ Front end or the web interface to initiate performance test run(s) and control o
 Unit tests for the `PerfRunner` to be kept updated with any new features added to the `PerfRunner` project.
 
 ### Planned features
-1. Migrate to use Semaphore to use limited no. of threads per second instead of manual control?
-2. Try using interface inherit implementation.
+1. Assunming runner(s) running a single test, test users may have to be shared across them. Need a cache or ESB queue to may be write to db or not on cloud. The UserMgr may have to fetch user(s) from that cache or queue.
+2. Migrate to use Semaphore to use limited no. of threads per second instead of manual control?
 
 ### Existing features
 1. Abitlity to create and run http test(s).
@@ -34,6 +34,7 @@ Unit tests for the `PerfRunner` to be kept updated with any new features added t
 7. Ability to transfer data across test(s) - can be achieved by adding new data properties to the `User` object itself, say like the phone number, library card number, health number and so on. This is updated and be used by each test(s) accordingly by dequeing that state queue with the user with that updated data. Say the user just registeted at the front desk with payment, library no, his state is now authenticated and library no. is the new data and he is in the authenticated state queue. Whenever its his turn, that user gets popped from that queue. 
 8. Support for flag for equal or uneven load distribution per second.
 8a. If each action has a rate that is used for rate otherwise default to test rate.
+9. Try using interface inherit implementation.
 
 ### Planned features - Loader
 1. Update/ Edit test params during run like rate, distribution.
