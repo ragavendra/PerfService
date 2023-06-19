@@ -27,39 +27,16 @@ namespace PerfRunner
             Directory.CreateDirectory(logOutputDir);
          }*/
 
-         var builder = WebApplication.CreateBuilder(args);
 
-         builder.Services.AddGrpc();
-         builder.Services.AddTransient<IActionRunner<ITestBase>, ActionRunner<ITestBase>>();
-         builder.Services.AddSingleton<ITestStateManager, TestStateManager>();
-         builder.Services.AddSingleton<IUserManager, UserManager>();
-
-         // add typed http client factory
-         builder.Services.AddHttpClient<ITestBase, TestBase>(client => {
-            client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
-
-            client.DefaultRequestHeaders.UserAgent.ParseAdd("dotnet-raga");
-         });
-
-         // web app cli where the test(s) aim to make gRPC calls, can be stubbed or mocked 
-         builder.Services.AddGrpcClient<WebAppClient>(client =>
-            client.Address = new Uri("https://localhost:7234"));
-
-         // support for cli calls
-         builder.Services.AddGrpcReflection();
-
-         var app = builder.Build();
-         app.MapGrpcService<PerfService>();
-         app.MapGet("/", () => "Comm with gRPC should be made through gRPC clients.");
-
-         var env = app.Environment;
-
-         if(env.IsDevelopment()){
-            app.MapGrpcReflectionService();
-         }
-
-         app.Run();
+         CreateHostBuilder(args).Build().Run();
       }
+
+      public static IHostBuilder CreateHostBuilder(string[] args) =>
+               Host.CreateDefaultBuilder(args)
+                  .ConfigureWebHostDefaults(webHostBuilder =>
+                     {
+                        webHostBuilder.UseStartup<AppStart>();
+                     });
 
    }
 }
