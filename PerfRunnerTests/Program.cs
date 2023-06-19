@@ -119,6 +119,7 @@ var rep = await cli.PingAsync(new PingRequest { Name = "PingCli" });
 // var rep = cli.Ping(new PerfRunner.PingRequest { Name = "PingCli" });
 */
 
+/*
 var cli = new Perf.PerfClient(channel);
 
 var testRequest = new TestRequest { Name = "FirstTest", Guid = Guid.NewGuid().ToString(), Rate = 3 };
@@ -157,7 +158,7 @@ var rep_1 = await cli.StopTestAsync(new StopTestRequest { Guid = testRequest2.Gu
 // Console.WriteLine("Greeting: " + rep.Message);
 Console.WriteLine("Stop Test Resp: " + rep_.Status);
 // Console.ReadKey();
-
+*/
 /*
 Func<string, int> someFunc;
 
