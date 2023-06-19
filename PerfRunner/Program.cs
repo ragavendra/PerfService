@@ -1,15 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography.X509Certificates;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Server.Kestrel.Https;
-using Microsoft.Extensions.DependencyInjection;
-using PerfRunner.Network;
-using PerfRunner.Services;
-using PerfRunner.Tests;
-using static WebApp.V1.WebApp;
-
 namespace PerfRunner
 {
     public static class Program
@@ -33,10 +21,7 @@ namespace PerfRunner
 
       public static IHostBuilder CreateHostBuilder(string[] args) =>
                Host.CreateDefaultBuilder(args)
-                  .ConfigureWebHostDefaults(webHostBuilder =>
-                     {
-                        webHostBuilder.UseStartup<AppStart>();
-                     });
+                  .ConfigureWebHostDefaults(webHostBuilder => webHostBuilder.UseStartup<AppStart>());
 
    }
 }

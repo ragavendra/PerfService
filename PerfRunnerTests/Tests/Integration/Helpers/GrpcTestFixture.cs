@@ -16,7 +16,6 @@
 
 #endregion
 
-/*
 
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -25,7 +24,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
-namespace Tests.Server.IntegrationTests.Helpers
+namespace PerfRunnerTests.Tests.Integration.Helpers
 {
     public delegate void LogMessage(LogLevel logLevel, string categoryName, EventId eventId, string message, Exception? exception);
 
@@ -99,4 +98,3 @@ namespace Tests.Server.IntegrationTests.Helpers
         }
     }
 }
-*/
