@@ -7,9 +7,11 @@ using PerfRunner.Models;
 
 namespace PerfRunner.Services
 {
-    // User mgmt for Users, keep this as light as possible
-    // One User instance per user, so millions can have millions
-    // need to check the performance as well.
+   ///<summary>
+   /// User mgmt for Users, keep this as light as possible
+   /// One User instance per user, so millions can have millions
+   /// need to check the performance as well.
+   ///</summary>
     public class UserManager : IUserManager
    {
       private readonly ILogger<UserManager> _logger;

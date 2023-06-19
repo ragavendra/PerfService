@@ -17,10 +17,5 @@ namespace PerfRunner.V1
     /// The <see cref="TestStateManager"/> the test should run with.
     /// </summary>
     internal CancellationTokenSource CancellationTokenSource { get; set; }
-
-    internal IActionRunner<ITestBase> ActionRunner { get; set; }
-
-    internal List<IActionRunner<ITestBase>> ActionRunners { get; set; } = new List<IActionRunner<ITestBase>>();
-
   }
 }

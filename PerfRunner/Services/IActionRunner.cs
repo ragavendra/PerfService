@@ -18,10 +18,6 @@ namespace PerfRunner.Services
 
       public T TypeValue { get; set; }
 
-      public IList<T> TypeValues { get; set; }
-
-      public Stopwatch Stopwatch { get; set; }
-
       public Task<TimeSpan> StartActionsPerSecondAsync(int rate);
 
       public object CloneObj();

@@ -18,6 +18,10 @@ and start the test first.
 
 // Demonstrates how to specify the maximum degree of parallelism
 // when using dataflow.
+
+/// <summary>
+/// One ActionRunner<T> for each action of type <T> or test to be run.
+/// </summary>
 public class ActionRunner<T> : IActionRunner<T>
 {
    private LoadDistribution? _loadDistribution;
@@ -43,13 +47,7 @@ public class ActionRunner<T> : IActionRunner<T>
 
    public ActionBlock<T> ActionBlock { get; set; }
 
-   public IList<ActionBlock<T>> ActionBlocks { get; set; } = new List<ActionBlock<T>>();
-
    public T TypeValue { get; set; }
-
-   public IList<T> TypeValues { get; set; }
-
-   public Stopwatch Stopwatch { get; set; } = new();
 
    private readonly ILogger<ActionRunner<T>> _logger;
 
