@@ -23,8 +23,6 @@ namespace PerfRunner.Services
 
       public readonly IConfiguration _configuration;
 
-      public readonly IServiceScopeFactory _serviceScopeFactory;
-
       public readonly ITestBase _testbase;
 
       #endregion
@@ -39,8 +37,7 @@ namespace PerfRunner.Services
          IActionRunner<ITestBase> actionRunner,
          ITestBase testBase,
          IUserManager userManager,
-         IConfiguration configuration,
-         IServiceScopeFactory serviceScopeFactory)
+         IConfiguration configuration)
       {
          _logger = logger;
          _testStateManager = testStateManager;
@@ -48,7 +45,6 @@ namespace PerfRunner.Services
          _testbase = testBase;
          _testbase.UserManager = userManager;
          _configuration = configuration;
-         _serviceScopeFactory = serviceScopeFactory;
       }
 
       #region Methods
@@ -130,7 +126,6 @@ namespace PerfRunner.Services
                _testbase.HttpClient,
                _testbase.GrpcClient,
                _testbase.UserManager);
-
 
             // not going here
             if (!(inst is ITestBase typeVal))
