@@ -12,7 +12,8 @@ using PerfRunner.V1;
 
 namespace PerfRunnerTests.Tests.Unit
 {
-   public class PerfRunnerMock
+   // These should be stub test(s).
+   public class PerfRunnerStub
    {
       [Fact]
       public async Task RunTestWhenTestIsRunning()
