@@ -231,7 +231,7 @@ namespace PerfRunnerTests.Tests.Unit
          var serverCallContext = TestServerCallContext.Create();
 
          // Act
-         var res = await service.UpdateRate(new UpdateRateRequest(){ Rate = 6 }, serverCallContext);
+         var res = service.UpdateRate(new UpdateRateRequest(){ Rate = 6 }, serverCallContext);
 
          // Assert
          Assert.Equal(true, res.Status);

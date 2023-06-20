@@ -267,6 +267,53 @@ namespace PerfRunner.Services
 
          return new UpdateRateReply { Status = true };
       }
+
+      public override async Task MonitorTest(MonitorTestRequest monitorRequest,
+      IServerStreamWriter<TestRequest> response,
+      ServerCallContext context)
+      {
+         try
+         {
+            var test = _testStateManager.GetTest(monitorRequest.Guid);
+            while (!context.CancellationToken.IsCancellationRequested)
+            {
+               await response.WriteAsync(test);
+               await Task.Delay(TimeSpan.FromSeconds(3), context.CancellationToken);
+            }
+         }
+         catch(Exception ex)
+         {
+            _logger.LogError($"Unable to update rate - {ex.Message}");
+         }
+
+         // return test;
+      }
+
+      public override async Task<TestRequests> RunningTests(RunningTestsRequest runningTestsRequest, ServerCallContext context)
+      {
+         try
+         {
+            // lets update rate
+            // _cancelTokenSourceAllTests.Cancel();
+            var test = _testStateManager.Tests;
+            
+            // var res = (List<TestRequest>) test.Values;
+            TestRequests testRequests = new TestRequests();
+            testRequests.Tests.AddRange(_testStateManager.Tests.Values);
+
+            return testRequests;
+            // return new Task<TestRequests>(() => { return testRequests; });
+         }
+         catch(Exception ex)
+         {
+            _logger.LogError($"Unable to update rate - {ex.Message}");
+         }
+
+         return default;
+         // return new UpdateRateReply { Status = true };
+      }
+
+ 
       #endregion 
    }
 }

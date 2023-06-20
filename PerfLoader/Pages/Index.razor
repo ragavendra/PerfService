@@ -37,9 +37,39 @@ Running Tests:
 @foreach (var item in RunningTests)
 {
  <br>
- <label>@item</label>
- <button @onclick="() => StopTest(item)">Stop</button>
+ <label>@item.Guid</label>
+ <button @onclick="() => StopTest(item.Guid)">Stop</button>
 }
+<br>
+<br>
+
+<h3>Monitoring Tests</h3>
+@foreach (var item in RunningTests)
+{
+ <br>
+ <label>Guid - @item.Guid</label>
+ <br>
+ <label>Name - @item.Name</label>
+ <br>
+ <label>Rate - @item.Rate</label>
+ <br>
+ <h6>Actions</h6>
+ @foreach (var item_ in item.Actions)
+ {
+        <label>Guid - @item_.Guid</label>  
+ <br>
+        <label>Name - @item_.Name</label>  
+ <br>
+        <label>Rate - @item_.Rate</label>  
+ <br>
+        <label>Duration - @item_.Duration</label>  
+ <br>
+ }
+ <br>
+ <button @onclick="() => StopTest(item.Guid)">Stop</button>
+}
+ <br>
+ <button @onclick="() => CheckTests()">CheckTests</button>
 
 @code {
 
@@ -48,7 +78,7 @@ Running Tests:
 
     private Perf.PerfClient PerfClient { get; set; }
 
-    private IList<string> RunningTests { get; set; } = new List<string>();
+    private IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
 
     protected override void OnInitialized()
     {
@@ -61,6 +91,11 @@ Running Tests:
         var host_ = "http://localhost:5277";
         var channel = GrpcChannel.ForAddress(host_);
         PerfClient = new Perf.PerfClient(channel);
+
+        if(RunningTests.Count <= 0)
+        {
+            CheckTests();
+        }
     }
 
     private void NewTest()
@@ -100,7 +135,7 @@ Running Tests:
 
         // not wait for task to complete
         var rep = PerfClient.RunTestAsync(TestRequest);
-        RunningTests.Add(TestRequest.Guid);
+        RunningTests.Add(TestRequest);
 
         NewTest();
    }
@@ -110,7 +145,8 @@ Running Tests:
         var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
         
         // StateHasChanged();
-        RunningTests.Remove(guid);
+        // RunningTests.Remove(test => test.Guid.Equals(guid));
+        RunningTests.Remove(RunningTests.Where(test => test.Guid.Equals(guid)).First());
     }
 
     private async void StopAllTestsAsync()
@@ -120,9 +156,36 @@ Running Tests:
             Logger.LogInformation("Stopping test " + item);
 
             // not wait for task to complete
-            var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item });
+            var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item.Guid });
             // RunningTests.Remove(item);
         }
+
+        RunningTests.Clear();
+    }
+
+    private void CheckTests()
+    {
+        try
+        {
+            var res = PerfClient.RunningTests(new RunningTestsRequest());
+            RunningTests = res.Tests;
+        }
+        catch (System.Exception exc)
+        {
+            Logger.LogError($"Unable to fetch tests - {exc.Message}");
+        }
+    }
+
+    private async void MonitorAllTestsAsync()
+    {
+        Parallel.ForEach(RunningTests, item =>
+        {
+            Logger.LogInformation("Monitoring test " + item);
+
+            // not wait for task to complete
+            var rep = PerfClient.MonitorTest(new MonitorTestRequest { Guid = item.Guid });
+            // RunningTests.Remove(item);
+        });
 
         RunningTests.Clear();
     }
