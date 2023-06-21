@@ -193,6 +193,7 @@ Running Tests:
 
     private async void MonitorAllTestsAsync(Action state)
     {
+        var cancelToken = new CancellationTokenSource();
 
         Parallel.ForEach(RunningTests, async item =>
         {
@@ -204,13 +205,14 @@ Running Tests:
 
                 // not wait for task to complete
                 using var resp = PerfClient.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
-    _cancellationToken);
+    cancelToken.Token);
 
-                await foreach (var item_ in resp.ResponseStream.ReadAllAsync(_cancellationToken))
+                await foreach (var item_ in resp.ResponseStream.ReadAllAsync(cancelToken.Token))
                 {
                     var resp_ = item_;
                     Logger.LogInformation($"Test is {item_.Name} .");
                     state?.Invoke();
+                    // cancelToken.Cancel();
                 }
 
                 // await resp;
@@ -229,6 +231,10 @@ Running Tests:
                 RunningTests.Remove(item);
                 // throw;
             }
+
+            // cancelToken.Cancel();
+            // var can = new CancellationTokenSource();
+            // can.Cancel();
             /*
             foreach (var item in resp.ResponseStream.ReadAllAsync(_cancellationToken))
             {

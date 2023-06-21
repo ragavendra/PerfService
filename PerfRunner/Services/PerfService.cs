@@ -274,16 +274,16 @@ namespace PerfRunner.Services
       {
          try
          {
-            var test = _testStateManager.GetTest(monitorRequest.Guid);
             while (!context.CancellationToken.IsCancellationRequested)
             {
+               var test = _testStateManager.GetTest(monitorRequest.Guid);
                await response.WriteAsync(test);
                await Task.Delay(TimeSpan.FromSeconds(3), context.CancellationToken);
             }
          }
          catch(Exception ex)
          {
-            _logger.LogError($"Unable to update rate - {ex.Message}");
+            _logger.LogError($"Unable to monitor test {monitorRequest.Guid} - {ex.Message}");
          }
 
          // return test;
