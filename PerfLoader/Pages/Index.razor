@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
 @inject ILogger<Index> Logger
@@ -79,6 +80,8 @@ Running Tests:
 }
  <br>
  <button @onclick="() => CheckTests()">CheckTests</button>
+ <br>
+ <button @onclick="() => MonitorAllTestsAsync(StateHasChanged)">MonitorAllTests</button>
 
 @code {
 
@@ -86,6 +89,8 @@ Running Tests:
     // Actions.Add(new ActionOption() { Name = "Login"}});
 
     private Perf.PerfClient PerfClient { get; set; }
+
+    private CancellationToken _cancellationToken;
 
     private IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
 
@@ -99,6 +104,7 @@ Running Tests:
         testRequest.Actions.Add(actionOption);*/
         var host_ = "http://localhost:5277";
         var channel = GrpcChannel.ForAddress(host_);
+        _cancellationToken = new CancellationToken();
         PerfClient = new Perf.PerfClient(channel);
 
         if(RunningTests.Count <= 0)
@@ -185,18 +191,53 @@ Running Tests:
         }
     }
 
-    private async void MonitorAllTestsAsync()
+    private async void MonitorAllTestsAsync(Action state)
     {
-        Parallel.ForEach(RunningTests, item =>
+
+        Parallel.ForEach(RunningTests, async item =>
         {
             Logger.LogInformation("Monitoring test " + item);
+            // Action someAction;
 
-            // not wait for task to complete
-            var rep = PerfClient.MonitorTest(new MonitorTestRequest { Guid = item.Guid });
+            try
+            {
+
+                // not wait for task to complete
+                using var resp = PerfClient.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
+    _cancellationToken);
+
+                await foreach (var item_ in resp.ResponseStream.ReadAllAsync(_cancellationToken))
+                {
+                    var resp_ = item_;
+                    Logger.LogInformation($"Test is {item_.Name} .");
+                    state?.Invoke();
+                }
+
+                // await resp;
+                // var str = resp.ResponseStream;
+                // var rep = resp.ResponseStream.ReadAllAsync(_cancellationToken);
+                // RunningTests = (List<TestRequest>) rep;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+                RunningTests.Remove(item);
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+                RunningTests.Remove(item);
+                // throw;
+            }
+            /*
+            foreach (var item in resp.ResponseStream.ReadAllAsync(_cancellationToken))
+            {
+
+            }*/
             // RunningTests.Remove(item);
         });
 
-        RunningTests.Clear();
+        // RunningTests.Clear();
     }
 }
 
