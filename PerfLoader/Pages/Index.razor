@@ -4,6 +4,15 @@
 @inject ILogger<Index> Logger
 
 <PageTitle>Index</PageTitle>
+<environment include="Development">
+    <div>Environment is Development</div>
+</environment>
+<!-- environment exclude="Development">
+    <div>Environment is NOT Development</div>
+</environment>
+<environment include="Staging,Development,Staging_2">
+    <div>Environment is: Staging, Development or Staging_2</div>
+</environment -->
 
 <h1>Hello, world!</h1>
 
