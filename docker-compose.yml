@@ -1,0 +1,25 @@
+services:
+  app:
+    image: ${IMAGE_NAME}:${IMAGE_VERSION}-perf-app
+    container_name: perf-app-srvc
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+      cache_from:
+        - ${IMAGE_NAME}:${IMAGE_VERSION}-perf-app
+    deploy:
+      resources:
+        limits:
+          memory: 160M
+    restart: unless-stopped
+    ports:
+      - 127.0.0.1:5000:5000
+    working_dir: /app
+    volumes:
+      - ./:/app
+
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    ports:
+      - 127.0.0.1:5672:5672
+      - 127.0.0.1:15672:15672

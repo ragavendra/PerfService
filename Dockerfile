@@ -3,10 +3,10 @@ WORKDIR /app
 
 # Copy csproj and restore as distinct layers
 COPY . ./
-RUN dotnet restore PerfRunner/*.csproj
+# RUN dotnet restore PerfRunner/*.csproj
 
 # Copy everything else and build
-COPY . ./
+# COPY . ./
 RUN dotnet publish -c Release -o out PerfRunner/*.csproj
 
 # Build runtime image
