@@ -5,13 +5,13 @@ namespace Company.Consumers
     using Contracts;
     using Microsoft.Extensions.Logging;
 
-    public class ConsumerConsumer :
+    public class UserMessageConsumer :
         IConsumer<UserMessage>
     {
 
-        readonly ILogger<ConsumerConsumer> _logger;
+        readonly ILogger<UserMessageConsumer> _logger;
 
-        public ConsumerConsumer(ILogger<ConsumerConsumer> logger)
+        public ConsumerConsumer(ILogger<UserMessageConsumer> logger)
         {
             _logger = logger;
         }

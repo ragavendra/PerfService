@@ -1,4 +1,9 @@
-namespace PerfRunner.Models
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Contracts
 {
    // A class containing the user context data, it can be address, contact info
    // related to user based on the web app api. Lets, say the web app to be a bowling
