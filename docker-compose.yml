@@ -14,9 +14,6 @@ services:
     restart: unless-stopped
     ports:
       - 127.0.0.1:5000:5000
-    working_dir: /app
-    volumes:
-      - ./:/app
 
   rabbitmq:
     image: rabbitmq:3.12-management
