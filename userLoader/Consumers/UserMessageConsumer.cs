@@ -1,5 +1,6 @@
 namespace Company.Consumers
 {
+    using System.Threading;
     using System.Threading.Tasks;
     using MassTransit;
     using Contracts;
@@ -19,7 +20,8 @@ namespace Company.Consumers
         public Task Consume(ConsumeContext<UserMessage> context)
         {
             _logger.LogInformation("Hello {name}", context.Message.Title);
-            Task.Delay(1020);
+            // Task.Delay(1020);
+            Thread.Sleep(1020);
             return Task.CompletedTask;
         }
     }

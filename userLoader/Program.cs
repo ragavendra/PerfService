@@ -38,7 +38,7 @@ namespace userLoader
                         x.AddSagaStateMachines(entryAssembly);
                         x.AddSagas(entryAssembly);
                         x.AddActivities(entryAssembly);*/
-                        service.AddConsumer<ConsumerConsumer>();
+                        service.AddConsumer<UserConsumer, UserConsumerDefinition>();
 
                         service.UsingRabbitMq(configure: (hostContext, conf) =>
                         {
@@ -53,7 +53,7 @@ namespace userLoader
                         });
                     });
 
-                     // services.AddHostedService<Producer>();
+            //       services.AddHostedService<Producer>();
                 });
     }
 }

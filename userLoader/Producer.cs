@@ -36,6 +36,7 @@ namespace userLoader
             // await _bus.Publish(new UserMessage() { Title = $"Hi there {DateTime.Now.ToString()}!" }, cts);
 
             // await Task.Delay(1000, cts);
+            await Task.Delay(1000, cancellationToken);
          }
       }
 
@@ -63,7 +64,7 @@ namespace userLoader
          });*/
 
          await _bus.Publish(user);
-         await Task.Delay(1000, cancellationToken);
+         Thread.Sleep(1000);
 
          return true;
       }
