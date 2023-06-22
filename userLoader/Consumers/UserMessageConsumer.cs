@@ -11,7 +11,7 @@ namespace Company.Consumers
 
         readonly ILogger<UserMessageConsumer> _logger;
 
-        public ConsumerConsumer(ILogger<UserMessageConsumer> logger)
+        public UserMessageConsumer(ILogger<UserMessageConsumer> logger)
         {
             _logger = logger;
         }
@@ -19,6 +19,7 @@ namespace Company.Consumers
         public Task Consume(ConsumeContext<UserMessage> context)
         {
             _logger.LogInformation("Hello {name}", context.Message.Title);
+            Task.Delay(1020);
             return Task.CompletedTask;
         }
     }

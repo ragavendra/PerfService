@@ -1,4 +1,4 @@
-namespace Company.Consumers
+namespace PerfRunner.Consumers
 {
     using System.Threading.Tasks;
     using MassTransit;
@@ -11,7 +11,7 @@ namespace Company.Consumers
 
         readonly ILogger<UserConsumer> _logger;
 
-        public UserConsumer(ILogger<UserConsumer> logger)
+        public ConsumerConsumer(ILogger<UserConsumer> logger)
         {
             _logger = logger;
         }
