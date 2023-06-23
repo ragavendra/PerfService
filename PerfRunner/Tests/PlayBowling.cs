@@ -44,7 +44,7 @@ namespace PerfRunner.Tests
 
          if(user != null)
          {
-            logger?.LogDebug($"User is {user?.Email}.");
+            logger?.LogDebug($"User PlayBowling is {user?.Email}.");
 
             var userId = 1;
             var todos = await HttpClient.GetFromJsonAsync<Todo[]>(

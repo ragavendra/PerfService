@@ -109,7 +109,7 @@ Running Tests:
 
         if(RunningTests.Count <= 0)
         {
-            CheckTests();
+            // CheckTests();
         }
     }
 
@@ -121,7 +121,7 @@ Running Tests:
         ActionOption actionOption = new ActionOption()
             {
                 Name = "Login",
-                Rate = 3,
+                Rate = 6,
                 Guid = Guid.NewGuid().ToString()
             };
         TestRequest.Actions.Add(actionOption);
@@ -129,7 +129,7 @@ Running Tests:
         actionOption = new ActionOption()
             {
                 Name = "PlayBowling",
-                Rate = 6,
+                Rate = 3,
                 Guid = Guid.NewGuid().ToString()
             };
         TestRequest.Actions.Add(actionOption);

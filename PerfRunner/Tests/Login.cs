@@ -69,7 +69,15 @@ namespace PerfRunner.Tests
             }
 
             user.State = UserState.Authenticated;
-            UserManager?.CheckInUser(user);
+
+            if(UserManager!.CheckInUser(user))
+            {
+               logger.LogWarning($"Checking user {user.Email} worked.");
+            }
+            else
+            {
+               logger.LogWarning($"Checking user {user.Email} failed.");
+            }
             // logger?.LogInformation($"User is {user?.Email}.");
          }
 

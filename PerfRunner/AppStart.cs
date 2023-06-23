@@ -11,7 +11,24 @@ namespace PerfRunner
          services.AddGrpc();
          services.AddTransient<IActionRunner<ITestBase>, ActionRunner<ITestBase>>();
          services.AddSingleton<ITestStateManager, TestStateManager>();
-         services.AddSingleton<IUserManager, UserManager>();
+
+         // string redisAddress = "redis-app:6379";
+         string redisAddress = "172.17.0.2:6379";
+         RedisUserStore cartStore = null;
+         if (string.IsNullOrEmpty(redisAddress))
+         {
+            Console.WriteLine("REDIS_ADDR environment variable is required.");
+            Environment.Exit(1);
+         }
+
+         cartStore = new RedisUserStore(redisAddress);
+
+         // Initialize the redis store
+         cartStore.InitializeAsync();
+         Console.WriteLine("Initialization completed");
+         // cartStore = null;
+
+         services.AddSingleton<IUserManager>(cartStore);
 
          // add typed http client factory
          services.AddHttpClient<ITestBase, TestBase>(client =>
