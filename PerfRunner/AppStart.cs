@@ -6,6 +6,13 @@ namespace PerfRunner
 {
    public class AppStart
    {
+      public AppStart(IConfiguration configuration)
+      {
+         Configuration = configuration;
+      }
+
+      public IConfiguration Configuration { get; }
+
       public void ConfigureServices(IServiceCollection services)
       {
          services.AddGrpc();
@@ -13,7 +20,8 @@ namespace PerfRunner
          services.AddSingleton<ITestStateManager, TestStateManager>();
 
          // string redisAddress = "redis-app:6379";
-         string redisAddress = "172.17.0.2:6379";
+         // string redisAddress = "172.17.0.2:6379";
+         string redisAddress = Configuration["REDIS_ADDR"];
          RedisUserStore cartStore = null;
          if (string.IsNullOrEmpty(redisAddress))
          {

@@ -55,7 +55,7 @@ namespace PerfRunner.Services
 
          InitializeAsync();
 
-         // LoadUsers();
+         LoadUsers();
       }
 
 

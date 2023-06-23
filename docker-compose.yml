@@ -33,4 +33,3 @@ services:
     restart: unless-stopped
     ports:
       - "${REDIS_PORT}"
-    logging: *logging
