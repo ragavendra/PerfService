@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
     <ProjectReference Include="..\Shared\Shared.csproj" />
     <PackageReference Include="Google.Protobuf" Version="3.23.2" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.53.0" />
