@@ -15,7 +15,7 @@ services:
           memory: 160M
     restart: unless-stopped
     ports:
-      - 5110:5000
+      - 5277:5000
     environment:
       - REDIS_ADDR
     depends_on:

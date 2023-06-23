@@ -16,7 +16,7 @@ EXPOSE 5110
 EXPOSE 5000
 EXPOSE 5277
 ENV ASPNETCORE_ENVIRONMENT Development
-ENV ASPNETCORE_URLS "http://0.0.0.0:5000"
+ENV ASPNETCORE_URLS "http://+:5000"
 COPY --from=build-env /app/out .
 #ENTRYPOINT ["dotnet", "PerfRunner.dll", "--environment=Development"]
 ENTRYPOINT ["dotnet", "PerfRunner.dll"]
