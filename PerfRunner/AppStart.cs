@@ -19,24 +19,34 @@ namespace PerfRunner
          services.AddTransient<IActionRunner<ITestBase>, ActionRunner<ITestBase>>();
          services.AddSingleton<ITestStateManager, TestStateManager>();
 
-         // string redisAddress = "redis-app:6379";
-         // string redisAddress = "172.17.0.2:6379";
-         string redisAddress = Configuration["REDIS_ADDR"];
-         RedisUserStore cartStore = null;
-         if (string.IsNullOrEmpty(redisAddress))
+         services.AddSingleton<IUserManager, UserManager>();
+
+         try
          {
-            Console.WriteLine("REDIS_ADDR environment variable is required.");
-            Environment.Exit(1);
+
+            // string redisAddress = "redis-app:6379";
+            // string redisAddress = "172.17.0.2:6379";
+            string redisAddress = Configuration["REDIS_ADDR"];
+            RedisUserStore cartStore = null;
+            if (string.IsNullOrEmpty(redisAddress))
+            {
+               Console.WriteLine("REDIS_ADDR environment variable is required.");
+               Environment.Exit(1);
+            }
+
+            cartStore = new RedisUserStore(redisAddress);
+
+            // Initialize the redis store
+            cartStore.InitializeAsync();
+            Console.WriteLine("Initialization completed");
+            // cartStore = null;
+
+            services.AddSingleton<IUserManager>(cartStore);
          }
-
-         cartStore = new RedisUserStore(redisAddress);
-
-         // Initialize the redis store
-         cartStore.InitializeAsync();
-         Console.WriteLine("Initialization completed");
-         // cartStore = null;
-
-         services.AddSingleton<IUserManager>(cartStore);
+         catch (Exception ex)
+         {
+            Console.WriteLine("Siome issue with redis, using in memory User Manager instead.");
+         }
 
          // add typed http client factory
          services.AddHttpClient<ITestBase, TestBase>(client =>
