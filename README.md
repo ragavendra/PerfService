@@ -72,7 +72,7 @@ message TestRequest {
 ```
 
 ### Customizations
-[![GardenSystems](Garden-Systems-logos_transparent.svg =100x20)](https://sites.google.com/view/garden-systems)
+<a href="https://sites.google.com/view/garden-systems"><img src="Garden-Systems-logos_transparent.svg" style="width:200px;height:200px"></a>
 
 ### Donations
 If you like using this repository and like to donate, please visit the below link. This work is made possible with donations like yours. PM for customizations and implementations .
