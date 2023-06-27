@@ -71,6 +71,7 @@ message TestRequest {
 }
 ```
 ### License
+Free for non-commercial use, but please read (LICENSE) for commercial use and support.
 
 ### Customizations/ Support
 <a href="https://sites.google.com/view/garden-systems"><img src="Garden-Systems-logos_transparent.svg" style="width:100px;height:100px" target="_blank"></a>
