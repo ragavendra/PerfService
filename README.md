@@ -16,6 +16,7 @@ The actual hoster and runner of service which has a folder called tests which co
 
 ### PerfLoader
 Front end or the web interface to initiate performance test run(s) and control or to stop them.
+<a href="PerfLoader.png" target="_blank">Screen</a>
 
 ### PerfRunnerTests
 Unit tests for the `PerfRunner` to be kept updated with any new features added to the `PerfRunner` project.
@@ -94,7 +95,7 @@ message TestRequest {
 Free for non-commercial use, but please read ![LICENSE](LICENSE) for commercial use, other(s) and support.
 
 ### Customizations/ Support
-<a href="https://sites.google.com/view/garden-systems"><img src="Garden-Systems-logos_transparent.svg" style="width:100px;height:100px" target="_blank"></a>
+<a href="https://sites.google.com/view/garden-systems" target="_blank"><img src="Garden-Systems-logos_transparent.svg" style="width:100px;height:100px"></a>
 
 ### Donations
 If you like using this repository and like to donate, please visit the below link. This work is made possible with donations like yours. PM for customizations and implementations .
