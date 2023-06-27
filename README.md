@@ -20,6 +20,21 @@ Front end or the web interface to initiate performance test run(s) and control o
 ### PerfRunnerTests
 Unit tests for the `PerfRunner` to be kept updated with any new features added to the `PerfRunner` project.
 
+### Getting Started
+#### Docker
+Once in this directory. Should be as straight as 
+
+`sudo docker build -t perfrunner .`
+
+and
+
+`docker compose up --no-build`
+
+The `mcr.microsoft.com/dotnet/sdk:6.0` and `redis:alpine` images are used.
+
+### Redic Cache manager
+Redis is used as a common user store to store users and are pulled and pushed into a queue there say when one or multiple `PerfRunner`s are running.
+
 ### Planned features
 1. Assunming runner(s) running a single test, test users may have to be shared across them. Need a cache or ESB queue to may be write to db or not on cloud. The UserMgr may have to fetch user(s) from that cache or queue.
 2. Migrate to use Semaphore to use limited no. of threads per second instead of manual control?
