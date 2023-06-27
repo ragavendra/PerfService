@@ -70,9 +70,10 @@ message TestRequest {
   repeated .perf.ActionOption actions = 4;
 }
 ```
+### License
 
-### Customizations
-<a href="https://sites.google.com/view/garden-systems"><img src="Garden-Systems-logos_transparent.svg" style="width:200px;height:200px" target="_blank"></a>
+### Customizations/ Support
+<a href="https://sites.google.com/view/garden-systems"><img src="Garden-Systems-logos_transparent.svg" style="width:100px;height:100px" target="_blank"></a>
 
 ### Donations
 If you like using this repository and like to donate, please visit the below link. This work is made possible with donations like yours. PM for customizations and implementations .
