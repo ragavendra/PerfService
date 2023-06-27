@@ -20,6 +20,9 @@ Front end or the web interface to initiate performance test run(s) and control o
 ### PerfRunnerTests
 Unit tests for the `PerfRunner` to be kept updated with any new features added to the `PerfRunner` project.
 
+### Architecture
+![Architecture](Architecture.drawio)
+
 ### Getting Started
 #### Docker
 Once in this directory. Should be as straight as 
