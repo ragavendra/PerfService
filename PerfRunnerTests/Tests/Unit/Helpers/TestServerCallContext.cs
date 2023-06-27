@@ -20,6 +20,15 @@ using Grpc.Core;
 
 namespace PerfRunnerTests.Tests.Unit.Helpers
 {
+/*
+    public class TestServerCallContext_ : ServerCallContext
+    {
+        protected override Status StatusCore { get; set; }
+        protected override DateTime DeadlineCore { get; }
+        protected AuthContext AuthContextCore { get; }
+        protected string HostCore { get; }
+    }*/
+
     public class TestServerCallContext : ServerCallContext
     {
         private readonly Metadata _requestHeaders;

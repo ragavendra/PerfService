@@ -122,7 +122,7 @@ namespace PerfRunner.Services
                Console.WriteLine("Wasn't able to connect to redis");
 
                // We weren't able to connect to Redis despite some retries with exponential backoff.
-               throw new ApplicationException("Wasn't able to connect to redis");
+               // throw new ApplicationException("Wasn't able to connect to redis");
             }
 
             Console.WriteLine("Successfully connected to Redis");
