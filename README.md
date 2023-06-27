@@ -35,6 +35,8 @@ The `mcr.microsoft.com/dotnet/sdk:6.0` and `redis:alpine` images are used.
 ### Redic Cache manager
 Redis is used as a common user store to store users and are pulled and pushed into a queue there say when one or multiple `PerfRunner`s are running.
 
+`PerfRunner` can alone be run without the `redis` as well, in which case the user store should default to the in-memory queue and running multiple `Perfrunner`s can cause the same user to call the api's from each of the `PerfRunner`s.
+
 ### Planned features
 1. Assunming runner(s) running a single test, test users may have to be shared across them. Need a cache or ESB queue to may be write to db or not on cloud. The UserMgr may have to fetch user(s) from that cache or queue.
 2. Migrate to use Semaphore to use limited no. of threads per second instead of manual control?
@@ -86,7 +88,7 @@ message TestRequest {
 }
 ```
 ### License
-Free for non-commercial use, but please read ![LICENSE](LICENSE) for commercial use and support.
+Free for non-commercial use, but please read ![LICENSE](LICENSE) for commercial use, other(s) and support.
 
 ### Customizations/ Support
 <a href="https://sites.google.com/view/garden-systems"><img src="Garden-Systems-logos_transparent.svg" style="width:100px;height:100px" target="_blank"></a>
