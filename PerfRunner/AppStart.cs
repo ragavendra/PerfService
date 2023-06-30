@@ -1,3 +1,5 @@
+using OpenTelemetry;
+using OpenTelemetry.Metrics;
 using PerfRunner.Services;
 using PerfRunner.Tests;
 using static WebApp.V1.WebApp;
@@ -19,39 +21,62 @@ namespace PerfRunner
          services.AddTransient<IActionRunner<ITestBase>, ActionRunner<ITestBase>>();
          services.AddSingleton<ITestStateManager, TestStateManager>();
 
-         // string redisAddress = "redis-app:6379";
-         // string redisAddress = "172.17.0.2:6379";
-         string redisAddress = Configuration["REDIS_ADDR"];
-         RedisUserStore cartStore = null;
-         if (string.IsNullOrEmpty(redisAddress))
-         {
-            Console.WriteLine("REDIS_ADDR environment variable is required.");
-            Environment.Exit(1);
-         }
+         services.AddSingleton<IUserManager, UserManager>();
 
-         cartStore = new RedisUserStore(redisAddress);
+         /*
+                  try
+                  {
 
-         // Initialize the redis store
-         cartStore.InitializeAsync();
-         Console.WriteLine("Initialization completed");
-         // cartStore = null;
+                     // string redisAddress = "redis-app:6379";
+                     // string redisAddress = "172.17.0.2:6379";
+                     string redisAddress = Configuration["REDIS_ADDR"];
+                     RedisUserStore cartStore = null;
+                     if (string.IsNullOrEmpty(redisAddress))
+                     {
+                        Console.WriteLine("REDIS_ADDR environment variable is required.");
+                        Environment.Exit(1);
+                     }
 
-         services.AddSingleton<IUserManager>(cartStore);
+                     cartStore = new RedisUserStore(redisAddress);
+
+                     // Initialize the redis store
+                     cartStore.InitializeAsync();
+                     Console.WriteLine("Initialization completed");
+                     // cartStore = null;
+
+                     services.AddSingleton<IUserManager>(cartStore);
+                  }
+                  catch (Exception ex)
+                  {
+                     Console.WriteLine("Siome issue with redis, using in memory User Manager instead.");
+                  }*/
 
          // add typed http client factory
          services.AddHttpClient<ITestBase, TestBase>(client =>
          {
-            client.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/");
+            client.BaseAddress = new Uri(Configuration["HTTP_APP1"]);
 
             client.DefaultRequestHeaders.UserAgent.ParseAdd("dotnet-raga");
          });
 
          // web app cli where the test(s) aim to make gRPC calls, can be stubbed or mocked
          services.AddGrpcClient<WebAppClient>(client =>
-            client.Address = new Uri("https://localhost:7234"));
+            client.Address = new Uri(Configuration["GRPC_APP1"]));
 
          // support for cli calls
          services.AddGrpcReflection();
+
+         // instr
+         MeterProvider meterProvider = Sdk.CreateMeterProviderBuilder()
+            .AddMeter(Configuration["INSTR_METER"])
+            .AddPrometheusExporter(opt =>
+            {
+               opt.StartHttpListener = true;
+               opt.HttpListenerPrefixes = new string[] { Configuration["INSTR_LISTENER"] };
+            })
+            .Build();
+
+         services.AddSingleton(meterProvider);
       }
 
       public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

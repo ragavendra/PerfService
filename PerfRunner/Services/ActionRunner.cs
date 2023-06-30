@@ -2,6 +2,7 @@
 
 using System;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using PerfRunner.V1;
@@ -28,8 +29,9 @@ public class ActionRunner<T> : IActionRunner<T>
 
    private int _rate;
 
-   public Guid Guid = Guid.NewGuid();
+   public Guid Guid { get; } = Guid.NewGuid();
 
+   public Guid TestGuid { get; set; }
 
    public LoadDistribution? LoadDistribution_ { get { return _loadDistribution; } set { _loadDistribution = value; } }
 
@@ -44,6 +46,10 @@ public class ActionRunner<T> : IActionRunner<T>
          }
       }
    }
+
+   public Histogram<double> RunCounter { get => _runCounter; set => _runCounter = value; }
+
+   private Histogram<double> _runCounter;
 
    public ActionBlock<T> ActionBlock { get; set; }
 
@@ -77,6 +83,9 @@ public class ActionRunner<T> : IActionRunner<T>
          _logger?.LogDebug(
             $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds} ms, waited for remain - {remaining} ms. and divisor - {divisor} ms"
          );
+
+         // update instr
+         UpdateInstr(sw.Elapsed.TotalMilliseconds);
 
          Thread.Sleep(remaining);
 
@@ -115,6 +124,17 @@ public class ActionRunner<T> : IActionRunner<T>
          $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds} ms for {Guid}");
 
       return sw.Elapsed;
+   }
+
+   public async void UpdateInstr(double totalMilliseconds)
+   {
+         TagList taglist = new TagList();
+         taglist.Add("action", TypeValue!.GetType());
+         taglist.Add("guid", TestGuid.ToString().Remove(6));
+         // taglist.Add("action-guid", Guid.ToString().Remove(6));
+
+         // record time takes in ms for each call
+         _runCounter.Record(totalMilliseconds, taglist);
    }
 
    public object CloneObj()
