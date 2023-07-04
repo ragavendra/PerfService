@@ -1,15 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Grpc.Net.Client;
+// extern alias CustomTypes;
+/*
 using PerfRunner.V1;
+using PerfLoader;
+using Grpc.Net.Client;
 using NUnit.Framework;
 
-namespace PerfRunnerTests.Tests
+namespace PerfRunnerTests.Tests.Integration
 {
    [TestFixture]
-   public class PerfRunner
+   public class PerfRunner_
    {
       private Perf.PerfClient? PerfClient { get; set; }
 
@@ -57,22 +56,10 @@ namespace PerfRunnerTests.Tests
          // return rep_;
       }
 
-      [Test]
-      public void Test1()
-      {
-         Console.WriteLine("In test 1 now");
-      }
-
-      [Test]
-      public void Test2()
-      {
-         Console.WriteLine("In test 2 now");
-      }
-
       [TestCase(1, "someStr", 3)]
       public void Test3(int no, string str, int no_)
       {
          Console.WriteLine($"In test 3 now with params {no} {str} {no_}");
       }
    }
-}
+}*/

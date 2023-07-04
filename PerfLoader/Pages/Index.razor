@@ -1,9 +1,19 @@
 ﻿@page "/"
+@using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
 @inject ILogger<Index> Logger
 
 <PageTitle>Index</PageTitle>
+<environment include="Development">
+    <div>Environment is Development</div>
+</environment>
+<!-- environment exclude="Development">
+    <div>Environment is NOT Development</div>
+</environment>
+<environment include="Staging,Development,Staging_2">
+    <div>Environment is: Staging, Development or Staging_2</div>
+</environment -->
 
 <h1>Hello, world!</h1>
 
@@ -37,9 +47,41 @@ Running Tests:
 @foreach (var item in RunningTests)
 {
  <br>
- <label>@item</label>
- <button @onclick="() => StopTest(item)">Stop</button>
+ <label>@item.Guid</label>
+ <button @onclick="() => StopTest(item.Guid)">Stop</button>
 }
+<br>
+<br>
+
+<h3>Monitoring Tests</h3>
+@foreach (var item in RunningTests)
+{
+ <br>
+ <label>Guid - @item.Guid</label>
+ <br>
+ <label>Name - @item.Name</label>
+ <br>
+ <label>Rate - @item.Rate</label>
+ <br>
+ <h6>Actions</h6>
+ @foreach (var item_ in item.Actions)
+ {
+        <label>Guid - @item_.Guid</label>  
+ <br>
+        <label>Name - @item_.Name</label>  
+ <br>
+        <label>Rate - @item_.Rate</label>  
+ <br>
+        <label>Duration - @item_.Duration</label>  
+ <br>
+ }
+ <br>
+ <button @onclick="() => StopTest(item.Guid)">Stop</button>
+}
+ <br>
+ <button @onclick="() => CheckTests()">CheckTests</button>
+ <br>
+ <button @onclick="() => MonitorAllTestsAsync(StateHasChanged)">MonitorAllTests</button>
 
 @code {
 
@@ -48,7 +90,9 @@ Running Tests:
 
     private Perf.PerfClient PerfClient { get; set; }
 
-    private IList<string> RunningTests { get; set; } = new List<string>();
+    private CancellationToken _cancellationToken;
+
+    private IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
 
     protected override void OnInitialized()
     {
@@ -60,7 +104,13 @@ Running Tests:
         testRequest.Actions.Add(actionOption);*/
         var host_ = "http://localhost:5277";
         var channel = GrpcChannel.ForAddress(host_);
+        _cancellationToken = new CancellationToken();
         PerfClient = new Perf.PerfClient(channel);
+
+        if(RunningTests.Count <= 0)
+        {
+            // CheckTests();
+        }
     }
 
     private void NewTest()
@@ -71,10 +121,27 @@ Running Tests:
         ActionOption actionOption = new ActionOption()
             {
                 Name = "Login",
+                Rate = 6,
+                Guid = Guid.NewGuid().ToString()
+            };
+        TestRequest.Actions.Add(actionOption);
+
+        actionOption = new ActionOption()
+            {
+                Name = "PlayBowling",
                 Rate = 3,
                 Guid = Guid.NewGuid().ToString()
             };
         TestRequest.Actions.Add(actionOption);
+
+/*
+        actionOption = new ActionOption()
+            {
+                Name = "LoginGrpc",
+                Rate = 3,
+                Guid = Guid.NewGuid().ToString()
+            };
+        TestRequest.Actions.Add(actionOption);*/
     }
 
     private async void StartTestAsync()
@@ -83,7 +150,7 @@ Running Tests:
 
         // not wait for task to complete
         var rep = PerfClient.RunTestAsync(TestRequest);
-        RunningTests.Add(TestRequest.Guid);
+        RunningTests.Add(TestRequest);
 
         NewTest();
    }
@@ -93,7 +160,8 @@ Running Tests:
         var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
         
         // StateHasChanged();
-        RunningTests.Remove(guid);
+        // RunningTests.Remove(test => test.Guid.Equals(guid));
+        RunningTests.Remove(RunningTests.Where(test => test.Guid.Equals(guid)).First());
     }
 
     private async void StopAllTestsAsync()
@@ -103,11 +171,79 @@ Running Tests:
             Logger.LogInformation("Stopping test " + item);
 
             // not wait for task to complete
-            var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item });
+            var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item.Guid });
             // RunningTests.Remove(item);
         }
 
         RunningTests.Clear();
+    }
+
+    private void CheckTests()
+    {
+        try
+        {
+            var res = PerfClient.RunningTests(new RunningTestsRequest());
+            RunningTests = res.Tests;
+        }
+        catch (System.Exception exc)
+        {
+            Logger.LogError($"Unable to fetch tests - {exc.Message}");
+        }
+    }
+
+    private async void MonitorAllTestsAsync(Action state)
+    {
+        var cancelToken = new CancellationTokenSource();
+
+        Parallel.ForEach(RunningTests, async item =>
+        {
+            Logger.LogInformation("Monitoring test " + item);
+            // Action someAction;
+
+            try
+            {
+
+                // not wait for task to complete
+                using var resp = PerfClient.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
+    cancelToken.Token);
+
+                await foreach (var item_ in resp.ResponseStream.ReadAllAsync(cancelToken.Token))
+                {
+                    var resp_ = item_;
+                    Logger.LogInformation($"Test is {item_.Name} .");
+                    state?.Invoke();
+                    // cancelToken.Cancel();
+                }
+
+                // await resp;
+                // var str = resp.ResponseStream;
+                // var rep = resp.ResponseStream.ReadAllAsync(_cancellationToken);
+                // RunningTests = (List<TestRequest>) rep;
+            }
+            catch (InvalidOperationException ex)
+            {
+                Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+                RunningTests.Remove(item);
+            }
+            catch (System.Exception ex)
+            {
+                Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+                RunningTests.Remove(item);
+                // throw;
+            }
+
+            // cancelToken.Cancel();
+            // var can = new CancellationTokenSource();
+            // can.Cancel();
+            /*
+            foreach (var item in resp.ResponseStream.ReadAllAsync(_cancellationToken))
+            {
+
+            }*/
+            // RunningTests.Remove(item);
+        });
+
+        // RunningTests.Clear();
     }
 }
 

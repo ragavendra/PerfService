@@ -1,163 +1,220 @@
 using System.Diagnostics;
 using System.Threading.Tasks.Dataflow;
-using System.Linq.Expressions;
-using System;
 using Grpc.Core;
-using PerfRunner.Network;
 using PerfRunner.V1;
 using PerfRunner.Tests;
 using System.Reflection;
+using PerfRunner.Exceptions;
+using System.Diagnostics.Metrics;
+using OpenTelemetry.Metrics;
 
 namespace PerfRunner.Services
 {
+   /// <summary>
+   /// Main service loading the dependencies
+   /// </summary>
    public class PerfService : Perf.PerfBase
    {
+      #region Fields
+
       private readonly ILogger<PerfService> _logger;
 
-      private readonly IHttp _http;
+      private readonly ITestStateManager _testStateManager;
 
-      private readonly IGrpc _grpc;
+      private readonly IActionRunner<ITestBase> _actionRunner;
 
-      private readonly TestStateManager _testStateManager;
-
-      private readonly ActionRunner<ITestBase> _actionRunner;
+      public readonly IConfiguration _configuration;
 
       public readonly ITestBase _testbase;
 
-      public Guid Guid = Guid.NewGuid();
+      public readonly MeterProvider _meterProvider;
 
-      /// <summary>
-      /// The set of actions created from <see cref="ITestBase"/>.
-      /// </summary>
-      internal static readonly List<Type> TestActionTypes = Assembly.GetExecutingAssembly()
-         .GetTypes()
-         .Where(t => typeof(ITestBase).IsAssignableFrom(t))
-         .OrderBy(t => t.FullName)
-         .ToList();
+      #endregion
+
+      public Guid Guid = Guid.NewGuid();
 
       public Stopwatch Stopwatch { get; set; } = new();
 
       public PerfService(
          ILogger<PerfService> logger,
-         IHttp http,
-         IGrpc grpc,
-         TestStateManager testStateManager,
-         ActionRunner<ITestBase> actionRunner,
-         ITestBase testBase)
+         ITestStateManager testStateManager,
+         IActionRunner<ITestBase> actionRunner,
+         ITestBase testBase,
+         IUserManager userManager,
+         MeterProvider meterProvider,
+         IConfiguration configuration)
       {
          _logger = logger;
-         _http = http;
-         _grpc = grpc;
          _testStateManager = testStateManager;
          _actionRunner = actionRunner;
          _testbase = testBase;
+         _testbase.UserManager = userManager;
+         _configuration = configuration;
+         _meterProvider = meterProvider;
       }
 
-      private void SomeFunc(int millisecondsTimeout)
-      {
-         Thread.Sleep(millisecondsTimeout);
-         _logger.LogInformation("NowI in SomeFunc - " + Guid);
-         // Console.WriteLine("Now in SomeFunc - " + Guid);
-      }
-
+      #region Methods
+ 
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
-         _logger.LogInformation("Message from Http service - " + _http.SampleHttpMethod());
-         _logger.LogInformation("Message from Grpc service - " + _grpc.SampleGrpcMethod());
+         _logger.LogDebug("Config - " + _configuration["SomeApp:Host"]);
 
-        testRequest.CancellationTokenSource = new CancellationTokenSource();
+         testRequest.CancellationTokenSource = new CancellationTokenSource();
 
          // depending on the no of processors
          // runs so many in parallel
          int processorCount = Environment.ProcessorCount;
-         const int howMany = 12;
 
          // Print the number of processors on this computer.
-         // Console.WriteLine("Processor count = {0}.", processorCount);
-         _logger?.LogInformation("Processor count = {0}.", processorCount);
+         _logger?.LogTrace("Processor count = {0}.", processorCount);
 
          TimeSpan elapsed = TimeSpan.MinValue;
-
-         ITestBase typeVal_;
 
          //lets get all the types of ITestBase
          var type = typeof(ITestBase);
          var types = AppDomain.CurrentDomain.GetAssemblies()
-             .SelectMany(s => s.GetTypes())
-             .Where(p => type.IsAssignableFrom(p));
+            .SelectMany(s => s.GetTypes())
+            .Where(p => type.IsAssignableFrom(p));
+         // types.First().
 
-         // Perform two dataflow computations and print the elapsed
-         // time required for each.
-         // testRequest.ActionRunner = new ActionRunner<int>((ILogger<ActionRunner<int>>)_logger){ TypeValue = 1000 };
-         // testRequest.ActionRunner = new ActionRunner<int>(){ TypeValue = 10 };
-         // _actionRunner.TypeValue = 10;
-         // testRequest.ActionRunner = new ActionRunner<TestBase>();
-         // typeVal_.GetType().AssemblyQualifiedName
+         bool contains = false;
+         Type actionType = null;
+         List<IActionRunner<ITestBase>> actionRunners = new List<IActionRunner<ITestBase>>();
 
-         // _actionRunner.TypeValue = new Login();
-
-         // Type ty = howMany.GetType();
-         // "SomeStr"
-         // _actionRunner.TypeValue = Activator.CreateInstance(testRequest.Actions.FirstOrDefault());
-         // _actionRunner.TypeValue = 
-         // var inst = Activator.CreateInstance(testRequest.Actions.FirstOrDefault().Name, testRequest.Actions.FirstOrDefault().Name);
-         // var inst = Activator.CreateInstance("PerfRunner.Tests.Login", "Login");
-         var inst = Activator.CreateInstance(
-            TestActionTypes.FirstOrDefault(action => action.FullName.ToLowerInvariant()
-               .EndsWith("." + testRequest.Actions.First().Name.ToLowerInvariant())), _testbase._httpClient);
-
-         if(!(inst is ITestBase typeVal)){
-            _logger.LogError($"Does test actions {testRequest.Actions.FirstOrDefault()} exist?");
-         }
-
-         _actionRunner.TypeValue = (ITestBase?)inst;
-
-         testRequest.ActionRunner = _actionRunner;
-
-         if(!_testStateManager.AddTest(testRequest))
+         // load actions
+         foreach (var action_ in testRequest.Actions)
          {
-           _logger.LogError($"Seems the test {testRequest.Guid} is already runing"); 
-           return default;
-         }
-
-         // keep runnung till cancelled from the client
-         while (!testRequest.CancellationTokenSource.IsCancellationRequested)
-         {
-
-            // Create an ActionBlock<int> that performs some work.
-            testRequest.ActionRunner.ActionBlock = new ActionBlock<ITestBase>(
-
-               // Simulate work by suspending the current thread.
-               testBase => testBase.RunTest(Guid, _logger),
-
-               // Specify a maximum degree of parallelism.
-               new ExecutionDataflowBlockOptions
+            // check if the actions exist
+            foreach (var type_ in types)
+            {
+               if(type_.FullName.ToLowerInvariant().EndsWith("." + action_.Name.ToLowerInvariant()))
                {
-                  MaxDegreeOfParallelism = processorCount
-               }
-                  );
+                  contains = true;
+                  actionType = type_;
+               } 
+            }
 
-            elapsed = await testRequest.ActionRunner.StartActionsPerSecondAsync(testRequest.Rate);
+            if(!contains)
+            {
+               throw new TestRequestException($"Unable to find {action_.Name} in Tests.");
+            }
+
+            contains = false;
+/*
+            using (IServiceScope scope = _serviceScopeFactory.CreateScope())
+            {
+               try
+               {
+                  _logger.LogInformation(
+                      "Starting scoped work, provider hash: {hash}.",
+                      scope.ServiceProvider.GetHashCode());
+
+                  // _actionRunner.TypeValue = 
+                  var test = scope.ServiceProvider.GetRequiredService<ITestBase>();
+                  // _actionRunner.TypeValue = (typeof(actionType)) test;
+                  // var next = await store.;
+                  // _logger.LogInformation("{next}", next);
+
+                  string some = "some";
+
+                  Convert.ChangeType(test, actionType.GetType());
+                  _actionRunner.TypeValue = test;
+                  // if(test is contains.GetType() a)
+               }
+               finally
+               {
+
+               }
+            }*/
+
+            var inst = Activator.CreateInstance(
+               actionType!,
+               _testbase.HttpClient,
+               _testbase.GrpcClient,
+               _testbase.UserManager);
+
+            // not going here
+            if (!(inst is ITestBase typeVal))
+            {
+               var message = $"Does test actions {testRequest.Actions.FirstOrDefault()} exist?";
+               _logger.LogError(message);
+               throw new TestRequestException(message);
+            }
+
+            var actionRunner = (IActionRunner<ITestBase>)_actionRunner.CloneObj();
+
+            actionRunner.TypeValue = (ITestBase?)inst;
+
+            actionRunner.Rate = action_.Rate;
+
+            actionRunner.TestGuid = Guid.Parse(testRequest.Guid);
+
+            Meter meter = new Meter(_configuration["INSTR_METER"]);
+
+            actionRunner.RunCounter = meter.CreateHistogram<double>(
+               // name: actionType!.ToString() + "_" + actionRunner.Guid.ToString().Remove(6),
+               name: "PerfService",
+               unit: "Runs",
+               description: $"No. of {actionType} run for {testRequest.Guid.Remove(6)}.");
+
+            // testRequest.ActionRunners.Add(actionRunner);
+            actionRunners.Add(actionRunner);
          }
 
-         // actionRunner.ActionBlocks.Select(item => item.Completion.Wait());
-         /*
-         foreach (var item in testRequest.ActionRunner.ActionBlocks)
+         if (!_testStateManager.AddTest(testRequest))
          {
-            item.Completion.Wait();
-         }*/
-         // testRequest.ActionRunner.ActionBlock.Completion.Wait();
+            var message = $"Seems the test {testRequest.Guid} is already runing.";
+            _logger.LogError(message);
+            return new TestReply { Message = $"Hi {testRequest.Name} returned - {message}" };
+         }
 
-         // actionRunner.ActionBlock.Completion.Wait();
-         // testRequest.ActionRunner.Stopwatch.Stop();
+         Parallel.ForEach(
+            actionRunners,
+            actionRunner =>
+            {
+               actionRunner.LoadDistribution_ = LoadDistribution.Even;
+               async void RunAct()
+               {
+                  // keep runnung till cancelled from the client
+                  while (!testRequest.CancellationTokenSource.IsCancellationRequested)
+                  {
 
-         _logger.LogInformation(
+                     // Create an ActionBlock<int> that performs some work.
+                     actionRunner.ActionBlock = new ActionBlock<ITestBase>(
+
+                        // Simulate work by suspending the current thread.
+                        testBase => testBase.RunTest(Guid, _logger),
+
+                        // Specify a maximum degree of parallelism.
+                        new ExecutionDataflowBlockOptions
+                        {
+                           MaxDegreeOfParallelism = processorCount
+                        }
+                           );
+
+                     var rate = 0;
+
+                     if (actionRunner.Rate.Equals(0))
+                     {
+                        rate = testRequest.Rate;
+                     }
+                     else
+                     {
+                        rate = actionRunner.Rate;
+                     }
+
+                     elapsed = await actionRunner.StartActionsPerSecondAsync(rate);
+                  }
+               }
+
+               RunAct();
+            });
+
+         _logger.LogDebug(
             "After completion, Elapsed = {0} ms",
             (int)elapsed.TotalMilliseconds);
 
-         var reply = new TestReply { Message = $"Hi {testRequest.Name}" };
-
-         return reply;
+         return new TestReply { Message = $"Hi {testRequest.Name}" };
       }
 
       public override async Task<StopTestReply> StopTest(StopTestRequest stopTestRequest, ServerCallContext context)
@@ -171,11 +228,15 @@ namespace PerfRunner.Services
          }
          catch (InvalidOperationException ex)
          {
-            _logger.LogError($"Issue stopping test - {ex.Message} .");
+            var message = $"Issue stopping test ex - {ex.Message} .";
+            _logger.LogError(message);
+            return new StopTestReply { Status = resp };
          }
          catch (Exception ex)
          {
-            _logger.LogError($"Issue stopping test ex - {ex.Message} .");
+            var message = $"Issue stopping test ex - {ex.Message} .";
+            _logger.LogError(message);
+            return new StopTestReply { Status = resp };
          }
 
          return new StopTestReply { Status = resp };
@@ -187,9 +248,6 @@ namespace PerfRunner.Services
          {
             test.Value.CancellationTokenSource.Cancel();
          }
-
-        // lets try cancel
-        // _cancelTokenSourceAllTests.Cancel();
 
          return new StopAllTestsReply { Status = true };
       }
@@ -225,5 +283,53 @@ namespace PerfRunner.Services
 
          return new UpdateRateReply { Status = true };
       }
+
+      public override async Task MonitorTest(MonitorTestRequest monitorRequest,
+      IServerStreamWriter<TestRequest> response,
+      ServerCallContext context)
+      {
+         try
+         {
+            while (!context.CancellationToken.IsCancellationRequested)
+            {
+               var test = _testStateManager.GetTest(monitorRequest.Guid);
+               await response.WriteAsync(test);
+               await Task.Delay(TimeSpan.FromSeconds(3), context.CancellationToken);
+            }
+         }
+         catch(Exception ex)
+         {
+            _logger.LogError($"Unable to monitor test {monitorRequest.Guid} - {ex.Message}");
+         }
+
+         // return test;
+      }
+
+      public override async Task<TestRequests> RunningTests(RunningTestsRequest runningTestsRequest, ServerCallContext context)
+      {
+         try
+         {
+            // lets update rate
+            // _cancelTokenSourceAllTests.Cancel();
+            var test = _testStateManager.Tests;
+            
+            // var res = (List<TestRequest>) test.Values;
+            TestRequests testRequests = new TestRequests();
+            testRequests.Tests.AddRange(_testStateManager.Tests.Values);
+
+            return testRequests;
+            // return new Task<TestRequests>(() => { return testRequests; });
+         }
+         catch(Exception ex)
+         {
+            _logger.LogError($"Unable to update rate - {ex.Message}");
+         }
+
+         return default;
+         // return new UpdateRateReply { Status = true };
+      }
+
+ 
+      #endregion 
    }
 }

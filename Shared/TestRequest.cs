@@ -3,7 +3,7 @@
 // </copyright>
 
 // ReSharper disable once CheckNamespace
-using PerfRunner.Tests;
+// using PerfRunner.V1.Perf.PerfBase;
 
 namespace PerfRunner.V1
 {
@@ -15,9 +15,6 @@ namespace PerfRunner.V1
     /// <summary>
     /// The <see cref="TestStateManager"/> the test should run with.
     /// </summary>
-    internal CancellationTokenSource CancellationTokenSource { get; set; }
-
-    internal ActionRunner<ITestBase> ActionRunner { get; set; }
-
+    public CancellationTokenSource CancellationTokenSource { get; set; }
   }
 }

@@ -1,0 +1,35 @@
+services:
+  app:
+#    image: ${IMAGE_NAME}:${IMAGE_VERSION}-perf-app
+#    image: mcr.microsoft.com/dotnet/sdk:6.0
+    container_name: perf-app-srvc
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+#      cache_from:
+#        - ${IMAGE_NAME}:${IMAGE_VERSION}-perf-app
+#        - perf-app
+    deploy:
+      resources:
+        limits:
+          memory: 160M
+    restart: unless-stopped
+    ports:
+      - 5277:5000
+    environment:
+      - REDIS_ADDR
+    depends_on:
+      - redis-app
+
+# Redis used by App service
+  redis-app:
+    image: redis:alpine
+    container_name: redis-app
+    user: redis
+    deploy:
+      resources:
+        limits:
+          memory: 20M
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT}"

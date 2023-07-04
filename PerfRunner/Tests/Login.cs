@@ -4,7 +4,7 @@ using PerfRunner.V1;
 using System.Text.Json;
 using PerfRunner.Models;
 using PerfRunner.Services;
-using Microsoft.AspNetCore.Mvc;
+using static WebApp.V1.WebApp;
 
 namespace PerfRunner.Tests
 {
@@ -13,14 +13,14 @@ namespace PerfRunner.Tests
    {
       public Guid Guid = Guid.NewGuid();
 
-/*
-      public Login(ILogger<TestBase> logger, HttpClient httpClient) : base(logger, httpClient)
-      {
-         // _logger = logger;
-         // _httpClient = httpClient;
-      }*/
+      /*
+            public Login(ILogger<TestBase> logger, HttpClient httpClient) : base(logger, httpClient)
+            {
+               // _logger = logger;
+               // _httpClient = httpClient;
+            }*/
 
-      public Login(HttpClient httpClient) : base(httpClient)
+      public Login(HttpClient httpClient, WebAppClient webApp, IUserManager userManager) : base(httpClient, webApp, userManager)
       {
          // _logger = logger;
          // _httpClient = httpClient;
@@ -36,12 +36,17 @@ namespace PerfRunner.Tests
 
       public override async void RunTest(Guid guid, ILogger<PerfService> logger)
       {
-         logger?.LogInformation($"Running {GetType().Name} now for {guid}.");
+         logger?.LogDebug($"Running {GetType().Name} now for {guid}.");
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
-         var userId = 1;
-         var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
-            $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
+         var user = UserManager?.CheckOutUser(UserState.Ready);
+         if (user != null)
+         {
+            logger?.LogDebug($"User is {user?.Email}.");
+
+            var userId = 1;
+            var todos = await HttpClient.GetFromJsonAsync<Todo[]>(
+               $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
          // Console.WriteLine($"Title for todo item is {todos[3].title}.");
          logger?.LogInformation($"Title for todo item is {todos[3].title}.");

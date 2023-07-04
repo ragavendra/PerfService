@@ -4,13 +4,16 @@ using PerfRunner.V1;
 
 namespace PerfRunner.Services
 {
-   // Static class to maintain or manage test(s).
-   public class TestStateManager
+   ///<summary>
+   /// Static class to maintain or manage test(s).
+   /// Helps in maintaining the tests or update* them.
+   ///</summary>
+   public class TestStateManager : ITestStateManager
    {
       public Guid Guid = Guid.NewGuid();
 
       // lets have test guid and its options here
-      public readonly ConcurrentDictionary<Guid, TestRequest> Tests = new ConcurrentDictionary<Guid, TestRequest>();
+      public ConcurrentDictionary<Guid, TestRequest> Tests { get; set; } = new ConcurrentDictionary<Guid, TestRequest>();
 
       private readonly ILogger<TestStateManager> _logger;
 

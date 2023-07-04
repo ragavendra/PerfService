@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PerfLoader.Data;
+using PerfLoader;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +29,9 @@ builder.Services.AddScoped<HttpContextAccessor>();
 
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<HttpClient>();
+
+// try with a service - bg - in turn calls the Grpc to the server
+// builder.Services.AddHostedService<Worker>();
 
 // 
 var app = builder.Build();

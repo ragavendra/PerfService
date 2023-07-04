@@ -8,13 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj" />
     <PackageReference Include="GoogleAuthenticator" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="6.0.15" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.53.0" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Protobuf Include="..\Protos\perf.proto" GrpcServices="Client" />
-  </ItemGroup>
-
 </Project>

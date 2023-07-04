@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PerfRunner.Network
+namespace PerfLoader
 {
-    public interface IProtocol
+    public interface ILoveThisLibrary
     {
-        
+        public bool DownloadExists(string text);
     }
 }

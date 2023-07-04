@@ -2,6 +2,7 @@ using System.Collections.Concurrent;
 using Grpc.Core;
 using PerfRunner.Services;
 using PerfRunner.V1;
+using static WebApp.V1.WebApp;
 
 namespace PerfRunner.Tests
 {
@@ -10,31 +11,61 @@ namespace PerfRunner.Tests
    {
       public Guid Guid = Guid.NewGuid();
 
+      public bool _disposed;
+
       public readonly ILogger<TestBase> _logger;
 
-      public HttpClient _httpClient { get; set; } = null!;
+      private HttpClient _httpClient;
 
-      public TestBase() { }
+      private WebAppClient _grpcClient;
 
-      public TestBase(HttpClient httpClient)
+      private IUserManager _userManager;
+
+      public IUserManager UserManager { get { return _userManager; } set { _userManager = value; } }
+
+      public HttpClient HttpClient { get { return _httpClient; } set { _httpClient = value; } }
+
+      public WebAppClient GrpcClient { get { return _grpcClient; } set { _grpcClient = value; } }
+
+      // public TestBase() { }
+      public TestBase(HttpClient httpClient, WebAppClient webAppClient, IUserManager userManager)
       {
          _httpClient = httpClient;
+         _grpcClient = webAppClient;
+         _userManager = userManager;
       }
-
-/*
-      public TestBase(ILogger<TestBase> logger, HttpClient httpClient)
-      {
-         _logger = logger;
-         _httpClient = httpClient;
-      }*/
 
       public virtual void RunTest(Guid guid, ILogger<PerfService> logger)
       {
-         logger?.LogInformation($"Running {nameof(this.GetType)} now.");
-         // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
-         // throw new NotImplementedException();
+         logger?.LogDebug($"Running {nameof(this.GetType)} now.");
       }
 
-      public void Dispose() => _httpClient?.Dispose();
+      public void Dispose()
+      {
+         Dispose(false);
+
+         // tell the GC to not dispose this?
+         GC.SuppressFinalize(this);
+      }
+
+      public void Dispose(bool disposing)
+      {
+         if(_disposed)
+         {
+            return;
+         }
+
+         if(disposing)
+         {
+            //dispose mgd resources
+
+         }
+
+         //dispose un mgd resources
+         _httpClient?.Dispose();
+         // _grpcClient?.Dispose();
+
+         _disposed = true;
+      }
    }
 }

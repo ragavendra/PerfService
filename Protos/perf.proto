@@ -25,6 +25,12 @@ service Perf {
 
     // Update rate
     rpc UpdateRate (UpdateRateRequest) returns (UpdateRateReply);
+
+    // Monitor test
+    rpc MonitorTest (MonitorTestRequest) returns (stream TestRequest);
+
+    // Running tests
+    rpc RunningTests (RunningTestsRequest) returns (TestRequests);
 }
 
 // request with user id
@@ -68,6 +74,12 @@ message ActionOption {
     // duration for which the test should run
     google.protobuf.Duration duration = 4;
 
+}
+
+enum LoadDistribution
+{
+    Even = 0;
+    Uneven = 1;
 }
 
 //message ping reply
@@ -116,3 +128,19 @@ message UpdateRateReply {
     bool status = 1;
 }
 
+// MonitorTest request
+message MonitorTestRequest {
+
+    // guid of the test
+    string guid = 1;
+}
+
+// request with user id
+message TestRequests {
+    // list of test TestRequests
+    repeated TestRequest tests = 1; 
+}
+
+// RunningTests request
+message RunningTestsRequest {
+}
