@@ -4,6 +4,7 @@ using PerfRunner.V1;
 using System.Text.Json;
 using PerfRunner.Models;
 using PerfRunner.Services;
+using static WebApp.V1.WebApp;
 
 namespace PerfRunner.Tests
 {
@@ -19,7 +20,7 @@ namespace PerfRunner.Tests
          // _httpClient = httpClient;
       }*/
 
-      public TodoItems(HttpClient httpClient) : base(httpClient)
+      public TodoItems(HttpClient httpClient, WebAppClient webApp, IUserManager userManager) : base(httpClient, webApp, userManager)
       {
          // _logger = logger;
          // _httpClient = httpClient;
@@ -39,7 +40,7 @@ namespace PerfRunner.Tests
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
          var userId = 1;
-         var todos = await _httpClient.GetFromJsonAsync<Todo[]>(
+         var todos = await HttpClient.GetFromJsonAsync<Todo[]>(
             $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
          // Console.WriteLine($"Title for todo item is {todos[3].title}.");

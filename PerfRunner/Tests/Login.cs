@@ -48,20 +48,20 @@ namespace PerfRunner.Tests
             var todos = await HttpClient.GetFromJsonAsync<Todo[]>(
                $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
-         // Console.WriteLine($"Title for todo item is {todos[3].title}.");
-         logger?.LogInformation($"Title for todo item is {todos[3].title}.");
+            // Console.WriteLine($"Title for todo item is {todos[3].title}.");
+            logger?.LogInformation($"Title for todo item is {todos[3].title}.");
+         }
       }
-
    }
-
-   public class SomeContr : Controller
-   {
-      HttpClient httpClient1 = new HttpClient();
-
-      public OkObjectResult SomeMethod()
+   /*
+      public class SomeContr : Controller
       {
-         return Ok(httpClient1?.GetStringAsync("/someep"));
-      }
-   }
+         HttpClient httpClient1 = new HttpClient();
+
+         public OkObjectResult SomeMethod()
+         {
+            return Ok(httpClient1?.GetStringAsync("/someep"));
+         }
+      }*/
 }
 
