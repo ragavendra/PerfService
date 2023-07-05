@@ -9,6 +9,8 @@ namespace PerfRunner.Tests
 {
     public interface ITestBase
     {
+      public CancellationToken CancellationToken { get; set; }
+
       public HttpClient HttpClient { get; set; }
 
       public WebAppClient GrpcClient { get; set; }
