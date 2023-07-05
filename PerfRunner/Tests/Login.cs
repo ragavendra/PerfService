@@ -49,39 +49,19 @@ namespace PerfRunner.Tests
                $"todos?userId={userId}", new JsonSerializerOptions(JsonSerializerDefaults.Web));
 
             // Console.WriteLine($"Title for todo item is {todos[3].title}.");
-            logger?.LogDebug($"Title for todo item is {todos[3].title}.");
-
-            try
-            {
-
-               var request = new WebApp.V1.PingRequest() { Name = "hi from Login" };
-               // trying rpc to the webapp
-               // WebApp.V1.PingReply call = await _grpcClient.PingAsync(request);
-
-               // logger.LogDebug($"Reply from WebApp is {call.Message}");
-
-            }
-            catch (System.Exception)
-            {
-
-               // throw;
-               logger.LogDebug($"Obviously here! not implemented yet");
-            }
-
-            user.State = UserState.Authenticated;
-
-            if(UserManager!.CheckInUser(user))
-            {
-               logger.LogWarning($"Checking user {user.Email} worked.");
-            }
-            else
-            {
-               logger.LogWarning($"Checking user {user.Email} failed.");
-            }
-            // logger?.LogInformation($"User is {user?.Email}.");
+            logger?.LogInformation($"Title for todo item is {todos[3].title}.");
          }
-
       }
    }
+   /*
+      public class SomeContr : Controller
+      {
+         HttpClient httpClient1 = new HttpClient();
+
+         public OkObjectResult SomeMethod()
+         {
+            return Ok(httpClient1?.GetStringAsync("/someep"));
+         }
+      }*/
 }
 

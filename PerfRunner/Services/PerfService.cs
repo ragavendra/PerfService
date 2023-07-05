@@ -5,6 +5,8 @@ using PerfRunner.V1;
 using PerfRunner.Tests;
 using System.Reflection;
 using PerfRunner.Exceptions;
+using System.Diagnostics.Metrics;
+using OpenTelemetry.Metrics;
 
 namespace PerfRunner.Services
 {
@@ -25,6 +27,8 @@ namespace PerfRunner.Services
 
       public readonly ITestBase _testbase;
 
+      public readonly MeterProvider _meterProvider;
+
       #endregion
 
       public Guid Guid = Guid.NewGuid();
@@ -37,6 +41,7 @@ namespace PerfRunner.Services
          IActionRunner<ITestBase> actionRunner,
          ITestBase testBase,
          IUserManager userManager,
+         MeterProvider meterProvider,
          IConfiguration configuration)
       {
          _logger = logger;
@@ -45,6 +50,7 @@ namespace PerfRunner.Services
          _testbase = testBase;
          _testbase.UserManager = userManager;
          _configuration = configuration;
+         _meterProvider = meterProvider;
       }
 
       #region Methods
@@ -140,6 +146,16 @@ namespace PerfRunner.Services
             actionRunner.TypeValue = (ITestBase?)inst;
 
             actionRunner.Rate = action_.Rate;
+
+            actionRunner.TestGuid = Guid.Parse(testRequest.Guid);
+
+            Meter meter = new Meter(_configuration["INSTR_METER"]);
+
+            actionRunner.RunCounter = meter.CreateHistogram<double>(
+               // name: actionType!.ToString() + "_" + actionRunner.Guid.ToString().Remove(6),
+               name: "PerfService",
+               unit: "Runs",
+               description: $"No. of {actionType} run for {testRequest.Guid.Remove(6)}.");
 
             // testRequest.ActionRunners.Add(actionRunner);
             actionRunners.Add(actionRunner);

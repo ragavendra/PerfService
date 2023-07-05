@@ -1,0 +1,12 @@
+# Copyright The OpenTelemetry Authors
+# SPDX-License-Identifier: Apache-2.0
+
+
+global:
+  evaluation_interval: 30s
+  scrape_interval: 5s
+scrape_configs:
+- job_name: PerfRunner
+  static_configs:
+  - targets:
+    - 'perf-app-srvc:9186'

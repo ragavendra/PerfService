@@ -56,6 +56,7 @@ Redis is used as a common user store to store users and are pulled and pushed in
 8. Support for flag for equal or uneven load distribution per second.
 8a. If each action has a rate that is used for rate otherwise default to test rate.
 9. Try using interface inherit implementation.
+10. Monitor traffic in prometheus or Grafana cloud. Check the Grafana dashboard [json](PerfRunner/grafanaDashboard.json) to import it to the Grafana dashboard.
 
 ### Planned features - Loader
 1. Update/ Edit test params during run like rate, distribution.
@@ -63,6 +64,24 @@ Redis is used as a common user store to store users and are pulled and pushed in
 
 ### Sample Web app
 For this use case, I am using the Bowling alley web app, assuming when a user goes to the ally, he has to say, get autheneticated, next wait for the lane and if lane is available, play can be initiated. For each stage, state can be represented, which is defined in `UserState`.
+
+### Prometheus
+Prometheus is used to more or less display or relay the instrumentation metrics to apps like Grafana or similar. To install you may have to download and run it on oyur distribution. The config file for it is [here](PerfRunner/grafanaDashboard.json) or append the scrape config like below.
+
+```
+  - job_name: 'PerfRunner'
+    scrape_interval: 1s # poll very quickly for a more responsive demo
+    static_configs:
+      - targets: ['localhost:9186']
+```
+
+### Grafana
+To run Grafana as a docker image, run.
+
+``` 
+docker run -d --name=grafana -p 3000:3000 grafana/grafana-enterprise
+admin
+```
 
 ### Sample commands
 ```

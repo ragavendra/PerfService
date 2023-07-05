@@ -27,6 +27,8 @@ namespace PerfRunner.Tests
 
       public WebAppClient GrpcClient { get { return _grpcClient; } set { _grpcClient = value; } }
 
+      public CancellationToken CancellationToken { get; set; }
+
       // public TestBase() { }
       public TestBase(HttpClient httpClient, WebAppClient webAppClient, IUserManager userManager)
       {
