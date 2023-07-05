@@ -74,6 +74,9 @@ message ActionOption {
     // duration for which the test should run
     google.protobuf.Duration duration = 4;
 
+    // load distribution in a second, should it be even or not
+    LoadDistribution LoadDistribution = 5;
+
 }
 
 enum LoadDistribution

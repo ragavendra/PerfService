@@ -35,6 +35,10 @@ Actions:
 <br>
  <InputText @bind-Value=TestRequest.Actions.Last().Name></InputText>
  <InputNumber @bind-Value=TestRequest.Actions.Last().Rate></InputNumber>   
+ <InputSelect @bind-Value=TestRequest.Actions.Last().LoadDistribution>
+ <option value="@LoadDistribution.Even">Even</option>
+ <option value="@LoadDistribution.Uneven">Uneven</option>
+ </InputSelect>   
  <!-- InputNumber @bind-Value=item.Duration></InputNumber -->
  <button @onclick="() => TestRequest.Actions.Add(TestRequest.Actions.Last())">+</button>   
  <button @onclick="() => TestRequest.Actions.RemoveAt(TestRequest.Actions.Count - 1)">-</button>
@@ -73,6 +77,8 @@ Running Tests:
         <label>Rate - @item_.Rate</label>  
  <br>
         <label>Duration - @item_.Duration</label>  
+ <br>
+        <label>Load Distribution - @item_.LoadDistribution</label>  
  <br>
  }
  <br>

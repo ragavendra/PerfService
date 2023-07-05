@@ -147,6 +147,8 @@ namespace PerfRunner.Services
 
             actionRunner.Rate = action_.Rate;
 
+            actionRunner.LoadDistribution_ = action_.LoadDistribution;
+
             actionRunner.TestGuid = Guid.Parse(testRequest.Guid);
 
             Meter meter = new Meter(_configuration["INSTR_METER"]);
@@ -172,7 +174,7 @@ namespace PerfRunner.Services
             actionRunners,
             actionRunner =>
             {
-               actionRunner.LoadDistribution_ = LoadDistribution.Even;
+               // actionRunner.LoadDistribution_ = LoadDistribution.Even;
                async void RunAct()
                {
 
