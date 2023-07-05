@@ -21,11 +21,15 @@ namespace PerfRunner.Tests
 
       private IUserManager _userManager;
 
+      public Action<Guid, ILogger<ITestBase>> _runTest;
+
       public IUserManager UserManager { get { return _userManager; } set { _userManager = value; } }
 
       public HttpClient HttpClient { get { return _httpClient; } set { _httpClient = value; } }
 
       public WebAppClient GrpcClient { get { return _grpcClient; } set { _grpcClient = value; } }
+
+      public Action<Guid, ILogger<ITestBase>> RunTest_ { get => _runTest; set => _runTest = value; }
 
       public CancellationToken CancellationToken { get; set; }
 
