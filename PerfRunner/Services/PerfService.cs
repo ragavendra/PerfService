@@ -179,7 +179,8 @@ namespace PerfRunner.Services
                   actionRunner.ActionBlock = new ActionBlock<ITestBase>(
 
                      // Simulate work by suspending the current thread.
-                     testBase => testBase.RunTest(Guid, _logger),
+                     // testBase => testBase.RunTest(Guid, _logger),
+                     testBase => testBase.RunTest_(Guid, _logger),
 
                      // Specify a maximum degree of parallelism.
                      new ExecutionDataflowBlockOptions

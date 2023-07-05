@@ -21,7 +21,7 @@ namespace PerfRunner.Tests
 
       private IUserManager _userManager;
 
-      public Action<Guid, ILogger<ITestBase>> _runTest;
+      private readonly Action<Guid, ILogger<PerfService>> _runTest;
 
       public IUserManager UserManager { get { return _userManager; } set { _userManager = value; } }
 
@@ -29,9 +29,11 @@ namespace PerfRunner.Tests
 
       public WebAppClient GrpcClient { get { return _grpcClient; } set { _grpcClient = value; } }
 
-      public Action<Guid, ILogger<ITestBase>> RunTest_ { get => _runTest; set => _runTest = value; }
+      public Action<Guid, ILogger<PerfService>> RunTest_ { get => _runTest; }
 
       public CancellationToken CancellationToken { get; set; }
+      
+      public Func<string, string> RunTest__ { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
       // public TestBase() { }
       public TestBase(HttpClient httpClient, WebAppClient webAppClient, IUserManager userManager)
@@ -39,6 +41,7 @@ namespace PerfRunner.Tests
          _httpClient = httpClient;
          _grpcClient = webAppClient;
          _userManager = userManager;
+         _runTest = RunTest;
       }
 
       public virtual void RunTest(Guid guid, ILogger<PerfService> logger)

@@ -19,6 +19,8 @@ namespace PerfRunner.Tests
 
       public void RunTest(Guid guid, ILogger<PerfService> logger);
 
-      public Action<Guid, ILogger<ITestBase>> RunTest_ { get; set; }
+      public Action<Guid, ILogger<PerfService>> RunTest_ { get; }
+
+      public Func<string, string> RunTest__ { get; set; }
     }
 }
