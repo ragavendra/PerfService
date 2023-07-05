@@ -175,22 +175,23 @@ namespace PerfRunner.Services
                actionRunner.LoadDistribution_ = LoadDistribution.Even;
                async void RunAct()
                {
-                  // keep runnung till cancelled from the client
-                  while (!testRequest.CancellationTokenSource.IsCancellationRequested)
-                  {
 
-                     // Create an ActionBlock<int> that performs some work.
-                     actionRunner.ActionBlock = new ActionBlock<ITestBase>(
+                  // Create an ActionBlock<int> that performs some work.
+                  actionRunner.ActionBlock = new ActionBlock<ITestBase>(
 
                         // Simulate work by suspending the current thread.
-                        testBase => testBase.RunTest(Guid, _logger),
+                     testBase => testBase.RunTest(Guid, _logger),
 
                         // Specify a maximum degree of parallelism.
-                        new ExecutionDataflowBlockOptions
+                     new ExecutionDataflowBlockOptions
                         {
                            MaxDegreeOfParallelism = processorCount
                         }
-                           );
+                        );
+
+                  // keep runnung till cancelled from the client
+                  while (!testRequest.CancellationTokenSource.IsCancellationRequested)
+                  {
 
                      var rate = 0;
 

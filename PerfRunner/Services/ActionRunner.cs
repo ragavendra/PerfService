@@ -108,7 +108,7 @@ public class ActionRunner<T> : IActionRunner<T>
       }
 
       // no more to post 
-      ActionBlock.Complete();
+      // ActionBlock.Complete();
 
       // Wait for all messages to propagate through the network.
       // workerBlock.Completion.Wait();
