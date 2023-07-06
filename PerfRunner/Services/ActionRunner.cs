@@ -77,18 +77,10 @@ public class ActionRunner<T> : IActionRunner<T>
       // get rate by 1000 ms to post in intervals
       var divisor_ = 1000 / rate;
 
+      int indexer = 0;
+
       while (rate-- > 0)
       {
-         ActionBlock.Post(TypeValue);
-         _logger?.LogDebug(
-            $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds} ms, waited for remain - {remaining} ms. and divisor - {divisor} ms"
-         );
-
-         // update instr
-         UpdateInstr(sw.Elapsed.TotalMilliseconds);
-
-         Thread.Sleep(remaining);
-
          // remaining = divisor;
          if (_loadDistribution?.Equals(LoadDistribution.Uneven) == true)
          {
@@ -97,6 +89,8 @@ public class ActionRunner<T> : IActionRunner<T>
 
             // _logger?.LogInformation($"Divisor - {divisor} .");
             remaining = divisor_ - divisor;
+
+            // Thread.Sleep(divisor_);
          }
          else
          {
@@ -105,6 +99,16 @@ public class ActionRunner<T> : IActionRunner<T>
 
          Thread.Sleep(divisor);
          // divisor = divisor_;
+
+         ActionBlock.Post(TypeValue);
+         _logger?.LogDebug(
+            $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds} ms, waited for remain - {remaining} ms. and divisor - {divisor} ms"
+         );
+
+         // update instr
+         UpdateInstr(sw.Elapsed.TotalMilliseconds, indexer++);
+
+         Thread.Sleep(remaining);
       }
 
       // no more to post 
@@ -126,10 +130,11 @@ public class ActionRunner<T> : IActionRunner<T>
       return sw.Elapsed;
    }
 
-   public async void UpdateInstr(double totalMilliseconds)
+   public async void UpdateInstr(double totalMilliseconds, int interation)
    {
          TagList taglist = new TagList();
          taglist.Add("action", TypeValue!.GetType());
+         taglist.Add("iteration", interation);
          taglist.Add("guid", TestGuid.ToString().Remove(6));
          // taglist.Add("action-guid", Guid.ToString().Remove(6));
 
