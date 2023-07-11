@@ -110,6 +110,9 @@ message TestRequest {
   repeated .perf.ActionOption actions = 4;
 }
 ```
+### Contributing
+Please read ![CONTRIBUTING](CONTRIBUTING.md) to help make any contributions to this project or repository.
+
 ### License
 Free for non-commercial use, but please read ![LICENSE](LICENSE) for commercial use, other(s) and support.
 
