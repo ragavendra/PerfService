@@ -31,6 +31,9 @@ service Perf {
 
     // Running tests
     rpc RunningTests (RunningTestsRequest) returns (TestRequests);
+
+    // Update action
+    rpc UpdateAction (UpdateActionRequest) returns (UpdateActionReply);
 }
 
 // request with user id
@@ -71,11 +74,14 @@ message ActionOption {
     // rate at which the test should run per second
     int32 rate = 3;
 
+    // switch to check to run the action or not
+    bool paused = 4;
+
     // duration for which the test should run
-    google.protobuf.Duration duration = 4;
+    google.protobuf.Duration duration = 6;
 
     // load distribution in a second, should it be even or not
-    LoadDistribution LoadDistribution = 5;
+    LoadDistribution LoadDistribution = 8;
 
 }
 
@@ -83,6 +89,14 @@ enum LoadDistribution
 {
     Even = 0;
     Uneven = 1;
+}
+
+enum ActionOptionUpdated
+{
+    Rate = 0;
+    Paused = 1;
+    Duration = 2;
+    Distribution = 3;
 }
 
 //message ping reply
@@ -146,4 +160,25 @@ message TestRequests {
 
 // RunningTests request
 message RunningTestsRequest {
+}
+
+// UpdateAction request
+message UpdateActionRequest {
+
+    // guid of this request
+    string guid = 1;
+
+    // guid of the test
+    string testGuid = 2;
+
+    // updated action option sent to be updated
+    ActionOption actionOption = 3;
+
+    // updated action option value sent to be updated
+    ActionOptionUpdated actionOptionUpdate = 6;
+}
+
+// UpdateAction response
+message UpdateActionReply {
+    bool status = 1;
 }

@@ -17,6 +17,8 @@ namespace PerfRunner.Services
 
       public int Rate { get; set; }
 
+      public bool Paused { get; set; }
+
       public Histogram<double> RunCounter { get; set; }
 
       public ActionBlock<T> ActionBlock { get; set; }

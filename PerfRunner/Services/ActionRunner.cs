@@ -29,9 +29,13 @@ public class ActionRunner<T> : IActionRunner<T>
 
    private int _rate;
 
+   private bool _paused;
+
    public Guid Guid { get; } = Guid.NewGuid();
 
    public Guid TestGuid { get; set; }
+
+   public bool Paused { get => _paused; set => _paused = value; }
 
    public LoadDistribution? LoadDistribution_ { get { return _loadDistribution; } set { _loadDistribution = value; } }
 

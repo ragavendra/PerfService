@@ -149,6 +149,8 @@ namespace PerfRunner.Services
 
             actionRunner.LoadDistribution_ = action_.LoadDistribution;
 
+            actionRunner.Paused = action_.Paused;
+
             actionRunner.TestGuid = Guid.Parse(testRequest.Guid);
 
             Meter meter = new Meter(_configuration["INSTR_METER"]);
@@ -332,6 +334,77 @@ namespace PerfRunner.Services
          // return new UpdateRateReply { Status = true };
       }
 
+      public override async Task<UpdateActionReply> UpdateAction(UpdateActionRequest updateActionRequest, ServerCallContext context)
+      {
+         try
+         {
+            var test = _testStateManager.GetTest(updateActionRequest.TestGuid);
+
+            // var action = test.Actions.Select(action => action.Guid.Equals(updateActionRequest.Guid)).First();
+            var action = test.Actions.Where(action => action.Guid.Equals(updateActionRequest.ActionOption.Guid)).First();
+
+            if(action.Equals(updateActionRequest.ActionOption))
+            {
+               _logger.LogWarning("Is there any update?");
+            }
+            else
+            {
+               /*
+               foreach (var propertyInfo in action.GetType().GetProperties())
+               {
+               foreach (var propertyInfo_ in updateActionRequest.ActionOption.GetType().GetProperties())
+               {
+                  if(propertyInfo.Name.Equals(propertyInfo_.Name))
+                  {
+                     // action.Duration.
+                     // if(propertyInfo.Va .GetValue().Equals(propertyInfo_.GetValue()))
+
+                  }                  
+               }*/
+
+               UpdateAction_(action);
+            }
+
+            async void UpdateAction_(ActionOption action)
+            {
+               if(!action.Guid.Equals(updateActionRequest.ActionOption.Guid))
+               {
+                  return;
+               }
+
+               switch (updateActionRequest.ActionOptionUpdate)
+               {
+                  case ActionOptionUpdated.Paused:
+                     action.Paused = updateActionRequest.ActionOption.Paused;
+                     break;
+
+                  case ActionOptionUpdated.Rate:
+                     action.Rate = updateActionRequest.ActionOption.Rate;
+                     break;
+
+                  case ActionOptionUpdated.Duration:
+                     action.Duration = updateActionRequest.ActionOption.Duration;
+                     break;
+
+                  case ActionOptionUpdated.Distribution:
+                     action.LoadDistribution = updateActionRequest.ActionOption.LoadDistribution;
+                     break;
+
+                  default:
+                     _logger.LogDebug("Invalid option " + updateActionRequest.ActionOptionUpdate);
+                     break;
+               }
+            }
+
+         }
+         catch(Exception ex)
+         {
+            _logger.LogError($"Unable to update action - {ex.Message}");
+         }
+
+         return default;
+         // return new UpdateRateReply { Status = true };
+      }
  
       #endregion 
    }

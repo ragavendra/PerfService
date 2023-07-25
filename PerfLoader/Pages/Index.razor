@@ -2,6 +2,7 @@
 @using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
+@inject IConfiguration Configuration
 @inject ILogger<Index> Logger
 
 <PageTitle>Index</PageTitle>
@@ -66,20 +67,36 @@ Running Tests:
  <label>Name - @item.Name</label>
  <br>
  <label>Rate - @item.Rate</label>
+ <!-- InputNumber @bind-Value=@item.Rate></InputNumber -->   
  <br>
  <h6>Actions</h6>
+
  @foreach (var item_ in item.Actions)
  {
+ <EditForm Model="@_actionOption" OnValidSubmit="@HandleUpdateAction">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
         <label>Guid - @item_.Guid</label>  
  <br>
         <label>Name - @item_.Name</label>  
  <br>
         <label>Rate - @item_.Rate</label>  
+        <!-- InputNumber @bind-Value=item_.Rate></InputNumber -->   
  <br>
         <label>Duration - @item_.Duration</label>  
+        <!-- InputNumber @bind-Value=item_.Duration></InputNumber -->   
  <br>
         <label>Load Distribution - @item_.LoadDistribution</label>  
+        <!-- InputSelect @bind-Value=item_.LoadDistribution>
+            <option value="@LoadDistribution.Even">Even</option>
+            <option value="@LoadDistribution.Uneven">Uneven</option>
+        </InputSelect -->   
  <br>
+    Paused:
+        <!-- InputCheckBox @value-item_.Paused></InputCheckBox -->   
+ <br>
+ <button type="submit">Update</button>
+ </EditForm>
  }
  <br>
  <button @onclick="() => StopTest(item.Guid)">Stop</button>
@@ -94,9 +111,16 @@ Running Tests:
     private TestRequest TestRequest { get; set; }
     // Actions.Add(new ActionOption() { Name = "Login"}});
 
-    private Perf.PerfClient PerfClient { get; set; }
+    // private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress(Configuration["PerfRunner"]));
+    private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress("http://localhost:5277"));
 
-    private CancellationToken _cancellationToken;
+    private Perf.PerfClient PerfClient { get => _perfClient; set => _perfClient = value; }
+
+    private ActionOption ActionOption { get => _actionOption; set => _actionOption = value; }
+
+    private ActionOption _actionOption;
+
+    private CancellationToken _cancellationToken = new CancellationToken();
 
     private IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
 
@@ -108,14 +132,44 @@ Running Tests:
         actionOption = new ActionOption() { Name = "Login1",
         Rate = 1, Guid = Guid.NewGuid().ToString() };
         testRequest.Actions.Add(actionOption);*/
-        var host_ = "http://localhost:5277";
-        var channel = GrpcChannel.ForAddress(host_);
-        _cancellationToken = new CancellationToken();
-        PerfClient = new Perf.PerfClient(channel);
 
-        if(RunningTests.Count <= 0)
+        // var host_ = "http://localhost:5277";
+        // var channel = GrpcChannel.ForAddress(host_);
+
+        // _cancellationToken = new CancellationToken();
+        // PerfClient = new Perf.PerfClient(channel);
+        Logger.LogInformation("Running initialized!");
+
+        // if(RunningTests.Count > 0)
         {
-            // CheckTests();
+            CheckTests();
+        }
+    }
+
+    // private async Task HandleUpdateAction(string testGuid, EditContext editContext)
+    private async Task HandleUpdateAction(EditContext editContext)
+    {
+        var testGuid = "test";
+
+        try
+        {
+            Logger.LogInformation("Updating action " + TestRequest.Name);
+
+            var action = (ActionOption)editContext.Model;
+            var updateAction = new UpdateActionRequest()
+                {
+                    Guid = action.Guid,
+                    TestGuid = testGuid,
+                    ActionOption = action,
+                    ActionOptionUpdate = ActionOptionUpdated.Paused
+                };
+
+            // not wait for task to complete
+            var rep = PerfClient.UpdateActionAsync(updateAction);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError("Update action failed " + ex.Message);
         }
     }
 
@@ -124,21 +178,23 @@ Running Tests:
 
         TestRequest = new TestRequest() { Name = "Test Name", Guid = Guid.NewGuid().ToString(), Rate = 3 };
 
-        ActionOption actionOption = new ActionOption()
+        _actionOption = new ActionOption()
             {
                 Name = "Login",
                 Rate = 6,
                 Guid = Guid.NewGuid().ToString()
             };
-        TestRequest.Actions.Add(actionOption);
 
-        actionOption = new ActionOption()
+        TestRequest.Actions.Add(_actionOption);
+
+        _actionOption = new ActionOption()
             {
                 Name = "PlayBowling",
                 Rate = 3,
                 Guid = Guid.NewGuid().ToString()
             };
-        TestRequest.Actions.Add(actionOption);
+
+        TestRequest.Actions.Add(_actionOption);
 
 /*
         actionOption = new ActionOption()

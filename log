@@ -1,0 +1,2035 @@
+
+Even load 3 per sec - check elapsed
+User is abc_0006000@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 317.8282ms - 200
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 674.8992 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006001@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 335.2453ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 50.1714ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 50.3872ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 1008.0715 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006002@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1010.1372 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 56.6668ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 56.8106ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1628 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006003@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 50.2034ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 50.3933ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 667.7318 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006004@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 50.9688ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 51.162ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 1000.9926 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006005@somecompany.co.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1001.1104 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 63.0705ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 63.255ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.0969 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006006@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 42.6498ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 42.8075ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.3123 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006007@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 64.3505ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 64.4933ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.56 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006008@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 54.1313ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 54.3145ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.7225 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1653 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006009@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.4312ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.6422ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.4142 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006010@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 46.3212ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 46.5385ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.6316 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006011@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 46.3358ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 46.5123ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.8042 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1676 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006012@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 42.8542ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 42.9848ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.6442 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006013@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 44.7961ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.0095ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.9447 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1000.0437 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006014@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.4557ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 47.608ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.4763 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006015@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.4301ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.5614ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.828 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006016@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 44.6943ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 44.9396ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 1000.5076 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1000.5918 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006017@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 105.8215ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 105.992ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1788 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006018@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 156.7279ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 156.8382ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.4738 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006019@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 130.1431ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 130.3596ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.768 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006020@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9841 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 106.5678ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 106.7076ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1592 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006021@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 129.2195ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 129.3357ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.3906 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006022@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 172.461ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 172.5743ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.8233 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006023@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 85.5528ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 85.6902ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9754 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.2925 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006024@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 243.03ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 243.1664ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.5472 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006025@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 328.0579ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 328.1791ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.7597 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006026@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.8896 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 204.5624ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 204.8147ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1202 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006027@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 194.8785ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 195.0195ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.3113 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006028@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 42.8423ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 42.9822ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.6093 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006029@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.422ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.5679ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.8197 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1742 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006030@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.063ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.1992ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.4166 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006031@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.7897ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.937ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.6911 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006032@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 51.3394ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 51.4664ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.8503 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1456 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006033@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 50.1338ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 50.2422ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.3329 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006034@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 44.3502ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 44.4704ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.5403 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006035@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.0226ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.1983ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.699 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1059 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006036@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.9375ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 46.0113ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.2407 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006037@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 42.0744ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 42.1566ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.5869 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006038@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 44.5859ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 44.6985ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.7343 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1407 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006039@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.2381ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.3831ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.3568 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006040@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.6746ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 47.8023ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.56 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006041@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 50.4387ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 50.5511ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.7415 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.2012 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006042@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 41.9565ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 42.0723ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.436 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006043@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 49.8661ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 50.012ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.966 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1000.0324 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006044@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 50.7845ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 50.8947ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1216 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006045@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 55.4125ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 55.5165ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.3334 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006046@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 53.2104ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 53.332ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.5223 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006047@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 48.1012ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 48.2461ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.6828 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1441 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006048@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 52.4219ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 52.5678ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.3762 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006049@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.9828ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 48.0789ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.5489 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006050@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 44.8993ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 44.9999ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.7243 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1729 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006051@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.2213ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.3095ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.4053 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006052@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 41.7638ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 41.9218ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.65 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006053@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.4971ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.5923ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.8563 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1727 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006054@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 42.101ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 42.2553ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.3851 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006055@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 44.9131ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.0251ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.5882 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006056@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.1106ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.2241ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.744 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 333.1092 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006057@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 56.154ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 56.2523ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://localhost:5277/perf.Perf/StopTest application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /perf.Perf/StopTest'
+dbug: Grpc.AspNetCore.Server.ServerCallHandler[10]
+      Reading message.
+dbug: Grpc.AspNetCore.Server.ServerCallHandler[15]
+      Sending message.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /perf.Perf/StopTest'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://localhost:5277/perf.Perf/StopTest application/grpc - - 200 - application/grpc 13.1028ms
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 666.2653 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006058@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 157.2125ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 157.2855ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 999.4592 ms, waited for remain - 0 ms. and divisor - 333 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for 2ef5ddd1-146e-4044-b8ec-8dadbe160405.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006059@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 76.5804ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 76.6954ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.6317 ms for cea9bd8a-6964-45ea-ba89-fd5273a269ef
+dbug: PerfRunner.Services.PerfService[0]
+      After completion, Elapsed = 1099 ms
+dbug: Grpc.AspNetCore.Server.ServerCallHandler[15]
+      Sending message.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /perf.Perf/RunTest'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://localhost:5277/perf.Perf/RunTest application/grpc - - 200 - application/grpc 21725.3615ms
+
+
+Un even load 3 per sec
+            Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.8831ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.9782ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 688.7161 ms, waited for remain - 311 ms. and divisor - 22 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006137@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 50.2793ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 50.3745ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1100.242 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 186.1809 ms, waited for remain - 147 ms. and divisor - 186 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006138@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.107ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 47.2057ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 638.462 ms, waited for remain - 28 ms. and divisor - 305 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006139@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.0306ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.1526ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 754.7918 ms, waited for remain - 245 ms. and divisor - 88 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006140@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 46.3186ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 46.6938ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1100.0736 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 145.1114 ms, waited for remain - 188 ms. and divisor - 145 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006141@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 55.7139ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 55.7915ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 392.3397 ms, waited for remain - 274 ms. and divisor - 59 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006142@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 114.5959ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 114.7303ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 896.5671 ms, waited for remain - 103 ms. and divisor - 230 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006143@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 80.2852ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 80.3572ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.7913 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 229.1258 ms, waited for remain - 104 ms. and divisor - 229 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006144@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 118.1257ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 118.2324ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 571.4671 ms, waited for remain - 95 ms. and divisor - 238 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006145@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 746.7469 ms, waited for remain - 253 ms. and divisor - 80 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006146@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 189.1434ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 189.2853ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 61.1445ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 61.3079ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9814 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 147.1141 ms, waited for remain - 186 ms. and divisor - 147 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006147@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 206.2235ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 206.3589ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 610.3603 ms, waited for remain - 56 ms. and divisor - 277 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006148@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 61.0424ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 61.1439ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 991.6118 ms, waited for remain - 8 ms. and divisor - 325 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006149@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.8513 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 180.2538ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 180.3858ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 220.7993 ms, waited for remain - 113 ms. and divisor - 220 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006150@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 167.028ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 167.1312ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 494.0589 ms, waited for remain - 173 ms. and divisor - 160 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006151@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 163.7366ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 163.8279ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 851.3321 ms, waited for remain - 149 ms. and divisor - 184 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006152@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 82.4509ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 82.5487ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1000.5153 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 105.1072 ms, waited for remain - 228 ms. and divisor - 105 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006153@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 97.1828ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 97.2687ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 514.355 ms, waited for remain - 152 ms. and divisor - 181 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006154@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.6586ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.7673ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 692.6244 ms, waited for remain - 307 ms. and divisor - 26 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006155@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 56.7685ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 56.8552ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9371 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 37.1422 ms, waited for remain - 296 ms. and divisor - 37 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006156@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.0284ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.1419ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 524.4883 ms, waited for remain - 142 ms. and divisor - 191 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006157@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.811ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.9481ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 936.7924 ms, waited for remain - 63 ms. and divisor - 270 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006158@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 48.7696ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 48.8462ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1100.0102 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 313.1096 ms, waited for remain - 20 ms. and divisor - 313 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006159@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 52.7095ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 52.8198ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 404.3692 ms, waited for remain - 262 ms. and divisor - 71 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006160@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.552ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.6532ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 818.6667 ms, waited for remain - 181 ms. and divisor - 152 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006161@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 44.4537ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 44.5554ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9555 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 84.4324 ms, waited for remain - 249 ms. and divisor - 84 ms
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006162@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.7702ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.8745ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[100]
+      Starting HttpMessageHandler cleanup cycle with 2 items
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[101]
+      Ending HttpMessageHandler cleanup cycle after 0.0038ms - processed: 0 items - remaining: 2 items
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 638.7577 ms, waited for remain - 28 ms. and divisor - 305 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006163@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.6657ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.7771ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 795.063 ms, waited for remain - 205 ms. and divisor - 128 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006164@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.1871ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 47.3157ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1000.224 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 153.1693 ms, waited for remain - 180 ms. and divisor - 153 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006165@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.8301ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.9718ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 474.4736 ms, waited for remain - 192 ms. and divisor - 141 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006166@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.5157ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.6103ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 732.7711 ms, waited for remain - 267 ms. and divisor - 66 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006167@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 58.8625ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 58.9849ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1100.0454 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 240.175 ms, waited for remain - 93 ms. and divisor - 240 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006168@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 46.5513ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 46.7378ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 618.5608 ms, waited for remain - 48 ms. and divisor - 285 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006169@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.6523ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.7384ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 724.7921 ms, waited for remain - 275 ms. and divisor - 58 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006170@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 44.9162ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.0216ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1100.0722 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 80.1339 ms, waited for remain - 253 ms. and divisor - 80 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006171@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 45.063ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 45.154ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 408.4042 ms, waited for remain - 258 ms. and divisor - 75 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006172@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 48.6309ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 48.7281ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 734.7044 ms, waited for remain - 265 ms. and divisor - 68 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006173@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 48.8474ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 48.963ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9783 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 251.1423 ms, waited for remain - 82 ms. and divisor - 251 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006174@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.5248ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 47.6559ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 370.0759 ms, waited for remain - 297 ms. and divisor - 36 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006175@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 48.456ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 48.555ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 827.3566 ms, waited for remain - 173 ms. and divisor - 160 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006176@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.6192ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.7177ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1000.501 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 308.1202 ms, waited for remain - 25 ms. and divisor - 308 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006177@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 42.7994ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 42.9127ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 403.371 ms, waited for remain - 263 ms. and divisor - 70 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006178@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 49.665ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 49.7648ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 946.7159 ms, waited for remain - 53 ms. and divisor - 280 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006179@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 43.617ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.7128ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9367 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 175.1303 ms, waited for remain - 158 ms. and divisor - 175 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006180@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 54.502ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 54.6207ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 411.4047 ms, waited for remain - 255 ms. and divisor - 78 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006181@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 42.9985ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 43.107ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 799.6561 ms, waited for remain - 200 ms. and divisor - 133 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006182@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.7205ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 47.8131ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9008 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 31.1231 ms, waited for remain - 302 ms. and divisor - 31 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006183@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 56.9075ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 57.0294ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 498.4022 ms, waited for remain - 168 ms. and divisor - 165 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006184@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 49.0035ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 49.1469ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 680.6713 ms, waited for remain - 319 ms. and divisor - 14 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006185@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.3739ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 47.4764ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9088 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 90.1161 ms, waited for remain - 243 ms. and divisor - 90 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006186@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 87.3176ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 87.4206ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 497.4504 ms, waited for remain - 169 ms. and divisor - 164 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006187@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.939ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 48.0396ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 680.766 ms, waited for remain - 319 ms. and divisor - 14 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006188@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 70.3882ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 70.5077ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1100.0565 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 315.164 ms, waited for remain - 18 ms. and divisor - 315 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006189@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 509.4625 ms, waited for remain - 157 ms. and divisor - 176 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006190@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 220.7965ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 220.9635ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 68.6008ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 68.7096ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[100]
+      Starting HttpMessageHandler cleanup cycle with 2 items
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[101]
+      Ending HttpMessageHandler cleanup cycle after 0.0018ms - processed: 0 items - remaining: 2 items
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 948.7661 ms, waited for remain - 51 ms. and divisor - 282 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006191@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 47.0124ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 47.1385ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9708 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+info: Microsoft.AspNetCore.Hosting.Diagnostics[1]
+      Request starting HTTP/2 POST http://localhost:5277/perf.Perf/StopTest application/grpc -
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[0]
+      Executing endpoint 'gRPC - /perf.Perf/StopTest'
+dbug: Grpc.AspNetCore.Server.ServerCallHandler[10]
+      Reading message.
+dbug: Grpc.AspNetCore.Server.ServerCallHandler[15]
+      Sending message.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /perf.Perf/StopTest'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://localhost:5277/perf.Perf/StopTest application/grpc - - 200 - application/grpc 0.8388ms
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 291.1007 ms, waited for remain - 42 ms. and divisor - 291 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006192@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 184.522ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 184.5915ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 511.3712 ms, waited for remain - 155 ms. and divisor - 178 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006193@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 171.7269ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 171.8209ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After Posting, elapsed - 860.6624 ms, waited for remain - 139 ms. and divisor - 194 ms
+dbug: PerfRunner.Services.PerfService[0]
+      Running Login now for a669a5eb-2d24-44d3-b81e-82213333ebe5.
+dbug: PerfRunner.Services.PerfService[0]
+      User is abc_0006194@somecompany.co.
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[100]
+      Start processing HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[100]
+      Sending HTTP request GET https://jsonplaceholder.typicode.com/todos?userId=1
+info: System.Net.Http.HttpClient.ITestBase.ClientHandler[101]
+      Received HTTP response headers after 72.4626ms - 200
+info: System.Net.Http.HttpClient.ITestBase.LogicalHandler[101]
+      End processing HTTP request after 72.5578ms - 200
+info: PerfRunner.Services.PerfService[0]
+      Title for todo item is et porro tempora.
+dbug: PerfRunner.Services.ActionRunner[0]
+      After complete, Elapsed = 1099.9328 ms for ae15c198-40b2-4c3c-9d7a-8c1f9627a7d2
+dbug: PerfRunner.Services.PerfService[0]
+      After completion, Elapsed = 1099 ms
+dbug: Grpc.AspNetCore.Server.ServerCallHandler[15]
+      Sending message.
+info: Microsoft.AspNetCore.Routing.EndpointMiddleware[1]
+      Executed endpoint 'gRPC - /perf.Perf/RunTest'
+info: Microsoft.AspNetCore.Hosting.Diagnostics[2]
+      Request finished HTTP/2 POST http://localhost:5277/perf.Perf/RunTest application/grpc - - 200 - application/grpc 48822.8331ms
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[100]
+      Starting HttpMessageHandler cleanup cycle with 2 items
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[101]
+      Ending HttpMessageHandler cleanup cycle after 0.0042ms - processed: 0 items - remaining: 2 items
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[100]
+      Starting HttpMessageHandler cleanup cycle with 2 items
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[101]
+      Ending HttpMessageHandler cleanup cycle after 0.0043ms - processed: 0 items - remaining: 2 items
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[100]
+      Starting HttpMessageHandler cleanup cycle with 2 items
+dbug: Microsoft.Extensions.Http.DefaultHttpClientFactory[101]
+      Ending HttpMessageHandler cleanup cycle after 0.0028ms - processed: 0 items - remaining: 2 items
