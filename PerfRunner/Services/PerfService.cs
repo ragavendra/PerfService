@@ -354,34 +354,14 @@ namespace PerfRunner.Services
             var test = _testStateManager.GetTest(updateActionRequest.TestGuid);
 
             // var action = test.Actions.Select(action => action.Guid.Equals(updateActionRequest.Guid)).First();
-            var action = test.Actions.Where(action => action.Guid.Equals(updateActionRequest.ActionOption.Guid)).First();
-            _logger.LogInformation("Found action " + updateActionRequest.ActionOption.Guid);
+            var action = test.Actions.Where(action => action.Guid.Equals(updateActionRequest.ActionGuid)).First();
+            _logger.LogInformation("Found action " + updateActionRequest.ActionGuid);
 
-            if(action.Equals(updateActionRequest.ActionOption))
-            {
-               _logger.LogWarning("Is there any update?");
-            }
-            else
-            {
-               /*
-               foreach (var propertyInfo in action.GetType().GetProperties())
-               {
-               foreach (var propertyInfo_ in updateActionRequest.ActionOption.GetType().GetProperties())
-               {
-                  if(propertyInfo.Name.Equals(propertyInfo_.Name))
-                  {
-                     // action.Duration.
-                     // if(propertyInfo.Va .GetValue().Equals(propertyInfo_.GetValue()))
-
-                  }                  
-               }*/
-
-               UpdateAction_(action);
-            }
+            UpdateAction_(action);
 
             async void UpdateAction_(ActionOption action)
             {
-               if(!action.Guid.Equals(updateActionRequest.ActionOption.Guid))
+               if(!action.Guid.Equals(updateActionRequest.ActionGuid))
                {
                   return;
                }
@@ -389,19 +369,21 @@ namespace PerfRunner.Services
                switch (updateActionRequest.ActionOptionUpdate)
                {
                   case ActionOptionUpdated.Paused:
-                     action.Paused = updateActionRequest.ActionOption.Paused;
+                     action.Paused = bool.Parse(updateActionRequest.UpdateValue);
                      break;
 
                   case ActionOptionUpdated.Rate:
-                     action.Rate = updateActionRequest.ActionOption.Rate;
+                     _logger.LogDebug("Updating rate from " + action.Rate);
+                     action.Rate = int.Parse(updateActionRequest.UpdateValue);
+                     _logger.LogDebug("Updated rate to " + action.Rate);
                      break;
 
                   case ActionOptionUpdated.Duration:
-                     action.Duration = updateActionRequest.ActionOption.Duration;
+                     // action.Duration = updateActionRequest.UpdateValue;
                      break;
 
                   case ActionOptionUpdated.Distribution:
-                     action.LoadDistribution = updateActionRequest.ActionOption.LoadDistribution;
+                     // action.LoadDistribution = updateActionRequest.UpdateValue;
                      break;
 
                   default:

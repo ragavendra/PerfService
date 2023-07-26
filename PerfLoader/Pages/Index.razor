@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using System;
 @using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
@@ -74,30 +75,25 @@ Running Tests:
  @foreach (var item_ in item.Actions)
  {
  <!-- EditForm Model="@_actionOption" OnValidSubmit="(item.Guid) => HandleUpdateAction(item.Guid)" -->
- <EditForm Model="@_updateAction" OnValidSubmit="@HandleUpdateAction">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+
         <label>Guid - @item_.Guid</label>  
  <br>
         <label>Name - @item_.Name</label>  
  <br>
-        <label>Rate - @item_.Rate</label>  
-        <InputNumber @bind-Value=item_.Rate></InputNumber>
+        <input value=@item_.Rate @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Rate, item.Guid, e)" />
  <br>
         <label>Duration - @item_.Duration</label>  
-        <!-- InputNumber @bind-Value=item_.Duration></InputNumber -->   
+        <!-- Input @bind-Value=item_.Duration></InputNumber -->   
  <br>
         <label>Load Distribution - @item_.LoadDistribution</label>  
-        <!-- InputSelect @bind-Value=item_.LoadDistribution>
+        <select value="@item_.LoadDistribution" @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Distribution, item.Guid, e)">
             <option value="@LoadDistribution.Even">Even</option>
             <option value="@LoadDistribution.Uneven">Uneven</option>
-        </InputSelect -->   
+        </select>   
  <br>
-    Paused:
-        <!-- InputCheckBox @value-item_.Paused></InputCheckBox -->   
+    <label>Paused:</label>
+        <input value=item_.Paused type="checkbox" @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Paused, item.Guid, e)" / -->
  <br>
- <button type="submit">Update</button>
- </EditForm>
  }
  <br>
  <button @onclick="() => StopTest(item.Guid)">Stop</button>
@@ -157,28 +153,32 @@ Running Tests:
         public string TestGuid { get; set; }
     }
 
-    // private async Task HandleUpdateAction(string testGuid, EditContext editContext)
-    private async Task HandleUpdateAction(EditContext editContext)
+    private async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid, EventArgs e)
+    // private async Task HandleUpdateAction(EditContext editContext)
     {
         // var testGuid = "test";
 
         try
         {
-            Logger.LogInformation("Updating test " + _updateAction.TestGuid);
-            Logger.LogInformation("Updating action " + _updateAction.ActionOption.Guid);
+            // Logger.LogInformation("Updating test " + _updateAction.TestGuid);
+            if(e is ChangeEventArgs ce)
+            {
+                Logger.LogInformation("Updating action " + actionGuid);
 
-            var action = (UpdateAction)editContext.Model;
-            var updateAction = new UpdateActionRequest()
-                {
-                    Guid = action.TestGuid,
-                    // TestGuid = testGuid,
-                    TestGuid = _updateAction.TestGuid,
-                    ActionOption = action.ActionOption,
-                    ActionOptionUpdate = ActionOptionUpdated.Rate
-                };
+                // var action = (UpdateAction)editContext.Model;
+                var updateAction = new UpdateActionRequest()
+                    {
+                        // Guid = action.TestGuid,
+                        TestGuid = testGuid,
+                        // TestGuid = _updateAction.TestGuid,
+                        ActionGuid = actionGuid,
+                        ActionOptionUpdate = actionOptionUpdated,
+                        UpdateValue = (string) ce.Value
+                    };
 
-            // not wait for task to complete
-            var rep = PerfClient.UpdateActionAsync(updateAction);
+                // not wait for task to complete
+                var rep = PerfClient.UpdateActionAsync(updateAction);
+            }
         }
         catch (Exception ex)
         {
@@ -198,7 +198,7 @@ Running Tests:
                 Guid = Guid.NewGuid().ToString()
             };
 
-        Logger.LogInformation("Action " + _actionOption.Guid);
+        // Logger.LogInformation("Action " + _actionOption.Guid);
 
         TestRequest.Actions.Add(_actionOption);
         _updateAction.ActionOption ??= _actionOption;
@@ -210,7 +210,7 @@ Running Tests:
                 Guid = Guid.NewGuid().ToString()
             };
 
-        Logger.LogInformation("Action " + _actionOption.Guid);
+        // Logger.LogInformation("Action " + _actionOption.Guid);
 
         TestRequest.Actions.Add(_actionOption);
 

@@ -166,16 +166,20 @@ message RunningTestsRequest {
 message UpdateActionRequest {
 
     // guid of this request
-    string guid = 1;
+    // string guid = 1;
 
     // guid of the test
-    string testGuid = 2;
+    string testGuid = 1;
 
     // updated action option sent to be updated
-    ActionOption actionOption = 3;
+    // ActionOption actionOption = 3;
+    string actionGuid = 3;
 
     // updated action option value sent to be updated
     ActionOptionUpdated actionOptionUpdate = 6;
+
+    // value to be updated
+    string updateValue = 7;
 }
 
 // UpdateAction response
