@@ -31,7 +31,7 @@ public class ActionRunner<T> : IActionRunner<T>
 
    private bool _paused;
 
-   public Guid Guid { get; } = Guid.NewGuid();
+   public Guid Guid { get; set; }
 
    public Guid TestGuid { get; set; }
 

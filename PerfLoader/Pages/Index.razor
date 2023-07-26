@@ -73,7 +73,8 @@ Running Tests:
 
  @foreach (var item_ in item.Actions)
  {
- <EditForm Model="@_actionOption" OnValidSubmit="@HandleUpdateAction">
+ <!-- EditForm Model="@_actionOption" OnValidSubmit="(item.Guid) => HandleUpdateAction(item.Guid)" -->
+ <EditForm Model="@_updateAction" OnValidSubmit="@HandleUpdateAction">
     <DataAnnotationsValidator />
     <ValidationSummary />
         <label>Guid - @item_.Guid</label>  
@@ -81,7 +82,7 @@ Running Tests:
         <label>Name - @item_.Name</label>  
  <br>
         <label>Rate - @item_.Rate</label>  
-        <!-- InputNumber @bind-Value=item_.Rate></InputNumber -->   
+        <InputNumber @bind-Value=item_.Rate></InputNumber>
  <br>
         <label>Duration - @item_.Duration</label>  
         <!-- InputNumber @bind-Value=item_.Duration></InputNumber -->   
@@ -108,21 +109,24 @@ Running Tests:
 
 @code {
 
-    private TestRequest TestRequest { get; set; }
     // Actions.Add(new ActionOption() { Name = "Login"}});
 
     // private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress(Configuration["PerfRunner"]));
     private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress("http://localhost:5277"));
 
+    private ActionOption _actionOption;
+
+    private UpdateAction _updateAction = new UpdateAction();
+
+    private TestRequest TestRequest { get; set; }
+
     private Perf.PerfClient PerfClient { get => _perfClient; set => _perfClient = value; }
 
     private ActionOption ActionOption { get => _actionOption; set => _actionOption = value; }
 
-    private ActionOption _actionOption;
+    private CancellationToken _cancellationToken;// = new CancellationToken();
 
-    private CancellationToken _cancellationToken = new CancellationToken();
-
-    private IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
+    private static IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
 
     protected override void OnInitialized()
     {
@@ -136,7 +140,7 @@ Running Tests:
         // var host_ = "http://localhost:5277";
         // var channel = GrpcChannel.ForAddress(host_);
 
-        // _cancellationToken = new CancellationToken();
+        _cancellationToken = new CancellationToken();
         // PerfClient = new Perf.PerfClient(channel);
         Logger.LogInformation("Running initialized!");
 
@@ -146,22 +150,31 @@ Running Tests:
         }
     }
 
+    public class UpdateAction
+    {
+        public ActionOption ActionOption { get; set; }
+
+        public string TestGuid { get; set; }
+    }
+
     // private async Task HandleUpdateAction(string testGuid, EditContext editContext)
     private async Task HandleUpdateAction(EditContext editContext)
     {
-        var testGuid = "test";
+        // var testGuid = "test";
 
         try
         {
-            Logger.LogInformation("Updating action " + TestRequest.Name);
+            Logger.LogInformation("Updating test " + _updateAction.TestGuid);
+            Logger.LogInformation("Updating action " + _updateAction.ActionOption.Guid);
 
-            var action = (ActionOption)editContext.Model;
+            var action = (UpdateAction)editContext.Model;
             var updateAction = new UpdateActionRequest()
                 {
-                    Guid = action.Guid,
-                    TestGuid = testGuid,
-                    ActionOption = action,
-                    ActionOptionUpdate = ActionOptionUpdated.Paused
+                    Guid = action.TestGuid,
+                    // TestGuid = testGuid,
+                    TestGuid = _updateAction.TestGuid,
+                    ActionOption = action.ActionOption,
+                    ActionOptionUpdate = ActionOptionUpdated.Rate
                 };
 
             // not wait for task to complete
@@ -185,7 +198,10 @@ Running Tests:
                 Guid = Guid.NewGuid().ToString()
             };
 
+        Logger.LogInformation("Action " + _actionOption.Guid);
+
         TestRequest.Actions.Add(_actionOption);
+        _updateAction.ActionOption ??= _actionOption;
 
         _actionOption = new ActionOption()
             {
@@ -194,7 +210,12 @@ Running Tests:
                 Guid = Guid.NewGuid().ToString()
             };
 
+        Logger.LogInformation("Action " + _actionOption.Guid);
+
         TestRequest.Actions.Add(_actionOption);
+
+        _updateAction.ActionOption ??= _actionOption;
+        _updateAction.TestGuid ??= TestRequest.Guid;
 
 /*
         actionOption = new ActionOption()
@@ -208,7 +229,7 @@ Running Tests:
 
     private async void StartTestAsync()
     {
-        Logger.LogInformation("Starting test " + TestRequest.Name);
+        Logger.LogInformation("Starting test " + TestRequest.Guid);
 
         // not wait for task to complete
         var rep = PerfClient.RunTestAsync(TestRequest);

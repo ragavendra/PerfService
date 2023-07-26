@@ -11,7 +11,7 @@ namespace PerfRunner.Services
 {
     public interface IActionRunner<T>
    {
-      public Guid Guid { get; }
+      public Guid Guid { get; set; }
 
       public Guid TestGuid { get; set; }
 

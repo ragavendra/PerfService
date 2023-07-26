@@ -143,6 +143,10 @@ namespace PerfRunner.Services
 
             var actionRunner = (IActionRunner<ITestBase>)_actionRunner.CloneObj();
 
+            actionRunner.Guid = Guid.Parse(action_.Guid);
+            _logger.LogDebug("Action guid " + action_.Guid);
+            _logger.LogDebug("Action guid " + actionRunner.Guid);
+
             actionRunner.TypeValue = (ITestBase?)inst;
 
             actionRunner.Rate = action_.Rate;
@@ -171,6 +175,9 @@ namespace PerfRunner.Services
             _logger.LogError(message);
             return new TestReply { Message = $"Hi {testRequest.Name} returned - {message}" };
          }
+
+         try
+         {
 
          Parallel.ForEach(
             actionRunners,
@@ -214,6 +221,12 @@ namespace PerfRunner.Services
 
                RunAct();
             });
+
+         }
+         catch(Exception exception)
+         {
+            _logger.LogError("Issue running test(s) " + exception.Message);
+         }
 
          _logger.LogDebug(
             "After completion, Elapsed = {0} ms",
@@ -342,6 +355,7 @@ namespace PerfRunner.Services
 
             // var action = test.Actions.Select(action => action.Guid.Equals(updateActionRequest.Guid)).First();
             var action = test.Actions.Where(action => action.Guid.Equals(updateActionRequest.ActionOption.Guid)).First();
+            _logger.LogInformation("Found action " + updateActionRequest.ActionOption.Guid);
 
             if(action.Equals(updateActionRequest.ActionOption))
             {
@@ -397,13 +411,16 @@ namespace PerfRunner.Services
             }
 
          }
+         catch(InvalidOperationException ex)
+         {
+            _logger.LogError($"Unable to update action InvalidOperation - {ex.Message}");
+         }
          catch(Exception ex)
          {
             _logger.LogError($"Unable to update action - {ex.Message}");
          }
 
-         return default;
-         // return new UpdateRateReply { Status = true };
+         return new UpdateActionReply(){ Status = true };
       }
  
       #endregion 

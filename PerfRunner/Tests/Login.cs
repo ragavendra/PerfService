@@ -36,6 +36,8 @@ namespace PerfRunner.Tests
 
       public override async void RunTest(Guid guid, ILogger<PerfService> logger)
       {
+         try
+         {
          logger?.LogDebug($"Running {GetType().Name} now for {guid}.");
          // Console.WriteLine($"Running {GetType().Name} now for {guid}.");
 
@@ -50,6 +52,11 @@ namespace PerfRunner.Tests
 
             // Console.WriteLine($"Title for todo item is {todos[3].title}.");
             logger?.LogInformation($"Title for todo item is {todos[3].title}.");
+         }
+         }
+         catch(Exception exception)
+         {
+            logger.LogError($"Issue running {GetType().Name} " + exception.Message);
          }
       }
    }
