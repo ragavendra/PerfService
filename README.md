@@ -57,6 +57,8 @@ Redis is used as a common user store to store users and are pulled and pushed in
 8a. If each action has a rate that is used for rate otherwise default to test rate.
 9. Try using interface inherit implementation.
 10. Monitor traffic in prometheus or Grafana cloud. Check the Grafana dashboard [json](PerfRunner/grafanaDashboard.json) to import it to the Grafana dashboard.
+11. Update rate for individual action.
+12. Pause/ Unpause individual action.
 
 ### Planned features - Loader
 1. Update/ Edit test params during run like rate, distribution.

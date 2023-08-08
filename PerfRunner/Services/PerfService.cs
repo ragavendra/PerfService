@@ -220,6 +220,12 @@ namespace PerfRunner.Services
                         rate = actionRunner.Rate;
                      }
 
+                     // loop if paused
+                     while(actionRunner.Paused)
+                     {
+                        Thread.Sleep(300);
+                     }
+
                      elapsed = await actionRunner.StartActionsPerSecondAsync(rate);
                   }
                }
