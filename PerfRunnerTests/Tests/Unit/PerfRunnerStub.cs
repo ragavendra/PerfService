@@ -9,45 +9,31 @@ using PerfRunnerTests.Tests.Unit.Helpers;
 using PerfRunner.Services;
 using PerfRunner.Tests;
 using PerfRunner.V1;
+using OpenTelemetry.Metrics;
+using PerfRunnerTests.Hepers;
 
 namespace PerfRunnerTests.Tests.Unit
 {
    // These should be stub test(s).
-   public class PerfRunnerStub
+   public class PerfRunnerStub : IClassFixture<PerfRunnerData>
    {
+      private PerfRunnerData _perfRunnerData;
+
+      public PerfRunnerStub(PerfRunnerData perfRunnerData)
+      {
+         _perfRunnerData = perfRunnerData;
+      }
+      
       [Fact]
       public async Task RunTestWhenTestIsRunning()
       {
          // Arrange
-         // var mockTestStateMgr = new Mock<ITestStateManager>();
-         var mockTestStateMgr = new Mock<ITestStateManager>();
-
-         // mockTestStateMgr.Setup(m => m.AddTest(It.IsAny<TestRequest>())).Returns(false);
-         // var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
-         var mockActionRunner = new Mock<IActionRunner<ITestBase>>();
-         // mockActionRunner.Setup(m => m.StartActionsPerSecondAsync(It.IsAny<int>())).ReturnsAsync(It.IsAny<TimeSpan>());
-
-         var mockLogger = new Mock<ILogger<PerfService>>();
-
-         var mockTestBase = new Mock<ITestBase>();
-
-         var mockUserManager = new Mock<IUserManager>();
-
-         var mockConf = new Mock<IConfiguration>();
-
-         var service = new PerfService(
-            mockLogger.Object,
-            mockTestStateMgr.Object,
-            mockActionRunner.Object,
-            mockTestBase.Object,
-            mockUserManager.Object,
-            mockConf.Object);
 
          var httpContext = new DefaultHttpContext();
          var serverCallContext = TestServerCallContext.Create();
 
          // Act
-         var res = await service.RunTest(new TestRequest() { Name = "Some" }, serverCallContext);
+         var res = await _perfRunnerData.PerfService.RunTest(new TestRequest() { Name = "Some" }, serverCallContext);
          
          // Assert
          Assert.Equal("Hi Some returned - Seems the test  is already runing.", res.Message);
@@ -75,12 +61,15 @@ namespace PerfRunnerTests.Tests.Unit
 
          var mockConf = new Mock<IConfiguration>();
 
+         var mockMeter = new Mock<MeterProvider>();
+
          var service = new PerfService(
             mockLogger.Object,
             mockTestStateMgr.Object,
             mockActionRunner.Object,
             mockTestBase.Object,
             mockUserManager.Object,
+            mockMeter.Object,
             mockConf.Object);
 
          var httpContext = new DefaultHttpContext();
@@ -119,12 +108,15 @@ namespace PerfRunnerTests.Tests.Unit
 
          var mockConf = new Mock<IConfiguration>();
 
+         var mockMeter = new Mock<MeterProvider>();
+
          var service = new PerfService(
             mockLogger.Object,
             mockTestStateMgr.Object,
             mockActionRunner.Object,
             mockTestBase.Object,
             mockUserManager.Object,
+            mockMeter.Object,
             mockConf.Object);
 
          var httpContext = new DefaultHttpContext();
@@ -176,12 +168,15 @@ namespace PerfRunnerTests.Tests.Unit
 
          var mockConf = new Mock<IConfiguration>();
 
+         var mockMeter = new Mock<MeterProvider>();
+
          var service = new PerfService(
             mockLogger.Object,
             mockTestStateMgr.Object,
             mockActionRunner.Object,
             mockTestBase.Object,
             mockUserManager.Object,
+            mockMeter.Object,
             mockConf.Object);
 
          var httpContext = new DefaultHttpContext();
@@ -219,12 +214,15 @@ namespace PerfRunnerTests.Tests.Unit
 
          var mockConf = new Mock<IConfiguration>();
 
+         var mockMeter = new Mock<MeterProvider>();
+
          var service = new PerfService(
             mockLogger.Object,
             mockTestStateMgr.Object,
             mockActionRunner.Object,
             mockTestBase.Object,
             mockUserManager.Object,
+            mockMeter.Object,
             mockConf.Object);
 
          var httpContext = new DefaultHttpContext();
@@ -234,7 +232,7 @@ namespace PerfRunnerTests.Tests.Unit
          var res = service.UpdateRate(new UpdateRateRequest(){ Rate = 6 }, serverCallContext);
 
          // Assert
-         Assert.Equal(true, res.Status);
+         Assert.Equal(true, res.Result.Status);
       }
 
 

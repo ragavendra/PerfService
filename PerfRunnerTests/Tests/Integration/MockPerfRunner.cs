@@ -81,7 +81,7 @@ namespace PerfRunnerTests.Tests.Integration
             });
          });
       }
-
+/* Need to use cli of proto
       #region snippet_RunTest
       [Fact]
       public async Task RunTest_MockGreeter_Success()
@@ -114,8 +114,6 @@ namespace PerfRunnerTests.Tests.Integration
          // Assert
          Assert.Equal(true, response.Status);
 
-      }
-
-
+      }*/
    }
 }

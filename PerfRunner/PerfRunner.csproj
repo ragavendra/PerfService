@@ -9,13 +9,12 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\webapp.proto" GrpcServices="Client" />
-    <Protobuf Include="..\Protos\perf.proto" Link="Protos\perf.proto" />
+    <Protobuf Include="..\Protos\perf.proto" GrpcServices="Server" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus" Version="1.3.0-rc.2" />
     <PackageReference Include="StackExchange.Redis" Version="2.6.116" />
-    <ProjectReference Include="..\Shared\Shared.csproj" />
     <PackageReference Include="Google.Protobuf" Version="3.23.2" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.53.0" />
     <PackageReference Include="Grpc.Net.Client" Version="2.53.0" />
