@@ -79,7 +79,7 @@ namespace PerfRunner.Services
 
          bool contains = false;
          Type actionType = null;
-         List<IActionRunner<ITestBase>> actionRunners = new List<IActionRunner<ITestBase>>();
+         // List<IActionRunner<ITestBase>> actionRunners = new List<IActionRunner<ITestBase>>();
 
          // load actions
          foreach (var action_ in testRequest.Actions)
@@ -157,6 +157,8 @@ namespace PerfRunner.Services
 
             actionRunner.TestGuid = Guid.Parse(testRequest.Guid);
 
+            actionRunner.Guid = Guid.Parse(action_.Guid);
+
             Meter meter = new Meter(_configuration["INSTR_METER"]);
 
             actionRunner.RunCounter = meter.CreateHistogram<double>(
@@ -165,8 +167,11 @@ namespace PerfRunner.Services
                unit: "Runs",
                description: $"No. of {actionType} run for {testRequest.Guid.Remove(6)}.");
 
-            // testRequest.ActionRunners.Add(actionRunner);
-            actionRunners.Add(actionRunner);
+            testRequest.ActionRunners.Add(actionRunner);
+            // actionRunners.Add(actionRunner);
+
+            // IReadOnlyList<int> list = new IReadOnlyList<int>();
+            // list.Add(3);
          }
 
          if (!_testStateManager.AddTest(testRequest))
@@ -180,7 +185,7 @@ namespace PerfRunner.Services
          {
 
          Parallel.ForEach(
-            actionRunners,
+            testRequest.ActionRunners,
             actionRunner =>
             {
                // actionRunner.LoadDistribution_ = LoadDistribution.Even;
@@ -354,16 +359,21 @@ namespace PerfRunner.Services
             var test = _testStateManager.GetTest(updateActionRequest.TestGuid);
 
             // var action = test.Actions.Select(action => action.Guid.Equals(updateActionRequest.Guid)).First();
-            var action = test.Actions.Where(action => action.Guid.Equals(updateActionRequest.ActionGuid)).First();
+            // var action = test.Actions.Where(action => action.Guid.Equals(updateActionRequest.ActionGuid)).First();
+
+            var action = test.GetActionRunner(updateActionRequest.ActionGuid);
+
             _logger.LogInformation("Found action " + updateActionRequest.ActionGuid);
+
+            // _actionRunner
 
             UpdateAction_(action);
 
-            async void UpdateAction_(ActionOption action)
+            async void UpdateAction_(IActionRunner<ITestBase> action)
             {
                if(!action.Guid.Equals(updateActionRequest.ActionGuid))
                {
-                  return;
+                  // return;
                }
 
                switch (updateActionRequest.ActionOptionUpdate)

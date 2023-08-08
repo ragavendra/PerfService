@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <Protobuf Include="Protos\webapp.proto" GrpcServices="Client" />
+    <Protobuf Include="..\Protos\perf.proto" Link="Protos\perf.proto" />
   </ItemGroup>
 
   <ItemGroup>
