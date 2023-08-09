@@ -399,7 +399,9 @@ namespace PerfRunner.Services
                      break;
 
                   case ActionOptionUpdated.Distribution:
-                     // action.LoadDistribution = updateActionRequest.UpdateValue;
+                     _logger.LogDebug("Updating distribution from " + action.LoadDistribution_);
+                     action.LoadDistribution_ = Enum.Parse<LoadDistribution>(updateActionRequest.UpdateValue);
+                     _logger.LogDebug("Updated rate to " + action.LoadDistribution_);
                      break;
 
                   default:
