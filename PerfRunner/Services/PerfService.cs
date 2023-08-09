@@ -92,6 +92,7 @@ namespace PerfRunner.Services
                {
                   contains = true;
                   actionType = type_;
+                  break;
                } 
             }
 

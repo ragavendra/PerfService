@@ -11,6 +11,7 @@ using PerfRunner.Tests;
 using PerfRunner.V1;
 using OpenTelemetry.Metrics;
 using PerfRunnerTests.Hepers;
+using Google.Protobuf.WellKnownTypes;
 
 namespace PerfRunnerTests.Tests.Unit
 {
@@ -47,7 +48,8 @@ namespace PerfRunnerTests.Tests.Unit
 
          // var req = It.IsAny<TestRequest>();
          var testRequest = new TestRequest { Name = "Some", Guid = Guid.NewGuid().ToString(), Rate = 3 };
-         testRequest.Actions.Add(new ActionOption() { Name = "Login" });
+         testRequest.Actions.Add(new ActionOption() { Name = "Login", Guid = Guid.NewGuid().ToString(), Rate = 7, Duration = Duration.FromTimeSpan(TimeSpan.FromSeconds(30)) });
+         _perfRunnerData.MockActionRunner.Setup(x => x.Guid).Returns(It.IsAny<Guid>());
 
          // Act
          var res = await service.RunTest(testRequest, _perfRunnerData.TestServerCallContext);
