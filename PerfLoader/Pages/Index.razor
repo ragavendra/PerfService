@@ -41,7 +41,7 @@ Actions:
  <option value="@LoadDistribution.Even">Even</option>
  <option value="@LoadDistribution.Uneven">Uneven</option>
  </InputSelect>   
- <!-- InputNumber @bind-Value=item.Duration></InputNumber -->
+ <!-- InputDate @bind-Value=TestRequest.Actions.Last().Duration></InputDate -->
  <button @onclick="() => TestRequest.Actions.Add(TestRequest.Actions.Last())">+</button>   
  <button @onclick="() => TestRequest.Actions.RemoveAt(TestRequest.Actions.Count - 1)">-</button>
  <button @onclick="() => StartTestAsync()">Start Test</button>
@@ -127,7 +127,7 @@ Running Tests:
     protected override void OnInitialized()
     {
         NewTest();
-        
+
         /*
         actionOption = new ActionOption() { Name = "Login1",
         Rate = 1, Guid = Guid.NewGuid().ToString() };
@@ -195,7 +195,8 @@ Running Tests:
             {
                 Name = "Login",
                 Rate = 6,
-                Guid = Guid.NewGuid().ToString()
+                // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(10)),
+                Guid = Guid.NewGuid().ToString(),
             };
 
         // Logger.LogInformation("Action " + _actionOption.Guid);
@@ -207,6 +208,7 @@ Running Tests:
             {
                 Name = "PlayBowling",
                 Rate = 3,
+                // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(16)),
                 Guid = Guid.NewGuid().ToString()
             };
 

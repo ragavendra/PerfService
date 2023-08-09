@@ -25,9 +25,11 @@ namespace PerfRunner.Services
 
       public LoadDistribution? LoadDistribution_ { get; set; }
 
+      public TimeSpan Duration { get; set; }
+
       public T TypeValue { get; set; }
 
-      public Task<TimeSpan> StartActionsPerSecondAsync(int rate);
+      public Task<bool> StartActionsPerSecondAsync(int rate);
 
       public object CloneObj();
     }

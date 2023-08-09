@@ -31,6 +31,14 @@ public class ActionRunner<T> : IActionRunner<T>
 
    private bool _paused;
 
+   private TimeSpan _duration;
+
+   private Stopwatch _stopWatch;
+
+   private Histogram<double> _runCounter;
+
+   private readonly ILogger<ActionRunner<T>> _logger;
+
    public Guid Guid { get; set; }
 
    public Guid TestGuid { get; set; }
@@ -53,23 +61,37 @@ public class ActionRunner<T> : IActionRunner<T>
 
    public Histogram<double> RunCounter { get => _runCounter; set => _runCounter = value; }
 
-   private Histogram<double> _runCounter;
-
    public ActionBlock<T> ActionBlock { get; set; }
 
    public T TypeValue { get; set; }
 
-   private readonly ILogger<ActionRunner<T>> _logger;
+   public TimeSpan Duration { get => _duration; set => _duration = value; }
 
    public ActionRunner(ILogger<ActionRunner<T>> logger)
    {
       _logger = logger;
+      _stopWatch = new Stopwatch();
    }
 
    // Initiates several computations by using dataflow and returns the elapsed
    // time required to initiate the computations.
-   public async Task<TimeSpan> StartActionsPerSecondAsync(int rate)
+   public async Task<bool> StartActionsPerSecondAsync(int rate)
    {
+      // loop if paused
+      while (_paused)
+      {
+         Thread.Sleep(300);
+      }
+
+      _stopWatch.Start();
+
+      if(_stopWatch.Elapsed.TotalSeconds > Duration.TotalSeconds)
+      {
+         _logger?.LogDebug(
+            $"After duration, Elapsed = {_stopWatch.Elapsed.TotalMilliseconds} s for {Guid}");
+         return true;
+      }
+
       // Compute the time that it takes for several messages to
       // flow through the dataflow block.
       var sw = new Stopwatch();
@@ -131,7 +153,7 @@ public class ActionRunner<T> : IActionRunner<T>
       _logger?.LogDebug(
          $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds} ms for {Guid}");
 
-      return sw.Elapsed;
+      return false;
    }
 
    public async void UpdateInstr(double totalMilliseconds, int interation)

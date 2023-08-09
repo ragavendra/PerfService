@@ -69,6 +69,7 @@ namespace PerfRunner.Services
          _logger?.LogTrace("Processor count = {0}.", processorCount);
 
          TimeSpan elapsed = TimeSpan.MinValue;
+         bool durationElapsed = false;
 
          //lets get all the types of ITestBase
          var type = typeof(ITestBase);
@@ -155,6 +156,8 @@ namespace PerfRunner.Services
 
             actionRunner.Paused = action_.Paused;
 
+            actionRunner.Duration = action_.Duration.ToTimeSpan();
+
             actionRunner.TestGuid = Guid.Parse(testRequest.Guid);
 
             actionRunner.Guid = Guid.Parse(action_.Guid);
@@ -206,7 +209,7 @@ namespace PerfRunner.Services
                         );
 
                   // keep runnung till cancelled from the client
-                  while (!testRequest.CancellationTokenSource.IsCancellationRequested)
+                  while (!testRequest.CancellationTokenSource.IsCancellationRequested && !durationElapsed)
                   {
 
                      var rate = 0;
@@ -220,13 +223,7 @@ namespace PerfRunner.Services
                         rate = actionRunner.Rate;
                      }
 
-                     // loop if paused
-                     while(actionRunner.Paused)
-                     {
-                        Thread.Sleep(300);
-                     }
-
-                     elapsed = await actionRunner.StartActionsPerSecondAsync(rate);
+                     durationElapsed = await actionRunner.StartActionsPerSecondAsync(rate);
                   }
                }
 
@@ -239,9 +236,9 @@ namespace PerfRunner.Services
             _logger.LogError("Issue running test(s) " + exception.Message);
          }
 
-         _logger.LogDebug(
-            "After completion, Elapsed = {0} ms",
-            (int)elapsed.TotalMilliseconds);
+         // _logger.LogDebug(
+           // "After completion, Elapsed = {0} ms",
+           // (int)elapsed.TotalMilliseconds);
 
          return new TestReply { Message = $"Hi {testRequest.Name}" };
       }
@@ -401,7 +398,7 @@ namespace PerfRunner.Services
                   case ActionOptionUpdated.Distribution:
                      _logger.LogDebug("Updating distribution from " + action.LoadDistribution_);
                      action.LoadDistribution_ = Enum.Parse<LoadDistribution>(updateActionRequest.UpdateValue);
-                     _logger.LogDebug("Updated rate to " + action.LoadDistribution_);
+                     _logger.LogDebug("Updated distribution to " + action.LoadDistribution_);
                      break;
 
                   default:

@@ -63,7 +63,7 @@ namespace PerfRunnerTests.Tests.Unit
          // Arrange
          _perfRunnerData.MockTestStateMgr.Setup(m => m.AddTest(It.IsAny<TestRequest>())).Returns(true);
 
-         _perfRunnerData.MockActionRunner.Setup(m => m.StartActionsPerSecondAsync(It.IsAny<int>())).ReturnsAsync(It.IsAny<TimeSpan>());
+         _perfRunnerData.MockActionRunner.Setup(m => m.StartActionsPerSecondAsync(It.IsAny<int>())).ReturnsAsync(It.IsAny<bool>());
 
          var service = GetPerfService();
 
