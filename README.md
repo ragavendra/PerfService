@@ -121,7 +121,7 @@ message TestRequest {
 Free for non-commercial use, but please read ![LICENSE](LICENSE) for commercial use, other(s) and support.
 
 ### Issues
-Please report any issues [here](https://github.com/ragavendra/issues). This can be ranging from a minor defect to a valid feature request.
+Please report any issues [here](https://github.com/ragavendra/PerfService/issues). This can be ranging from a minor defect to a valid feature request.
 
 ### Contribution
 If you would like to contribute to thie repository, please read [CONTRIBUTING](CONTRIBUTING.md) before creating your PR.
