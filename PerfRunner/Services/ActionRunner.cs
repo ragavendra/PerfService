@@ -25,17 +25,9 @@ and start the test first.
 /// </summary>
 public class ActionRunner<T> : IActionRunner<T>
 {
-   private LoadDistribution? _loadDistribution;
-
-   private int _rate;
-
-   private bool _paused;
-
-   private TimeSpan _duration;
-
-   private Stopwatch _stopWatch;
-
    private Histogram<double> _runCounter;
+
+   private ActionOption _actionOption;
 
    private readonly ILogger<ActionRunner<T>> _logger;
 
@@ -43,21 +35,7 @@ public class ActionRunner<T> : IActionRunner<T>
 
    public Guid TestGuid { get; set; }
 
-   public bool Paused { get => _paused; set => _paused = value; }
-
-   public LoadDistribution? LoadDistribution_ { get { return _loadDistribution; } set { _loadDistribution = value; } }
-
-   public int Rate
-   {
-      get { return _rate; }
-      set
-      {
-         if (value > 0)
-         {
-            _rate = value;
-         }
-      }
-   }
+   public ActionOption ActionOption { get => _actionOption; set => _actionOption = value; }
 
    public Histogram<double> RunCounter { get => _runCounter; set => _runCounter = value; }
 
@@ -65,12 +43,9 @@ public class ActionRunner<T> : IActionRunner<T>
 
    public T TypeValue { get; set; }
 
-   public TimeSpan Duration { get => _duration; set => _duration = value; }
-
    public ActionRunner(ILogger<ActionRunner<T>> logger)
    {
       _logger = logger;
-      _stopWatch = new Stopwatch();
    }
 
    // Initiates several computations by using dataflow and returns the elapsed
@@ -78,21 +53,9 @@ public class ActionRunner<T> : IActionRunner<T>
    public async Task<bool> StartActionsPerSecondAsync(int rate)
    {
       // loop if paused
-      while (_paused)
+      while (ActionOption.Paused)
       {
          Thread.Sleep(300);
-      }
-
-      _stopWatch.Start();
-
-      if((Duration != null) && (Duration!.TotalSeconds > 0))
-      {
-         if (_stopWatch.Elapsed.TotalSeconds > Duration.TotalSeconds)
-         {
-            _logger?.LogDebug(
-               $"After duration, Elapsed = {_stopWatch.Elapsed.TotalMilliseconds} s for {Guid}");
-            return true;
-         }
       }
 
       // Compute the time that it takes for several messages to
@@ -111,7 +74,7 @@ public class ActionRunner<T> : IActionRunner<T>
       while (rate-- > 0)
       {
          // remaining = divisor;
-         if (_loadDistribution?.Equals(LoadDistribution.Uneven) == true)
+         if (_actionOption.LoadDistribution.Equals(LoadDistribution.Uneven) == true)
          {
             var rand = new Random();
             divisor = rand.Next(divisor_);

@@ -9,29 +9,22 @@ using PerfRunner.V1;
 
 namespace PerfRunner.Services
 {
-    public interface IActionRunner<T>
-   {
-      public Guid Guid { get; set; }
+  public interface IActionRunner<T>
+  {
+    public Guid Guid { get; set; }
 
-      public Guid TestGuid { get; set; }
+    public Guid TestGuid { get; set; }
 
-      public int Rate { get; set; }
+    public Histogram<double> RunCounter { get; set; }
 
-      public bool Paused { get; set; }
+    public ActionBlock<T> ActionBlock { get; set; }
 
-      public Histogram<double> RunCounter { get; set; }
+    public T TypeValue { get; set; }
 
-      public ActionBlock<T> ActionBlock { get; set; }
+    public ActionOption ActionOption { get; set; }
 
-      public LoadDistribution? LoadDistribution_ { get; set; }
+    public Task<bool> StartActionsPerSecondAsync(int rate);
 
-      public TimeSpan Duration { get; set; }
-
-      public T TypeValue { get; set; }
-
-      public Task<bool> StartActionsPerSecondAsync(int rate);
-
-      public object CloneObj();
-    }
-
+    public object CloneObj();
+  }
 }

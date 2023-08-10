@@ -59,7 +59,7 @@ namespace PerfRunner.Services
       {
          _logger.LogDebug("Config - " + _configuration["SomeApp:Host"]);
 
-         testRequest.CancellationTokenSource = new CancellationTokenSource();
+         testRequest.CancellationTokenSource ??= new CancellationTokenSource();
 
          // depending on the no of processors
          // runs so many in parallel
@@ -102,32 +102,6 @@ namespace PerfRunner.Services
             }
 
             contains = false;
-/*
-            using (IServiceScope scope = _serviceScopeFactory.CreateScope())
-            {
-               try
-               {
-                  _logger.LogInformation(
-                      "Starting scoped work, provider hash: {hash}.",
-                      scope.ServiceProvider.GetHashCode());
-
-                  // _actionRunner.TypeValue = 
-                  var test = scope.ServiceProvider.GetRequiredService<ITestBase>();
-                  // _actionRunner.TypeValue = (typeof(actionType)) test;
-                  // var next = await store.;
-                  // _logger.LogInformation("{next}", next);
-
-                  string some = "some";
-
-                  Convert.ChangeType(test, actionType.GetType());
-                  _actionRunner.TypeValue = test;
-                  // if(test is contains.GetType() a)
-               }
-               finally
-               {
-
-               }
-            }*/
 
             var inst = Activator.CreateInstance(
                actionType!,
@@ -145,26 +119,30 @@ namespace PerfRunner.Services
 
             var actionRunner = (IActionRunner<ITestBase>)_actionRunner.CloneObj();
 
-            actionRunner.Guid = Guid.Parse(action_.Guid);
+            // actionRunner.Guid = Guid.Parse(action_.Guid);
             _logger.LogDebug("Action guid " + action_.Guid);
-            _logger.LogDebug("Action guid " + actionRunner.Guid);
 
             actionRunner.TypeValue = (ITestBase?)inst;
 
-            actionRunner.Rate = action_.Rate;
+            // actionRunner.Rate = action_.Rate;
+            // actionRunner.LoadDistribution_ = action_.LoadDistribution;
+            // actionRunner.Paused = action_.Paused;
 
-            actionRunner.LoadDistribution_ = action_.LoadDistribution;
-
-            actionRunner.Paused = action_.Paused;
-
+            /*
             if (!(action_.Duration == null))
             {
                actionRunner.Duration = action_.Duration.ToTimeSpan();
-            }
+            }*/
 
             actionRunner.TestGuid = Guid.Parse(testRequest.Guid);
 
-            actionRunner.Guid = Guid.Parse(action_.Guid);
+            // actionRunner.Guid = Guid.Parse(action_.Guid);
+            action_.CancellationTokenSource ??= new CancellationTokenSource();
+            action_.Stopwatch = new Stopwatch();
+            action_.Stopwatch.Start();
+
+            actionRunner.ActionOption = action_;
+            _logger.LogDebug("Action guid " + actionRunner.ActionOption.Guid);
 
             Meter meter = new Meter(_configuration["INSTR_METER"]);
 
@@ -216,25 +194,33 @@ namespace PerfRunner.Services
                         );
 
                   // keep runnung till cancelled from the client
-                  while (!testRequest.CancellationTokenSource.IsCancellationRequested && !durationElapsed)
+                  while (!testRequest.CancellationTokenSource.IsCancellationRequested &&
+                         !actionRunner.ActionOption.CancellationTokenSource.IsCancellationRequested)
                   {
 
                      var rate = 0;
 
-                     if (actionRunner.Rate.Equals(0))
+                     if (actionRunner.ActionOption.Rate.Equals(0))
                      {
                         rate = testRequest.Rate;
                      }
                      else
                      {
-                        rate = actionRunner.Rate;
+                        rate = actionRunner.ActionOption.Rate;
                      }
 
-                     durationElapsed = await actionRunner.StartActionsPerSecondAsync(rate);
+                     await actionRunner.StartActionsPerSecondAsync(rate);
+
                      if(testRequest.CheckTestDurationElapsed())
                      {
-                        _logger.LogDebug("Test duration elapsed - {0}", 6);
+                        _logger.LogDebug("Test {0} duration elapsed.", testRequest.Name);
                         testRequest.CancellationTokenSource.Cancel();
+                     }
+
+                     if (actionRunner.ActionOption.CheckActionDurationElapsed())
+                     {
+                        _logger.LogDebug("Action {0} duration elapsed.", actionRunner.ActionOption.Name);
+                        actionRunner.ActionOption.CancellationTokenSource.Cancel();
                      }
                   }
                }
@@ -378,7 +364,7 @@ namespace PerfRunner.Services
 
             var action = test.GetActionRunner(updateActionRequest.ActionGuid);
 
-            _logger.LogInformation("Found action " + updateActionRequest.ActionGuid);
+            _logger.LogInformation("Updating action - " + action.ActionOption.Name);
 
             // _actionRunner
 
@@ -386,7 +372,7 @@ namespace PerfRunner.Services
 
             async void UpdateAction_(IActionRunner<ITestBase> action)
             {
-               if(!action.Guid.Equals(updateActionRequest.ActionGuid))
+               if(!action.ActionOption.Guid.Equals(updateActionRequest.ActionGuid))
                {
                   // return;
                }
@@ -395,47 +381,47 @@ namespace PerfRunner.Services
                {
                   case ActionOptionUpdated.Paused:
 
-                     action.Paused = bool.Parse(updateActionRequest.UpdateValue);
+                     action.ActionOption.Paused = bool.Parse(updateActionRequest.UpdateValue);
 
                      break;
 
                   case ActionOptionUpdated.Rate:
 
-                     _logger.LogDebug("Updating rate from " + action.Rate);
+                     _logger.LogDebug("Updating rate from " + action.ActionOption.Rate);
 
                      if(int.TryParse(updateActionRequest.UpdateValue, out int res_))
                      {
-                        action.Rate = res_;
+                        action.ActionOption.Rate = res_;
                      }
 
-                     _logger.LogDebug("Updated rate to " + action.Rate);
+                     _logger.LogDebug("Updated rate to " + action.ActionOption.Rate);
 
                      break;
 
                   case ActionOptionUpdated.Duration:
 
-                     _logger.LogDebug("Updating duration from " + action.Duration);
+                     _logger.LogDebug("Updating duration from " + action.ActionOption.Duration);
 
                      // if no Try, Parse will cause System.FormatException and app crash*
                      if(int.TryParse(updateActionRequest.UpdateValue, out int res))
                      {
-                        action.Duration = TimeSpan.FromSeconds(res);
+                        action.ActionOption.Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(res));
                      }
 
-                     _logger.LogDebug("Updating duration to " + action.Duration);
+                     _logger.LogDebug("Updating duration to " + action.ActionOption.Duration);
 
                      break;
 
                   case ActionOptionUpdated.Distribution:
 
-                     _logger.LogDebug("Updating distribution from " + action.LoadDistribution_);
+                     _logger.LogDebug("Updating distribution from " + action.ActionOption.LoadDistribution);
 
-                     if(Enum.TryParse<LoadDistribution>(updateActionRequest.UpdateValue, true, out LoadDistribution result))
+                     if(System.Enum.TryParse<LoadDistribution>(updateActionRequest.UpdateValue, true, out LoadDistribution result))
                      {
-                        action.LoadDistribution_ = result;
+                        action.ActionOption.LoadDistribution = result;
                      }
 
-                     _logger.LogDebug("Updated distribution to " + action.LoadDistribution_);
+                     _logger.LogDebug("Updated distribution to " + action.ActionOption.LoadDistribution);
 
                      break;
 

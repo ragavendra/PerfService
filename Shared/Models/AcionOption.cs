@@ -5,6 +5,8 @@
 // ReSharper disable once CheckNamespace
 // using PerfRunner.V1.Perf.PerfBase;
 
+using System.Diagnostics;
+
 namespace PerfRunner.V1
 {
   /// <summary>
