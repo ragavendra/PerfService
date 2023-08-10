@@ -3,7 +3,6 @@ using System.Threading.Tasks.Dataflow;
 using Grpc.Core;
 using PerfRunner.V1;
 using PerfRunner.Tests;
-using System.Reflection;
 using PerfRunner.Exceptions;
 using System.Diagnostics.Metrics;
 using OpenTelemetry.Metrics;
@@ -54,7 +53,7 @@ namespace PerfRunner.Services
       }
 
       #region Methods
- 
+
       public override async Task<TestReply> RunTest(TestRequest testRequest, ServerCallContext context)
       {
          _logger.LogDebug("Config - " + _configuration["SomeApp:Host"]);
@@ -69,7 +68,6 @@ namespace PerfRunner.Services
          _logger?.LogTrace("Processor count = {0}.", processorCount);
 
          TimeSpan elapsed = TimeSpan.MinValue;
-         bool durationElapsed = false;
 
          //lets get all the types of ITestBase
          var type = typeof(ITestBase);
@@ -88,15 +86,15 @@ namespace PerfRunner.Services
             // check if the actions exist
             foreach (var type_ in types)
             {
-               if(type_.FullName.ToLowerInvariant().EndsWith("." + action_.Name.ToLowerInvariant()))
+               if (type_.FullName.ToLowerInvariant().EndsWith("." + action_.Name.ToLowerInvariant()))
                {
                   contains = true;
                   actionType = type_;
                   break;
-               } 
+               }
             }
 
-            if(!contains)
+            if (!contains)
             {
                throw new TestRequestException($"Unable to find {action_.Name} in Tests.");
             }
@@ -139,7 +137,6 @@ namespace PerfRunner.Services
             // actionRunner.Guid = Guid.Parse(action_.Guid);
             action_.CancellationTokenSource ??= new CancellationTokenSource();
             action_.Stopwatch = new Stopwatch();
-            action_.Stopwatch.Start();
 
             actionRunner.ActionOption = action_;
             _logger.LogDebug("Action guid " + actionRunner.ActionOption.Guid);
@@ -160,7 +157,6 @@ namespace PerfRunner.Services
          }
 
          testRequest.Stopwatch = new Stopwatch();
-         testRequest.Stopwatch.Start();
 
          if (!_testStateManager.AddTest(testRequest))
          {
@@ -172,71 +168,73 @@ namespace PerfRunner.Services
          try
          {
 
-         Parallel.ForEach(
-            testRequest.ActionRunners,
-            actionRunner =>
-            {
-               // actionRunner.LoadDistribution_ = LoadDistribution.Even;
-               async void RunAct()
-               {
+            testRequest.Stopwatch.Start();
 
-                  // Create an ActionBlock<int> that performs some work.
-                  actionRunner.ActionBlock = new ActionBlock<ITestBase>(
+            Parallel.ForEach(
+               testRequest.ActionRunners,
+               actionRunner =>
+               {
+                  // actionRunner.LoadDistribution_ = LoadDistribution.Even;
+                  async void RunAct()
+                  {
+
+                     // Create an ActionBlock<int> that performs some work.
+                     actionRunner.ActionBlock = new ActionBlock<ITestBase>(
 
                         // Simulate work by suspending the current thread.
-                     testBase => testBase.RunTest(Guid, _logger),
+                        testBase => testBase.RunTest(Guid, _logger),
 
                         // Specify a maximum degree of parallelism.
-                     new ExecutionDataflowBlockOptions
+                        new ExecutionDataflowBlockOptions
                         {
                            MaxDegreeOfParallelism = processorCount
                         }
-                        );
+                           );
 
-                  // keep runnung till cancelled from the client
-                  while (!testRequest.CancellationTokenSource.IsCancellationRequested &&
-                         !actionRunner.ActionOption.CancellationTokenSource.IsCancellationRequested)
-                  {
-
-                     var rate = 0;
-
-                     if (actionRunner.ActionOption.Rate.Equals(0))
+                     // keep runnung till cancelled from the client
+                     while (!testRequest.CancellationTokenSource.IsCancellationRequested &&
+                            !actionRunner.ActionOption.CancellationTokenSource.IsCancellationRequested)
                      {
-                        rate = testRequest.Rate;
-                     }
-                     else
-                     {
-                        rate = actionRunner.ActionOption.Rate;
-                     }
 
-                     await actionRunner.StartActionsPerSecondAsync(rate);
+                        var rate = 0;
 
-                     if(testRequest.CheckTestDurationElapsed())
-                     {
-                        _logger.LogDebug("Test {0} duration elapsed.", testRequest.Name);
-                        testRequest.CancellationTokenSource.Cancel();
-                     }
+                        if (actionRunner.ActionOption.Rate.Equals(0))
+                        {
+                           rate = testRequest.Rate;
+                        }
+                        else
+                        {
+                           rate = actionRunner.ActionOption.Rate;
+                        }
 
-                     if (actionRunner.ActionOption.CheckActionDurationElapsed())
-                     {
-                        _logger.LogDebug("Action {0} duration elapsed.", actionRunner.ActionOption.Name);
-                        actionRunner.ActionOption.CancellationTokenSource.Cancel();
+                        await actionRunner.StartActionsPerSecondAsync(rate);
+
+                        if (testRequest.CheckTestDurationElapsed())
+                        {
+                           _logger.LogDebug("Test {0} duration elapsed.", testRequest.Name);
+                           testRequest.CancellationTokenSource.Cancel();
+                        }
+
+                        if (actionRunner.ActionOption.CheckActionDurationElapsed())
+                        {
+                           _logger.LogDebug("Action {0} duration elapsed.", actionRunner.ActionOption.Name);
+                           actionRunner.ActionOption.CancellationTokenSource.Cancel();
+                        }
                      }
                   }
-               }
 
-               RunAct();
-            });
+                  RunAct();
+               });
 
          }
-         catch(Exception exception)
+         catch (Exception exception)
          {
             _logger.LogError("Issue running test(s) " + exception.Message);
          }
 
          // _logger.LogDebug(
-           // "After completion, Elapsed = {0} ms",
-           // (int)elapsed.TotalMilliseconds);
+         // "After completion, Elapsed = {0} ms",
+         // (int)elapsed.TotalMilliseconds);
 
          return new TestReply { Message = $"Hi {testRequest.Name}" };
       }
@@ -299,7 +297,7 @@ namespace PerfRunner.Services
                }
             }*/
          }
-         catch(Exception ex)
+         catch (Exception ex)
          {
             _logger.LogError($"Unable to update rate - {ex.Message}");
          }
@@ -321,7 +319,7 @@ namespace PerfRunner.Services
                await Task.Delay(TimeSpan.FromSeconds(3), context.CancellationToken);
             }
          }
-         catch(Exception ex)
+         catch (Exception ex)
          {
             _logger.LogError($"Unable to monitor test {monitorRequest.Guid} - {ex.Message}");
          }
@@ -336,7 +334,7 @@ namespace PerfRunner.Services
             // lets update rate
             // _cancelTokenSourceAllTests.Cancel();
             var test = _testStateManager.Tests;
-            
+
             // var res = (List<TestRequest>) test.Values;
             TestRequests testRequests = new TestRequests();
             testRequests.Tests.AddRange(_testStateManager.Tests.Values);
@@ -344,7 +342,7 @@ namespace PerfRunner.Services
             return testRequests;
             // return new Task<TestRequests>(() => { return testRequests; });
          }
-         catch(Exception ex)
+         catch (Exception ex)
          {
             _logger.LogError($"Unable to update rate - {ex.Message}");
          }
@@ -372,7 +370,7 @@ namespace PerfRunner.Services
 
             async void UpdateAction_(IActionRunner<ITestBase> action)
             {
-               if(!action.ActionOption.Guid.Equals(updateActionRequest.ActionGuid))
+               if (!action.ActionOption.Guid.Equals(updateActionRequest.ActionGuid))
                {
                   // return;
                }
@@ -389,7 +387,7 @@ namespace PerfRunner.Services
 
                      _logger.LogDebug("Updating rate from " + action.ActionOption.Rate);
 
-                     if(int.TryParse(updateActionRequest.UpdateValue, out int res_))
+                     if (int.TryParse(updateActionRequest.UpdateValue, out int res_))
                      {
                         action.ActionOption.Rate = res_;
                      }
@@ -403,8 +401,9 @@ namespace PerfRunner.Services
                      _logger.LogDebug("Updating duration from " + action.ActionOption.Duration);
 
                      // if no Try, Parse will cause System.FormatException and app crash*
-                     if(int.TryParse(updateActionRequest.UpdateValue, out int res))
+                     if (int.TryParse(updateActionRequest.UpdateValue, out int res))
                      {
+                        action.ActionOption.Stopwatch.Reset();
                         action.ActionOption.Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(res));
                      }
 
@@ -416,7 +415,7 @@ namespace PerfRunner.Services
 
                      _logger.LogDebug("Updating distribution from " + action.ActionOption.LoadDistribution);
 
-                     if(System.Enum.TryParse<LoadDistribution>(updateActionRequest.UpdateValue, true, out LoadDistribution result))
+                     if (System.Enum.TryParse<LoadDistribution>(updateActionRequest.UpdateValue, true, out LoadDistribution result))
                      {
                         action.ActionOption.LoadDistribution = result;
                      }
@@ -434,18 +433,18 @@ namespace PerfRunner.Services
             }
 
          }
-         catch(InvalidOperationException ex)
+         catch (InvalidOperationException ex)
          {
             _logger.LogError($"Unable to update action InvalidOperation - {ex.Message}");
          }
-         catch(Exception ex)
+         catch (Exception ex)
          {
             _logger.LogError($"Unable to update action - {ex.Message}");
          }
 
-         return new UpdateActionReply(){ Status = true };
+         return new UpdateActionReply() { Status = true };
       }
- 
-      #endregion 
+
+      #endregion
    }
 }

@@ -59,6 +59,9 @@ Redis is used as a common user store to store users and are pulled and pushed in
 10. Monitor traffic in prometheus or Grafana cloud. Check the Grafana dashboard [json](PerfRunner/grafanaDashboard.json) to import it to the Grafana dashboard.
 11. Update rate for individual action.
 12. Pause/ Unpause individual action.
+13. Set duration for action and test. Whichever comes first will stop first.
+14. Updating duration for action will run the action for the next n update seconds since update.
+15. Update distribution for each action.
 
 ### Planned features - Loader
 1. Update/ Edit test params during run like rate, distribution.
@@ -86,6 +89,8 @@ admin
 ```
 
 ### Sample commands
+To run from tests directly `CLI` with `PerfRunner` running.
+
 ```
 $ grpcurl -plaintext localhost:5277 describe
 perf.Perf is a service:
@@ -117,6 +122,12 @@ Please read ![CONTRIBUTING](CONTRIBUTING.md) to help make any contributions to t
 
 ### License
 Free for non-commercial use, but please read ![LICENSE](LICENSE) for commercial use, other(s) and support.
+
+### Issues
+Please report any issues [here](issues). This can be ranging from a minor defect to a valid feature request.
+
+### Contribution
+If you would like to contribute to thie repository, please read [CONTRIBUTING](CONTRIBUTING.md) before creating your PR.
 
 ### Customizations/ Support
 <a href="https://sites.google.com/view/garden-systems" target="_blank"><img src="Garden-Systems-logos_transparent.svg" style="width:100px;height:100px"></a>
