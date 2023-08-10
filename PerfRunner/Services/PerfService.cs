@@ -157,7 +157,10 @@ namespace PerfRunner.Services
 
             actionRunner.Paused = action_.Paused;
 
-            actionRunner.Duration = action_.Duration.ToTimeSpan();
+            if (!(action_.Duration == null))
+            {
+               actionRunner.Duration = action_.Duration.ToTimeSpan();
+            }
 
             actionRunner.TestGuid = Guid.Parse(testRequest.Guid);
 
@@ -393,7 +396,9 @@ namespace PerfRunner.Services
                      break;
 
                   case ActionOptionUpdated.Duration:
-                     // action.Duration = updateActionRequest.UpdateValue;
+                     _logger.LogDebug("Updating duration from " + action.Duration);
+                     action.Duration = TimeSpan.FromSeconds(int.Parse(updateActionRequest.UpdateValue));
+                     _logger.LogDebug("Updating duration to " + action.Duration);
                      break;
 
                   case ActionOptionUpdated.Distribution:

@@ -28,5 +28,7 @@ namespace PerfRunner.V1
     //return the first action
     public IActionRunner<ITestBase>? GetActionRunner(string guid) => ActionRunners.First(action => action.Guid.ToString().
        Equals(guid));
+
+    public string Guid_ { get => this.Guid; }
   }
 }

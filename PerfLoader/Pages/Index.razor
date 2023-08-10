@@ -84,6 +84,7 @@ Running Tests:
  <br>
         <label>Duration - @item_.Duration</label>  
         <!-- Input @bind-Value=item_.Duration></InputNumber -->   
+        <input value=@item_.Duration @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Duration, item.Guid, e)" />
  <br>
         <label>Load Distribution - @item_.LoadDistribution</label>  
         <select value="@item_.LoadDistribution" @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Distribution, item.Guid, e)">
@@ -196,6 +197,7 @@ Running Tests:
                 Name = "Login",
                 Rate = 6,
                 // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(10)),
+                // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.MaxValue),
                 Guid = Guid.NewGuid().ToString(),
             };
 
@@ -209,6 +211,7 @@ Running Tests:
                 Name = "PlayBowling",
                 Rate = 3,
                 // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(16)),
+                // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.MaxValue),
                 Guid = Guid.NewGuid().ToString()
             };
 

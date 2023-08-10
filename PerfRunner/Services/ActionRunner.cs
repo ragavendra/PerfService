@@ -85,11 +85,14 @@ public class ActionRunner<T> : IActionRunner<T>
 
       _stopWatch.Start();
 
-      if(_stopWatch.Elapsed.TotalSeconds > Duration.TotalSeconds)
+      if((Duration != null) && (Duration!.TotalSeconds > 0))
       {
-         _logger?.LogDebug(
-            $"After duration, Elapsed = {_stopWatch.Elapsed.TotalMilliseconds} s for {Guid}");
-         return true;
+         if (_stopWatch.Elapsed.TotalSeconds > Duration.TotalSeconds)
+         {
+            _logger?.LogDebug(
+               $"After duration, Elapsed = {_stopWatch.Elapsed.TotalMilliseconds} s for {Guid}");
+            return true;
+         }
       }
 
       // Compute the time that it takes for several messages to
