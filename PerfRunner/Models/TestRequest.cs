@@ -7,21 +7,25 @@
 
 namespace PerfRunner.V1
 {
-
+  using System.Diagnostics;
   using PerfRunner.Services;
   using PerfRunner.Tests;
 
   /// <summary>
   /// Extend the protobuf type to add some internal fields.
   /// </summary>
-  public sealed partial class TestRequest
+  public partial class TestRequest
   {
+    private IList<IActionRunner<ITestBase>> _actionRunners = new List<IActionRunner<ITestBase>>();
+
+    private Stopwatch _stopWatch;
+
     /// <summary>
     /// The <see cref="TestStateManager"/> the test should run with.
     /// </summary>
     public CancellationTokenSource CancellationTokenSource { get; set; }
 
-    private IList<IActionRunner<ITestBase>> _actionRunners = new List<IActionRunner<ITestBase>>();
+    public Stopwatch Stopwatch { get { return _stopWatch; } set { _stopWatch = value; } }
 
     public IList<IActionRunner<ITestBase>> ActionRunners { get => _actionRunners; }
 
@@ -30,5 +34,15 @@ namespace PerfRunner.V1
        Equals(guid));
 
     public string Guid_ { get => this.Guid; }
+
+    public bool CheckTestDurationElapsed()
+    {
+      if (_stopWatch.Elapsed.TotalSeconds < this.Duration.Seconds)
+      {
+        return false;
+      }
+
+      return true;
+    }
   }
 }

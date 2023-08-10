@@ -181,6 +181,9 @@ namespace PerfRunner.Services
             // list.Add(3);
          }
 
+         testRequest.Stopwatch = new Stopwatch();
+         testRequest.Stopwatch.Start();
+
          if (!_testStateManager.AddTest(testRequest))
          {
             var message = $"Seems the test {testRequest.Guid} is already runing.";
@@ -228,6 +231,11 @@ namespace PerfRunner.Services
                      }
 
                      durationElapsed = await actionRunner.StartActionsPerSecondAsync(rate);
+                     if(testRequest.CheckTestDurationElapsed())
+                     {
+                        _logger.LogDebug("Test duration elapsed - {0}", 6);
+                        testRequest.CancellationTokenSource.Cancel();
+                     }
                   }
                }
 
@@ -386,29 +394,55 @@ namespace PerfRunner.Services
                switch (updateActionRequest.ActionOptionUpdate)
                {
                   case ActionOptionUpdated.Paused:
+
                      action.Paused = bool.Parse(updateActionRequest.UpdateValue);
+
                      break;
 
                   case ActionOptionUpdated.Rate:
+
                      _logger.LogDebug("Updating rate from " + action.Rate);
-                     action.Rate = int.Parse(updateActionRequest.UpdateValue);
+
+                     if(int.TryParse(updateActionRequest.UpdateValue, out int res_))
+                     {
+                        action.Rate = res_;
+                     }
+
                      _logger.LogDebug("Updated rate to " + action.Rate);
+
                      break;
 
                   case ActionOptionUpdated.Duration:
+
                      _logger.LogDebug("Updating duration from " + action.Duration);
-                     action.Duration = TimeSpan.FromSeconds(int.Parse(updateActionRequest.UpdateValue));
+
+                     // if no Try, Parse will cause System.FormatException and app crash*
+                     if(int.TryParse(updateActionRequest.UpdateValue, out int res))
+                     {
+                        action.Duration = TimeSpan.FromSeconds(res);
+                     }
+
                      _logger.LogDebug("Updating duration to " + action.Duration);
+
                      break;
 
                   case ActionOptionUpdated.Distribution:
+
                      _logger.LogDebug("Updating distribution from " + action.LoadDistribution_);
-                     action.LoadDistribution_ = Enum.Parse<LoadDistribution>(updateActionRequest.UpdateValue);
+
+                     if(Enum.TryParse<LoadDistribution>(updateActionRequest.UpdateValue, true, out LoadDistribution result))
+                     {
+                        action.LoadDistribution_ = result;
+                     }
+
                      _logger.LogDebug("Updated distribution to " + action.LoadDistribution_);
+
                      break;
 
                   default:
+
                      _logger.LogDebug("Invalid option " + updateActionRequest.ActionOptionUpdate);
+
                      break;
                }
             }
