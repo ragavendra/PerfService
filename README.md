@@ -70,6 +70,17 @@ Redis is used as a common user store to store users and are pulled and pushed in
 ### Sample Web app
 For this use case, I am using the Bowling alley web app, assuming when a user goes to the ally, he has to say, get autheneticated, next wait for the lane and if lane is available, play can be initiated. For each stage, state can be represented, which is defined in `UserState`.
 
+## Monitoring
+There are several ways to monitor like below.
+
+### CLI
+
+The easiest way is with `dotnet-counters`. You can observe the distribution when you flip from `Even` to `Uneven` or vice - versa.
+
+```
+dotnet-counters monitor -n PerfRunner --counters PerfService.PerfRunner
+```
+
 ### Prometheus
 Prometheus is used to more or less display or relay the instrumentation metrics to apps like Grafana or similar. To install you may have to download and run it on oyur distribution. The config file for it is [here](PerfRunner/grafanaDashboard.json) or append the scrape config like below.
 
