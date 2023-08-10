@@ -58,6 +58,8 @@ public class ActionRunner<T> : IActionRunner<T>
          Thread.Sleep(300);
       }
 
+      ActionOption.Stopwatch.Start();
+
       // Compute the time that it takes for several messages to
       // flow through the dataflow block.
       var sw = new Stopwatch();
