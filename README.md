@@ -99,6 +99,9 @@ docker run -d --name=grafana -p 3000:3000 grafana/grafana-enterprise
 admin
 ```
 
+### Run results
+Please refer [here](Screens/300PerSecondActionLoad.png) for a sample run with upto 300 users per second with 12 core processor and having about 17% CPU usage and about 1.5 GB memory usage.
+
 ### Sample commands
 To run from tests directly `CLI` with `PerfRunner` running.
 
