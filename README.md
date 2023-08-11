@@ -36,14 +36,13 @@ and
 
 The `mcr.microsoft.com/dotnet/sdk:6.0` and `redis:alpine` images are used.
 
-### Redic Cache manager
+### Redis Cache manager
 Redis is used as a common user store to store users and are pulled and pushed into a queue there say when one or multiple `PerfRunner`s are running.
 
 `PerfRunner` can alone be run without the `redis` as well, in which case the user store should default to the in-memory queue and running multiple `Perfrunner`s can cause the same user to call the api's from each of the `PerfRunner`s.
 
 ### Planned features
-1. Assunming runner(s) running a single test, test users may have to be shared across them. Need a cache or ESB queue to may be write to db or not on cloud. The UserMgr may have to fetch user(s) from that cache or queue.
-2. Migrate to use Semaphore to use limited no. of threads per second instead of manual control?
+ ....
 
 ### Existing features
 1. Abitlity to create and run http test(s).
@@ -53,7 +52,7 @@ Redis is used as a common user store to store users and are pulled and pushed in
 5. Account data support with `User` object having state has well. Each user have their own state and are in the queue per state and updated by the test(s) accordingly.
 6. User state management - as user queue per each state.
 7. Ability to transfer data across test(s) - can be achieved by adding new data properties to the `User` object itself, say like the phone number, library card number, health number and so on. This is updated and be used by each test(s) accordingly by dequeing that state queue with the user with that updated data. Say the user just registeted at the front desk with payment, library no, his state is now authenticated and library no. is the new data and he is in the authenticated state queue. Whenever its his turn, that user gets popped from that queue. 
-8. Support for flag for equal or uneven load distribution per second.
+8. Support for flag for even or uneven load distribution per second.
 8a. If each action has a rate that is used for rate otherwise default to test rate.
 9. Try using interface inherit implementation.
 10. Monitor traffic in prometheus or Grafana cloud. Check the Grafana dashboard [json](PerfRunner/grafanaDashboard.json) to import it to the Grafana dashboard.
@@ -64,11 +63,21 @@ Redis is used as a common user store to store users and are pulled and pushed in
 15. Update distribution for each action.
 
 ### Planned features - Loader
-1. Update/ Edit test params during run like rate, distribution.
-2. Clean interface for interaction.
+1. Clean front end interface for interaction. The app needs a lot of fron end improvement yet. Basic operations such as rate, duration and distribution updates are instantanious.
 
 ### Sample Web app
 For this use case, I am using the Bowling alley web app, assuming when a user goes to the ally, he has to say, get autheneticated, next wait for the lane and if lane is available, play can be initiated. For each stage, state can be represented, which is defined in `UserState`.
+
+## Monitoring
+There are several ways to monitor like below.
+
+### CLI
+
+The easiest way is with `dotnet-counters`. You can observe the distribution when you flip from `Even` to `Uneven` or vice - versa.
+
+```
+dotnet-counters monitor -n PerfRunner --counters PerfService.PerfRunner
+```
 
 ### Prometheus
 Prometheus is used to more or less display or relay the instrumentation metrics to apps like Grafana or similar. To install you may have to download and run it on oyur distribution. The config file for it is [here](PerfRunner/grafanaDashboard.json) or append the scrape config like below.
@@ -87,6 +96,9 @@ To run Grafana as a docker image, run.
 docker run -d --name=grafana -p 3000:3000 grafana/grafana-enterprise
 admin
 ```
+
+### Run results
+Please refer [here](Screens/300PerSecondActionLoad.png) for a sample run with upto 300 users per second with 12 core processor and having about 17% CPU usage and about 1.5 GB memory usage.
 
 ### Sample commands
 To run from tests directly `CLI` with `PerfRunner` running.
@@ -124,7 +136,7 @@ Please read ![CONTRIBUTING](CONTRIBUTING.md) to help make any contributions to t
 Free for non-commercial use, but please read ![LICENSE](LICENSE) for commercial use, other(s) and support.
 
 ### Issues
-Please report any issues [here](issues). This can be ranging from a minor defect to a valid feature request.
+Please report any issues [here](https://github.com/ragavendra/PerfService/issues). This can be ranging from a minor defect to a valid feature request.
 
 ### Contribution
 If you would like to contribute to thie repository, please read [CONTRIBUTING](CONTRIBUTING.md) before creating your PR.
