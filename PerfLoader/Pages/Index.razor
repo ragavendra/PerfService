@@ -59,50 +59,16 @@ Running Tests:
 <br>
 <br>
 
-<h3>Monitoring Tests</h3>
 @foreach (var item in RunningTests)
 {
- <br>
- <label>Guid - @item.Guid</label>
- <br>
- <label>Name - @item.Name</label>
- <br>
- <label>Rate - @item.Rate</label>
- <!-- InputNumber @bind-Value=@item.Rate></InputNumber -->   
- <br>
- <h6>Actions</h6>
-
- @foreach (var item_ in item.Actions)
- {
- <!-- EditForm Model="@_actionOption" OnValidSubmit="(item.Guid) => HandleUpdateAction(item.Guid)" -->
-
-        <label>Guid - @item_.Guid</label>  
- <br>
-        <label>Name - @item_.Name</label>  
- <br>
-        <input value=@item_.Rate @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Rate, item.Guid, e)" />
- <br>
-        <label>Duration - @item_.Duration</label>  
-        <!-- Input @bind-Value=item_.Duration></InputNumber -->   
-        <input value=@item_.Duration @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Duration, item.Guid, e)" />
- <br>
-        <label>Load Distribution - @item_.LoadDistribution</label>  
-        <select value="@item_.LoadDistribution" @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Distribution, item.Guid, e)">
-            <option value="@LoadDistribution.Even">Even</option>
-            <option value="@LoadDistribution.Uneven">Uneven</option>
-        </select>   
- <br>
-    <label>Paused:</label>
-        <input value=item_.Paused type="checkbox" @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Paused, item.Guid, e)" / -->
- <br>
- }
- <br>
- <button @onclick="() => StopTest(item.Guid)">Stop</button>
+    <CascadingValue Value="@this">
+        <MonitorTest TestRequest=item />
+    </CascadingValue>
 }
+<br>
+<button @onclick="() => CheckTests()">CheckTests</button>
  <br>
- <button @onclick="() => CheckTests()">CheckTests</button>
- <br>
- <button @onclick="() => MonitorAllTestsAsync(StateHasChanged)">MonitorAllTests</button>
+ <button @onclick="() => MonitorAllTestsAsync()">MonitorAllTests</button>
 
 @code {
 
@@ -154,7 +120,7 @@ Running Tests:
         public string TestGuid { get; set; }
     }
 
-    private async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid, EventArgs e)
+    public async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid, EventArgs e)
     // private async Task HandleUpdateAction(EditContext editContext)
     {
         // var testGuid = "test";
@@ -249,7 +215,7 @@ Running Tests:
         NewTest();
    }
 
-    private void StopTest(string guid)
+    public void StopTest(string guid)
     {
         var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
         
@@ -285,7 +251,7 @@ Running Tests:
         }
     }
 
-    private async void MonitorAllTestsAsync(Action state)
+    private async void MonitorAllTestsAsync()
     {
         var cancelToken = new CancellationTokenSource();
 
@@ -305,7 +271,8 @@ Running Tests:
                 {
                     var resp_ = item_;
                     Logger.LogInformation($"Test is {item_.Name} .");
-                    state?.Invoke();
+                    // state?.Invoke();
+                    StateHasChanged();
                     // cancelToken.Cancel();
                 }
 
