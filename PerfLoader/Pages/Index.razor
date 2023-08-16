@@ -380,6 +380,8 @@ Running Tests:
 
     private void CheckTests()
     {
+        RunningTests.Clear();
+
         foreach (var cli in _perfClients)
         {
             // if no selection, run in all
@@ -406,7 +408,21 @@ Running Tests:
                 {
                     // var res = PerfClient.RunningTests(new RunningTestsRequest());
                     var res = cli.Item2.RunningTests(new RunningTestsRequest());
-                    RunningTests = res.Tests;
+
+                    foreach (var test in res.Tests)
+                    {
+                        if (RunningTests.Count > 0)
+                        {
+                            if (!RunningTests.Select(item => item.Guid.Equals(test.Guid)).First())
+                            {
+                                RunningTests.Add(test);
+                            }
+                        }
+                        else
+                        {
+                            RunningTests.Add(test);
+                        }
+                    }
                 }
                 catch (Grpc.Core.RpcException exc)
                 {
