@@ -418,9 +418,10 @@ Running Tests:
     Logger.LogInformation("Monitoring test " + item);
     // Action someAction;
 
-    try
+    async void MonitorTests_()
     {
-        async void MonitorTests_()
+
+        try
         {
             // not wait for task to complete
             using var resp = cli.Item2.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
@@ -434,46 +435,64 @@ Running Tests:
                 StateHasChanged();
                 // cancelToken.Cancel();
             }
+
         }
-
-        // if no selection, run in all
-        if (SelectedChannels.Length > 0)
+        catch (InvalidOperationException ex)
         {
+            Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+            // RunningTests.Remove(item);
+            item = null;
+        }
+        catch (System.Exception ex)
+        {
+            Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+            // RunningTests.Remove(item);
+            item = null;
+            // throw;
+        }
+        finally
+        {
+            // RunningTests.Remove(item);
+        }
+    }
 
-            Parallel.ForEach(SelectedChannels, (item0) =>
-            {
-    // check only if any sel made
-    if (item0.Contains(cli.Item1))
+    // if no selection, run in all
+    if (SelectedChannels.Length > 0)
+    {
+
+        Parallel.ForEach(SelectedChannels, (item0) =>
+        {
+        // check only if any sel made
+                if (item0.Contains(cli.Item1))
+                {
+    MonitorTests_();
+                }
+            });
+    }
+    else
     {
         MonitorTests_();
     }
-            });
-        }
-        else
-        {
-            MonitorTests_();
-        }
 
-        // await resp;
-        // var str = resp.ResponseStream;
-        // var rep = resp.ResponseStream.ReadAllAsync(_cancellationToken);
-        // RunningTests = (List<TestRequest>) rep;
-    }
-    catch (InvalidOperationException ex)
-    {
-        Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
-        RunningTests.Remove(item);
-    }
-    catch (System.Exception ex)
-    {
-        Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
-        RunningTests.Remove(item);
-        // throw;
-    }
-            });
-        });
+    // await resp;
+    // var str = resp.ResponseStream;
+    // var rep = resp.ResponseStream.ReadAllAsync(_cancellationToken);
+    // RunningTests = (List<TestRequest>) rep;
+            }
+            );
+        }
+        );
 
         // RunningTests.Clear();
+        foreach(var ele in RunningTests)
+        {
+            if(ele is null)
+            {
+                RunningTests.Remove(ele);
+            }
+        }
+
+        StateHasChanged();
     }
 }
 
