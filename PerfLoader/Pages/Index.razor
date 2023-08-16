@@ -96,7 +96,7 @@ Running Tests:
 
     private UpdateAction _updateAction = new UpdateAction();
 
-    public string[] SelectedChannels { get; set; } = new string[] { "All" };
+    public string[] SelectedChannels { get; set; } = new string[] { };
 
     private TestRequest TestRequest { get; set; }
 
@@ -323,6 +323,10 @@ Running Tests:
         // StateHasChanged();
         // RunningTests.Remove(test => test.Guid.Equals(guid));
         RunningTests.Remove(RunningTests.Where(test => test.Guid.Equals(guid)).First());
+
+        StateHasChanged();
+
+        // CheckTests();
     }
 
     private async void StopAllTestsAsync()
