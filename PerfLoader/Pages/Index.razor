@@ -23,17 +23,20 @@
 Welcome to Perf Loader.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+<br>
+
 <EditForm Model="@TestRequest">
-    <InputText @bind-Value=TestRequest.Name></InputText>
-
-    <InputNumber @bind-Value=TestRequest.Rate></InputNumber>
-
 <InputSelect @bind-Value=SelectedChannels>
 @foreach(var channel in _perfClients)
 {
  <option value="@channel.Item1">@channel.Item1</option>
 }
  </InputSelect>
+<br>
+    <InputText @bind-Value=TestRequest.Name></InputText>
+
+    <InputNumber @bind-Value=TestRequest.Rate></InputNumber>
+
 
 Actions: 
 @foreach (var item in TestRequest.Actions)
