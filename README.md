@@ -14,6 +14,14 @@ under one repository.
 ### PerfRunner
 The actual hoster and runner of service which has a folder called tests which contain the tests. Simply copy the `TestBase.cs` in it to your new test and update the `RunTest` method in it to suit your performance test needs. The http client has been typed DIed into `_httpClient` which can be used in the test(s) to make the http calls along with an end point.
 
+To run on a specific port, when running multiple instances.
+
+```
+dotnet run --no-build Debug urls=http://0.0.0.0:5278
+```
+
+PS - Need to update `docker-compose.yml` for more than one `PerfRunner`
+
 ### PerfLoader
 Front end or the web interface to initiate performance test run(s) and control or to stop them.
 <a href="PerfLoader.png" target="_blank">Screen</a>
@@ -61,6 +69,7 @@ Redis is used as a common user store to store users and are pulled and pushed in
 13. Set duration for action and test. Whichever comes first will stop first.
 14. Updating duration for action will run the action for the next n update seconds since update.
 15. Update distribution for each action.
+16. Run, update and monitor test(s) on selected runner(s). If no runner is selected, all are probed*.
 
 ### Planned features - Loader
 1. Clean front end interface for interaction. The app needs a lot of fron end improvement yet. Basic operations such as rate, duration and distribution updates are instantanious.

@@ -1,0 +1,66 @@
+@using PerfRunner.V1;
+@using PerfLoader.Pages;
+
+<h3>Monitoring Tests</h3>
+
+<br>
+<label>Guid - @TestRequest.Guid</label>
+<br>
+<label>Name - @TestRequest.Name</label>
+<br>
+<label>Rate - @TestRequest.Rate</label>
+<!-- InputNumber @bind-Value=@TestRequest.Rate></InputNumber -->
+<br>
+<label>Clients</label>
+@foreach (var item in TestRequest.Clients)
+{
+ <br>
+ <label>@item</label>
+}
+<br>
+<h6>Actions</h6>
+
+@foreach (var item_ in TestRequest.Actions)
+{
+       <!-- EditForm Model="@_actionOption" OnValidSubmit="(item.Guid) => HandleUpdateAction(item.Guid)" -->
+
+       <label>Guid - @item_.Guid</label>
+       <br>
+       <label>Name - @item_.Name</label>
+       <br>
+       <input value=@item_.Rate
+       @onchange="(e) => IndexPage.HandleUpdateAction(item_.Guid, ActionOptionUpdated.Rate, TestRequest.Guid, e)" />
+       <br>
+       <label>Duration - @item_.Duration</label>
+       <!-- Input @bind-Value=item_.Duration></InputNumber -->
+       <input value=@item_.Duration
+       @onchange="(e) => IndexPage.HandleUpdateAction(item_.Guid, ActionOptionUpdated.Duration, TestRequest.Guid, e)" />
+       <br>
+       <label>Load Distribution - @item_.LoadDistribution</label>
+       <select value="@item_.LoadDistribution"
+       @onchange="(e) => IndexPage.HandleUpdateAction(item_.Guid, ActionOptionUpdated.Distribution, TestRequest.Guid, e)">
+              <option value="@LoadDistribution.Even">Even</option>
+              <option value="@LoadDistribution.Uneven">Uneven</option>
+       </select>
+       <br>
+       <label>Paused:</label>
+       <input value=item_.Paused type="checkbox"
+       @onchange="(e) => IndexPage.HandleUpdateAction(item_.Guid, ActionOptionUpdated.Paused, TestRequest.Guid, e)">
+       <br>
+}
+<br>
+<button @onclick="() => IndexPage.StopTest(TestRequest.Guid)">Stop</button>
+
+@code
+{
+       [Parameter]
+       public TestRequest? TestRequest { get; set; }
+
+       [CascadingParameter]
+       public Pages.Index IndexPage { get; set; }
+
+       public void Some()
+       {
+              // IndexPage
+       }
+}

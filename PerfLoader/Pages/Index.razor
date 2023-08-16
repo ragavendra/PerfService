@@ -1,5 +1,6 @@
 ﻿@page "/"
 @using System;
+@using System.ComponentModel.DataAnnotations
 @using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
@@ -22,10 +23,20 @@
 Welcome to Perf Loader.
 
 <SurveyPrompt Title="How is Blazor working for you?" />
+<br>
+
 <EditForm Model="@TestRequest">
+<InputSelect @bind-Value=SelectedChannels>
+@foreach(var channel in _perfClients)
+{
+ <option value="@channel.Item1">@channel.Item1</option>
+}
+ </InputSelect>
+<br>
     <InputText @bind-Value=TestRequest.Name></InputText>
 
     <InputNumber @bind-Value=TestRequest.Rate></InputNumber>
+
 
 Actions: 
 @foreach (var item in TestRequest.Actions)
@@ -59,72 +70,42 @@ Running Tests:
 <br>
 <br>
 
-<h3>Monitoring Tests</h3>
 @foreach (var item in RunningTests)
 {
- <br>
- <label>Guid - @item.Guid</label>
- <br>
- <label>Name - @item.Name</label>
- <br>
- <label>Rate - @item.Rate</label>
- <!-- InputNumber @bind-Value=@item.Rate></InputNumber -->   
- <br>
- <h6>Actions</h6>
-
- @foreach (var item_ in item.Actions)
- {
- <!-- EditForm Model="@_actionOption" OnValidSubmit="(item.Guid) => HandleUpdateAction(item.Guid)" -->
-
-        <label>Guid - @item_.Guid</label>  
- <br>
-        <label>Name - @item_.Name</label>  
- <br>
-        <input value=@item_.Rate @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Rate, item.Guid, e)" />
- <br>
-        <label>Duration - @item_.Duration</label>  
-        <!-- Input @bind-Value=item_.Duration></InputNumber -->   
-        <input value=@item_.Duration @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Duration, item.Guid, e)" />
- <br>
-        <label>Load Distribution - @item_.LoadDistribution</label>  
-        <select value="@item_.LoadDistribution" @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Distribution, item.Guid, e)">
-            <option value="@LoadDistribution.Even">Even</option>
-            <option value="@LoadDistribution.Uneven">Uneven</option>
-        </select>   
- <br>
-    <label>Paused:</label>
-        <input value=item_.Paused type="checkbox" @onchange="(e) => HandleUpdateAction(item_.Guid, ActionOptionUpdated.Paused, item.Guid, e)" / -->
- <br>
- }
- <br>
- <button @onclick="() => StopTest(item.Guid)">Stop</button>
+    <CascadingValue Value="@this">
+        <MonitorTest TestRequest=item />
+    </CascadingValue>
 }
+<br>
+<button @onclick="() => CheckTests()">CheckTests</button>
  <br>
- <button @onclick="() => CheckTests()">CheckTests</button>
- <br>
- <button @onclick="() => MonitorAllTestsAsync(StateHasChanged)">MonitorAllTests</button>
+ <button @onclick="() => MonitorAllTestsAsync()">MonitorAllTests</button>
 
 @code {
+
+    public class PerfClientChannels_
+    {
+        public string[] SelectedChannels { get; set; } = new string[]{ "All" };
+    }
 
     // Actions.Add(new ActionOption() { Name = "Login"}});
 
     // private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress(Configuration["PerfRunner"]));
     private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress("http://localhost:5277"));
 
+    private static IList<(string, Perf.PerfClient)> _perfClients = new List<(string, Perf.PerfClient)>();
+
     private ActionOption _actionOption;
 
     private UpdateAction _updateAction = new UpdateAction();
 
+    public string[] SelectedChannels { get; set; } = new string[] { };
+
     private TestRequest TestRequest { get; set; }
-
-    private Perf.PerfClient PerfClient { get => _perfClient; set => _perfClient = value; }
-
-    private ActionOption ActionOption { get => _actionOption; set => _actionOption = value; }
 
     private CancellationToken _cancellationToken;// = new CancellationToken();
 
     private static IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
-
     protected override void OnInitialized()
     {
         NewTest();
@@ -141,6 +122,27 @@ Running Tests:
         // PerfClient = new Perf.PerfClient(channel);
         Logger.LogInformation("Running initialized!");
 
+        // load or update Perf Clients only in beginning*
+        if (_perfClients.Count == 0)
+        {
+            foreach (var cli in Configuration.GetRequiredSection("PerfRunners").Get<List<string>>())
+            {
+                var channel = GrpcChannel.ForAddress(cli);
+
+                // if not online
+                // if (!channel.State.Equals(ConnectivityState.Idle))
+                {
+                    // _perfClientChannels_.PerfClientChannels.Add(cli);
+                    Logger.LogDebug("Channel {0} was created!", channel.Target);
+                    var perfCli = new Perf.PerfClient(channel);
+                    // _perfClients.Add(new Tuple(){ channel.Target, perfCli });
+                    _perfClients.Add(new (cli, perfCli));
+                }
+            }
+
+            // SelectedChannels = _perfClients.ToArray() 
+        }
+        
         // if(RunningTests.Count > 0)
         {
             CheckTests();
@@ -154,7 +156,7 @@ Running Tests:
         public string TestGuid { get; set; }
     }
 
-    private async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid, EventArgs e)
+    public async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid, EventArgs e)
     // private async Task HandleUpdateAction(EditContext editContext)
     {
         // var testGuid = "test";
@@ -162,7 +164,7 @@ Running Tests:
         try
         {
             // Logger.LogInformation("Updating test " + _updateAction.TestGuid);
-            if(e is ChangeEventArgs ce)
+            if (e is ChangeEventArgs ce)
             {
                 Logger.LogInformation("Updating action " + actionGuid);
 
@@ -174,11 +176,32 @@ Running Tests:
                         // TestGuid = _updateAction.TestGuid,
                         ActionGuid = actionGuid,
                         ActionOptionUpdate = actionOptionUpdated,
-                        UpdateValue = (string) ce.Value.ToString()
+                        UpdateValue = (string)ce.Value.ToString()
                     };
 
                 // not wait for task to complete
-                var rep = PerfClient.UpdateActionAsync(updateAction);
+                foreach (var cli in _perfClients)
+                {
+                    // if no selection, run in all
+                    if (SelectedChannels.Length > 0)
+                    {
+                        Parallel.ForEach(SelectedChannels, (item) =>
+                        {
+
+                            // check only if any sel made
+                            if (item.Contains(cli.Item1))
+                            {
+
+                                var rep = cli.Item2.UpdateActionAsync(updateAction);
+                                // if(cli.)
+                            }
+                        });
+                    }
+                    else
+                    {
+                        var rep = cli.Item2.UpdateActionAsync(updateAction);
+                    }
+                }
             }
         }
         catch (Exception ex)
@@ -243,30 +266,113 @@ Running Tests:
         Logger.LogInformation("Starting test " + TestRequest.Guid);
 
         // not wait for task to complete
-        var rep = PerfClient.RunTestAsync(TestRequest);
+        // var rep = PerfClient.RunTestAsync(TestRequest);
+        foreach (var cli in _perfClients)
+        {
+            {
+                void RunTest()
+                {
+                    TestRequest.Clients.Add(cli.Item1);
+                    var rep = cli.Item2.RunTestAsync(TestRequest);
+                }
+
+                // if no selection, run in all
+                if (SelectedChannels.Length > 0)
+                {
+                    Parallel.ForEach(SelectedChannels, (item) =>
+                    {
+
+                        // check only if any sel made
+                        if (item.Contains(cli.Item1))
+                        {
+                            RunTest();
+                        }
+                    });
+                }
+                else
+                {
+                    RunTest();
+                }
+            }
+            // if(cli.)
+        }
+
         RunningTests.Add(TestRequest);
 
         NewTest();
-   }
+    }
 
-    private void StopTest(string guid)
+    public void StopTest(string guid)
     {
-        var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
-        
+        // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
+        foreach (var cli in _perfClients)
+        {
+            void StopTest()
+            {
+                var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = guid });
+            }
+
+            // if no selection, run in all
+            if (SelectedChannels.Length > 0)
+            {
+                Parallel.ForEach(SelectedChannels, (item) =>
+                {
+
+                    // check only if any sel made
+                    if (item.Contains(cli.Item1))
+                    {
+                        StopTest();
+                    }
+                });
+            }
+            else
+            {
+                StopTest();
+            }
+        }
+
         // StateHasChanged();
         // RunningTests.Remove(test => test.Guid.Equals(guid));
         RunningTests.Remove(RunningTests.Where(test => test.Guid.Equals(guid)).First());
+
+        StateHasChanged();
+
+        // CheckTests();
     }
 
     private async void StopAllTestsAsync()
     {
-        foreach (var item in RunningTests)
+        foreach (var cli in _perfClients)
         {
-            Logger.LogInformation("Stopping test " + item);
+            foreach (var item_ in RunningTests)
+            {
+                Logger.LogInformation("Stopping test " + item_);
 
-            // not wait for task to complete
-            var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item.Guid });
-            // RunningTests.Remove(item);
+                void StopAllTests()
+                {
+                    var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = item_.Guid });
+                }
+
+                // not wait for task to complete
+                // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item.Guid });
+                // RunningTests.Remove(item);
+                // if no selection, run in all
+                if (SelectedChannels.Length > 0)
+                {
+                    Parallel.ForEach(SelectedChannels, (item) =>
+                    {
+                        // check only if any sel made
+                        if (item.Contains(cli.Item1))
+                        {
+                            StopAllTests();
+                        }
+                    });
+                }
+                else
+                {
+                    StopAllTests();
+                }
+            }
         }
 
         RunningTests.Clear();
@@ -274,70 +380,144 @@ Running Tests:
 
     private void CheckTests()
     {
-        try
+        RunningTests.Clear();
+
+        foreach (var cli in _perfClients)
         {
-            var res = PerfClient.RunningTests(new RunningTestsRequest());
-            RunningTests = res.Tests;
-        }
-        catch (System.Exception exc)
-        {
-            Logger.LogError($"Unable to fetch tests - {exc.Message}");
+            // if no selection, run in all
+            if (SelectedChannels.Length > 0)
+            {
+
+                Parallel.ForEach(SelectedChannels, (item) =>
+                {
+                    // check only if any sel made
+                    if (item.Contains(cli.Item1))
+                    {
+                        RunningTests_();
+                    }
+                });
+            }
+            else
+            {
+                RunningTests_();
+            }
+
+            void RunningTests_()
+            {
+                try
+                {
+                    // var res = PerfClient.RunningTests(new RunningTestsRequest());
+                    var res = cli.Item2.RunningTests(new RunningTestsRequest());
+
+                    foreach (var test in res.Tests)
+                    {
+                        if (RunningTests.Count > 0)
+                        {
+                            if (!RunningTests.Select(item => item.Guid.Equals(test.Guid)).First())
+                            {
+                                RunningTests.Add(test);
+                            }
+                        }
+                        else
+                        {
+                            RunningTests.Add(test);
+                        }
+                    }
+                }
+                catch (Grpc.Core.RpcException exc)
+                {
+                    Logger.LogError($"Unable to fetch tests - {exc.Message}");
+
+                    // if unavail remove them? causing exc
+                    // _perfClients.Remove(cli);
+                }
+            }
         }
     }
 
-    private async void MonitorAllTestsAsync(Action state)
+    private async void MonitorAllTestsAsync()
     {
         var cancelToken = new CancellationTokenSource();
 
-        Parallel.ForEach(RunningTests, async item =>
+        Parallel.ForEach(_perfClients, async cli => EachCli(cli));
+
+        async void EachCli((string, Perf.PerfClient) cli)
         {
-            Logger.LogInformation("Monitoring test " + item);
-            // Action someAction;
+            Parallel.ForEach(RunningTests, async item => MonitorParallel(item));
 
-            try
+            async void MonitorParallel(TestRequest item)
             {
+                Logger.LogInformation("Monitoring test " + item);
 
-                // not wait for task to complete
-                using var resp = PerfClient.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
-    cancelToken.Token);
-
-                await foreach (var item_ in resp.ResponseStream.ReadAllAsync(cancelToken.Token))
+                async void MonitorTests_()
                 {
-                    var resp_ = item_;
-                    Logger.LogInformation($"Test is {item_.Name} .");
-                    state?.Invoke();
-                    // cancelToken.Cancel();
+
+                    try
+                    {
+                        // not wait for task to complete
+                        using var resp = cli.Item2.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
+                        cancelToken.Token);
+
+                        await foreach (var item1 in resp.ResponseStream.ReadAllAsync(cancelToken.Token))
+                        {
+                            var resp_ = item1;
+                            Logger.LogInformation($"Test is {item1.Name} .");
+                            // state?.Invoke();
+                            StateHasChanged();
+                            // cancelToken.Cancel();
+                        }
+
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+                        // RunningTests.Remove(item);
+                        item = null;
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+                        // RunningTests.Remove(item);
+                        item = null;
+                        // throw;
+                    }
+                    finally
+                    {
+                        // RunningTests.Remove(item);
+                    }
                 }
 
-                // await resp;
-                // var str = resp.ResponseStream;
-                // var rep = resp.ResponseStream.ReadAllAsync(_cancellationToken);
-                // RunningTests = (List<TestRequest>) rep;
-            }
-            catch (InvalidOperationException ex)
-            {
-                Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
-                RunningTests.Remove(item);
-            }
-            catch (System.Exception ex)
-            {
-                Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
-                RunningTests.Remove(item);
-                // throw;
-            }
+                // if no selection, run in all
+                if (SelectedChannels.Length > 0)
+                {
 
-            // cancelToken.Cancel();
-            // var can = new CancellationTokenSource();
-            // can.Cancel();
-            /*
-            foreach (var item in resp.ResponseStream.ReadAllAsync(_cancellationToken))
-            {
+                    Parallel.ForEach(SelectedChannels, (item0) =>
+                    {
+                        // check only if any sel made
+                        if (item0.Contains(cli.Item1))
+                        {
+                            MonitorTests_();
+                        }
+                    });
+                }
+                else
+                {
+                    MonitorTests_();
+                }
 
-            }*/
-            // RunningTests.Remove(item);
-        });
+            }
+        }
 
         // RunningTests.Clear();
+        foreach (var ele in RunningTests)
+        {
+            if (ele is null)
+            {
+                RunningTests.Remove(ele);
+            }
+        }
+
+        StateHasChanged();
     }
 }
 
