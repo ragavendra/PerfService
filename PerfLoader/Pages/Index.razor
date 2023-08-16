@@ -29,9 +29,9 @@ Welcome to Perf Loader.
     <InputNumber @bind-Value=TestRequest.Rate></InputNumber>
 
 <InputSelect @bind-Value=SelectedChannels>
-@foreach(var channel in _perfClients_)
+@foreach(var channel in _perfClients)
 {
- <option value="@channel">@channel</option>
+ <option value="@channel.Item1">@channel.Item1</option>
 }
  </InputSelect>
 
@@ -90,11 +90,7 @@ Running Tests:
     // private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress(Configuration["PerfRunner"]));
     private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress("http://localhost:5277"));
 
-    private static IList<Perf.PerfClient> _perfClients = new List<Perf.PerfClient>();
-
-    private static IList<string> _perfClients_ = new List<string>();
-
-    private PerfClientChannels_ _perfClientChannels_ = new PerfClientChannels_();
+    private static IList<(string, Perf.PerfClient)> _perfClients = new List<(string, Perf.PerfClient)>();
 
     private ActionOption _actionOption;
 
@@ -104,16 +100,9 @@ Running Tests:
 
     private TestRequest TestRequest { get; set; }
 
-    private Perf.PerfClient PerfClient { get => _perfClient; set => _perfClient = value; }
-
-    private static IList<Perf.PerfClient> PerfClients { get => _perfClients; }
-
-    private ActionOption ActionOption { get => _actionOption; set => _actionOption = value; }
-
     private CancellationToken _cancellationToken;// = new CancellationToken();
 
     private static IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
-
     protected override void OnInitialized()
     {
         NewTest();
@@ -131,14 +120,9 @@ Running Tests:
         Logger.LogInformation("Running initialized!");
 
         // load or update Perf Clients only in beginning*
-        if (_perfClients_.Count == 0)
+        if (_perfClients.Count == 0)
         {
             foreach (var cli in Configuration.GetRequiredSection("PerfRunners").Get<List<string>>())
-            {
-                _perfClients_.Add(cli);
-            }
-
-            foreach (var cli in _perfClients_)
             {
                 var channel = GrpcChannel.ForAddress(cli);
 
@@ -148,9 +132,12 @@ Running Tests:
                     // _perfClientChannels_.PerfClientChannels.Add(cli);
                     Logger.LogDebug("Channel {0} was created!", channel.Target);
                     var perfCli = new Perf.PerfClient(channel);
-                    _perfClients.Add(perfCli);
+                    // _perfClients.Add(new Tuple(){ channel.Target, perfCli });
+                    _perfClients.Add(new (cli, perfCli));
                 }
             }
+
+            // SelectedChannels = _perfClients.ToArray() 
         }
         
         // if(RunningTests.Count > 0)
@@ -193,7 +180,7 @@ Running Tests:
                 // var rep = PerfClient.UpdateActionAsync(updateAction);
                 foreach(var cli in _perfClients)
                 {
-                    var rep = cli.UpdateActionAsync(updateAction);
+                    var rep = cli.Item2.UpdateActionAsync(updateAction);
                     // if(cli.)
                 }
             }
@@ -263,7 +250,7 @@ Running Tests:
         // var rep = PerfClient.RunTestAsync(TestRequest);
         foreach (var cli in _perfClients)
         {
-            var rep = cli.RunTestAsync(TestRequest);
+            var rep = cli.Item2.RunTestAsync(TestRequest);
             // if(cli.)
         }
 
@@ -277,7 +264,7 @@ Running Tests:
         // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
         foreach (var cli in _perfClients)
         {
-            var rep = cli.StopTestAsync(new StopTestRequest { Guid = guid });
+            var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = guid });
             // if(cli.)o
         }
 
@@ -297,7 +284,7 @@ Running Tests:
                 // not wait for task to complete
                 // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item.Guid });
                 // RunningTests.Remove(item);
-                var rep = cli.StopTestAsync(new StopTestRequest { Guid = item.Guid });
+                var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = item.Guid });
             }
         }
 
@@ -306,22 +293,33 @@ Running Tests:
 
     private void CheckTests()
     {
+        if(_perfClients.Count > 0)
+        {
+        foreach (var cli in _perfClients)
+            {
+                // Parallel.ForEach(SelectedChannels, (item) => {
+
+                // if(SelectedChannels.Contains((Grpc.Net.Client.Internal.HttpClientCallInvoker)cli.Configuration.undecoratedCallInvoker).Channel.Target)
+                // if(item.Contains(cli.Item1))
+                {
+
         try
         {
-
-            foreach (var cli in _perfClients)
-            {
-                // if(SelectedChannels.Contains((Grpc.Net.Client.Internal.HttpClientCallInvoker)cli.Configuration.undecoratedCallInvoker).Channel.Target)
-                {
                     // var res = PerfClient.RunningTests(new RunningTestsRequest());
-                    var res = cli.RunningTests(new RunningTestsRequest());
+                    var res = cli.Item2.RunningTests(new RunningTestsRequest());
                     RunningTests = res.Tests;
-                }
-            }
         }
-        catch (System.Exception exc)
+        catch (Grpc.Core.RpcException exc)
         {
             Logger.LogError($"Unable to fetch tests - {exc.Message}");
+
+            // if unavail remove them?
+            // _perfClients.Remove(cli); 
+        }
+                }
+         //       });
+        
+        }
         }
     }
 
@@ -340,7 +338,7 @@ Running Tests:
     {
 
         // not wait for task to complete
-        using var resp = cli.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
+        using var resp = cli.Item2.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
         cancelToken.Token);
 
         await foreach (var item_ in resp.ResponseStream.ReadAllAsync(cancelToken.Token))
