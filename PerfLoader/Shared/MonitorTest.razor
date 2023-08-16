@@ -11,6 +11,13 @@
 <label>Rate - @TestRequest.Rate</label>
 <!-- InputNumber @bind-Value=@TestRequest.Rate></InputNumber -->
 <br>
+<label>Clients</label>
+@foreach (var item in TestRequest.Clients)
+{
+ <br>
+ <label>@item</label>
+}
+<br>
 <h6>Actions</h6>
 
 @foreach (var item_ in TestRequest.Actions)

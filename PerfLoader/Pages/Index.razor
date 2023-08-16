@@ -270,6 +270,12 @@ Running Tests:
         foreach (var cli in _perfClients)
         {
             {
+                void RunTest()
+                {
+                    TestRequest.Clients.Add(cli.Item1);
+                    var rep = cli.Item2.RunTestAsync(TestRequest);
+                }
+
                 // if no selection, run in all
                 if (SelectedChannels.Length > 0)
                 {
@@ -279,15 +285,13 @@ Running Tests:
                         // check only if any sel made
                         if (item.Contains(cli.Item1))
                         {
-
-                            var rep = cli.Item2.RunTestAsync(TestRequest);
-                            // if(cli.)
+                            RunTest();
                         }
                     });
                 }
                 else
                 {
-                    var rep = cli.Item2.RunTestAsync(TestRequest);
+                    RunTest();
                 }
             }
             // if(cli.)
@@ -303,6 +307,11 @@ Running Tests:
         // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
         foreach (var cli in _perfClients)
         {
+            void StopTest()
+            {
+                var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = guid });
+            }
+
             // if no selection, run in all
             if (SelectedChannels.Length > 0)
             {
@@ -312,14 +321,13 @@ Running Tests:
                     // check only if any sel made
                     if (item.Contains(cli.Item1))
                     {
-
-                        var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = guid });
+                        StopTest();
                     }
                 });
             }
             else
             {
-                var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = guid });
+                StopTest();
             }
         }
 
@@ -340,26 +348,30 @@ Running Tests:
             {
                 Logger.LogInformation("Stopping test " + item_);
 
+                void StopAllTests()
+                {
+                    var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = item_.Guid });
+                }
+
                 // not wait for task to complete
                 // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = item.Guid });
                 // RunningTests.Remove(item);
-                    // if no selection, run in all
-                    if (SelectedChannels.Length > 0)
+                // if no selection, run in all
+                if (SelectedChannels.Length > 0)
+                {
+                    Parallel.ForEach(SelectedChannels, (item) =>
                     {
-                        Parallel.ForEach(SelectedChannels, (item) =>
+                        // check only if any sel made
+                        if (item.Contains(cli.Item1))
                         {
-                            // check only if any sel made
-                            if (item.Contains(cli.Item1))
-                            {
-
-                                var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = item_.Guid });
-                            }
-                        });
-                    }
-                    else
-                    {
-                        var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = item_.Guid });
-                    }
+                            StopAllTests();
+                        }
+                    });
+                }
+                else
+                {
+                    StopAllTests();
+                }
             }
         }
 
@@ -411,82 +423,79 @@ Running Tests:
     {
         var cancelToken = new CancellationTokenSource();
 
-        Parallel.ForEach(_perfClients, async cli =>
+        Parallel.ForEach(_perfClients, async cli => EachCli(cli));
+
+        async void EachCli((string, Perf.PerfClient) cli)
         {
-            Parallel.ForEach(RunningTests, async item =>
-    {
-    Logger.LogInformation("Monitoring test " + item);
-    // Action someAction;
+            Parallel.ForEach(RunningTests, async item => MonitorParallel(item));
 
-    async void MonitorTests_()
-    {
-
-        try
-        {
-            // not wait for task to complete
-            using var resp = cli.Item2.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
-            cancelToken.Token);
-
-            await foreach (var item1 in resp.ResponseStream.ReadAllAsync(cancelToken.Token))
+            async void MonitorParallel(TestRequest item)
             {
-                var resp_ = item1;
-                Logger.LogInformation($"Test is {item1.Name} .");
-                // state?.Invoke();
-                StateHasChanged();
-                // cancelToken.Cancel();
-            }
+                Logger.LogInformation("Monitoring test " + item);
 
-        }
-        catch (InvalidOperationException ex)
-        {
-            Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
-            // RunningTests.Remove(item);
-            item = null;
-        }
-        catch (System.Exception ex)
-        {
-            Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
-            // RunningTests.Remove(item);
-            item = null;
-            // throw;
-        }
-        finally
-        {
-            // RunningTests.Remove(item);
-        }
-    }
-
-    // if no selection, run in all
-    if (SelectedChannels.Length > 0)
-    {
-
-        Parallel.ForEach(SelectedChannels, (item0) =>
-        {
-        // check only if any sel made
-                if (item0.Contains(cli.Item1))
+                async void MonitorTests_()
                 {
-    MonitorTests_();
-                }
-            });
-    }
-    else
-    {
-        MonitorTests_();
-    }
 
-    // await resp;
-    // var str = resp.ResponseStream;
-    // var rep = resp.ResponseStream.ReadAllAsync(_cancellationToken);
-    // RunningTests = (List<TestRequest>) rep;
+                    try
+                    {
+                        // not wait for task to complete
+                        using var resp = cli.Item2.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
+                        cancelToken.Token);
+
+                        await foreach (var item1 in resp.ResponseStream.ReadAllAsync(cancelToken.Token))
+                        {
+                            var resp_ = item1;
+                            Logger.LogInformation($"Test is {item1.Name} .");
+                            // state?.Invoke();
+                            StateHasChanged();
+                            // cancelToken.Cancel();
+                        }
+
+                    }
+                    catch (InvalidOperationException ex)
+                    {
+                        Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+                        // RunningTests.Remove(item);
+                        item = null;
+                    }
+                    catch (System.Exception ex)
+                    {
+                        Logger.LogDebug($"Monitor failed for test {item.Name} with {ex.Message}.");
+                        // RunningTests.Remove(item);
+                        item = null;
+                        // throw;
+                    }
+                    finally
+                    {
+                        // RunningTests.Remove(item);
+                    }
+                }
+
+                // if no selection, run in all
+                if (SelectedChannels.Length > 0)
+                {
+
+                    Parallel.ForEach(SelectedChannels, (item0) =>
+                    {
+                        // check only if any sel made
+                        if (item0.Contains(cli.Item1))
+                        {
+                            MonitorTests_();
+                        }
+                    });
+                }
+                else
+                {
+                    MonitorTests_();
+                }
+
             }
-            );
         }
-        );
 
         // RunningTests.Clear();
-        foreach(var ele in RunningTests)
+        foreach (var ele in RunningTests)
         {
-            if(ele is null)
+            if (ele is null)
             {
                 RunningTests.Remove(ele);
             }
