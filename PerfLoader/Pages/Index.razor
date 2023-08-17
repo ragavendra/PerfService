@@ -27,9 +27,9 @@ Welcome to Perf Loader.
 
 <EditForm Model="@TestRequest">
 <InputSelect @bind-Value=SelectedChannels>
-@foreach(var channel in _perfClients)
+@foreach(var channel in _perfChannels)
 {
- <option value="@channel.Item1">@channel.Item1</option>
+ <option value="@channel.Target">@channel.Target</option>
 }
  </InputSelect>
 <br>
@@ -88,17 +88,13 @@ Running Tests:
         public string[] SelectedChannels { get; set; } = new string[]{ "All" };
     }
 
-    // Actions.Add(new ActionOption() { Name = "Login"}});
-
-    // private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress(Configuration["PerfRunner"]));
-    private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress("http://localhost:5277"));
-
-    private static IList<(string, Perf.PerfClient)> _perfClients = new List<(string, Perf.PerfClient)>();
+    private static IList<GrpcChannel> _perfChannels = new List<GrpcChannel>();
 
     private ActionOption _actionOption;
 
     private UpdateAction _updateAction = new UpdateAction();
 
+    // will not work? [Required, MinLength(1)]
     public string[] SelectedChannels { get; set; } = new string[] { };
 
     private TestRequest TestRequest { get; set; }
@@ -106,6 +102,18 @@ Running Tests:
     private CancellationToken _cancellationToken;// = new CancellationToken();
 
     private static IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            // on page load only - after Initialized
+            Logger.LogDebug("In first render");
+        }
+
+        Logger.LogDebug("In After render");
+        base.OnAfterRender(firstRender);
+    }
     protected override void OnInitialized()
     {
         NewTest();
@@ -120,10 +128,10 @@ Running Tests:
 
         _cancellationToken = new CancellationToken();
         // PerfClient = new Perf.PerfClient(channel);
-        Logger.LogInformation("Running initialized!");
+        Logger.LogDebug("Running initialized!");
 
         // load or update Perf Clients only in beginning*
-        if (_perfClients.Count == 0)
+        if (_perfChannels.Count == 0)
         {
             foreach (var cli in Configuration.GetRequiredSection("PerfRunners").Get<List<string>>())
             {
@@ -134,15 +142,13 @@ Running Tests:
                 {
                     // _perfClientChannels_.PerfClientChannels.Add(cli);
                     Logger.LogDebug("Channel {0} was created!", channel.Target);
-                    var perfCli = new Perf.PerfClient(channel);
-                    // _perfClients.Add(new Tuple(){ channel.Target, perfCli });
-                    _perfClients.Add(new (cli, perfCli));
+                    _perfChannels.Add(channel);
                 }
             }
 
-            // SelectedChannels = _perfClients.ToArray() 
+            // SelectedChannels = _perfClients.ToArray()
         }
-        
+
         // if(RunningTests.Count > 0)
         {
             CheckTests();
@@ -156,7 +162,8 @@ Running Tests:
         public string TestGuid { get; set; }
     }
 
-    public async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid, EventArgs e)
+    public async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid,
+    EventArgs e)
     // private async Task HandleUpdateAction(EditContext editContext)
     {
         // var testGuid = "test";
@@ -179,8 +186,15 @@ Running Tests:
                         UpdateValue = (string)ce.Value.ToString()
                     };
 
+                void UpdateAction(GrpcChannel? cli)
+                {
+
+                    var perfCli = new Perf.PerfClient(cli);
+                    var rep = perfCli.UpdateActionAsync(updateAction);
+                }
+
                 // not wait for task to complete
-                foreach (var cli in _perfClients)
+                foreach (var cli in _perfChannels)
                 {
                     // if no selection, run in all
                     if (SelectedChannels.Length > 0)
@@ -189,17 +203,16 @@ Running Tests:
                         {
 
                             // check only if any sel made
-                            if (item.Contains(cli.Item1))
+                            if (item.Contains(cli.Target))
                             {
-
-                                var rep = cli.Item2.UpdateActionAsync(updateAction);
                                 // if(cli.)
+                                UpdateAction(cli);
                             }
                         });
                     }
                     else
                     {
-                        var rep = cli.Item2.UpdateActionAsync(updateAction);
+                        UpdateAction(cli);
                     }
                 }
             }
@@ -213,13 +226,13 @@ Running Tests:
     private void NewTest()
     {
 
-        TestRequest = new TestRequest() 
-        { 
-            Name = "Test Name", 
-            Guid = Guid.NewGuid().ToString(), 
-            // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(10))
-            Rate = 3,
-        };
+        TestRequest = new TestRequest()
+            {
+                Name = "Test Name",
+                Guid = Guid.NewGuid().ToString(),
+                // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(10))
+                Rate = 3,
+            };
 
         _actionOption = new ActionOption()
             {
@@ -251,13 +264,13 @@ Running Tests:
         _updateAction.ActionOption ??= _actionOption;
         _updateAction.TestGuid ??= TestRequest.Guid;
 
-/*
+        /*
         actionOption = new ActionOption()
-            {
-                Name = "LoginGrpc",
-                Rate = 3,
-                Guid = Guid.NewGuid().ToString()
-            };
+        {
+        Name = "LoginGrpc",
+        Rate = 3,
+        Guid = Guid.NewGuid().ToString()
+        };
         TestRequest.Actions.Add(actionOption);*/
     }
 
@@ -267,34 +280,31 @@ Running Tests:
 
         // not wait for task to complete
         // var rep = PerfClient.RunTestAsync(TestRequest);
-        foreach (var cli in _perfClients)
+        foreach (var cli in _perfChannels)
         {
+            void RunTest()
             {
-                void RunTest()
-                {
-                    TestRequest.Clients.Add(cli.Item1);
-                    var rep = cli.Item2.RunTestAsync(TestRequest);
-                }
-
-                // if no selection, run in all
-                if (SelectedChannels.Length > 0)
-                {
-                    Parallel.ForEach(SelectedChannels, (item) =>
-                    {
-
-                        // check only if any sel made
-                        if (item.Contains(cli.Item1))
-                        {
-                            RunTest();
-                        }
-                    });
-                }
-                else
-                {
-                    RunTest();
-                }
+                TestRequest.Clients.Add(cli.Target);
+                var perfCli = new Perf.PerfClient(cli);
+                var rep = perfCli.RunTestAsync(TestRequest);
             }
-            // if(cli.)
+
+            // if no selection, run in all
+            if (SelectedChannels.Length > 0)
+            {
+                Parallel.ForEach(SelectedChannels, (item) =>
+                {
+                    // check only if any sel made
+                    if (item.Contains(cli.Target))
+                    {
+                        RunTest();
+                    }
+                });
+            }
+            else
+            {
+                RunTest();
+            }
         }
 
         RunningTests.Add(TestRequest);
@@ -304,12 +314,16 @@ Running Tests:
 
     public void StopTest(string guid)
     {
+
+        Logger.LogInformation("Stopping test " + guid);
+
         // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
-        foreach (var cli in _perfClients)
+        foreach (var cli in _perfChannels)
         {
             void StopTest()
             {
-                var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = guid });
+                var perfCli = new Perf.PerfClient(cli);
+                var rep = perfCli.StopTestAsync(new StopTestRequest { Guid = guid });
             }
 
             // if no selection, run in all
@@ -319,7 +333,7 @@ Running Tests:
                 {
 
                     // check only if any sel made
-                    if (item.Contains(cli.Item1))
+                    if (item.Contains(cli.Target))
                     {
                         StopTest();
                     }
@@ -342,15 +356,16 @@ Running Tests:
 
     private async void StopAllTestsAsync()
     {
-        foreach (var cli in _perfClients)
+        foreach (var cli in _perfChannels)
         {
             foreach (var item_ in RunningTests)
             {
-                Logger.LogInformation("Stopping test " + item_);
+                Logger.LogInformation("Stopping test " + item_.Guid);
 
                 void StopAllTests()
                 {
-                    var rep = cli.Item2.StopTestAsync(new StopTestRequest { Guid = item_.Guid });
+                    var perfCli = new Perf.PerfClient(cli);
+                    var rep = perfCli.StopTestAsync(new StopTestRequest { Guid = item_.Guid });
                 }
 
                 // not wait for task to complete
@@ -362,7 +377,7 @@ Running Tests:
                     Parallel.ForEach(SelectedChannels, (item) =>
                     {
                         // check only if any sel made
-                        if (item.Contains(cli.Item1))
+                        if (item.Contains(cli.Target))
                         {
                             StopAllTests();
                         }
@@ -382,7 +397,7 @@ Running Tests:
     {
         RunningTests.Clear();
 
-        foreach (var cli in _perfClients)
+        foreach (var cli in _perfChannels)
         {
             // if no selection, run in all
             if (SelectedChannels.Length > 0)
@@ -391,7 +406,7 @@ Running Tests:
                 Parallel.ForEach(SelectedChannels, (item) =>
                 {
                     // check only if any sel made
-                    if (item.Contains(cli.Item1))
+                    if (item.Contains(cli.Target))
                     {
                         RunningTests_();
                     }
@@ -407,7 +422,8 @@ Running Tests:
                 try
                 {
                     // var res = PerfClient.RunningTests(new RunningTestsRequest());
-                    var res = cli.Item2.RunningTests(new RunningTestsRequest());
+                    var perfCli = new Perf.PerfClient(cli);
+                    var res = perfCli.RunningTests(new RunningTestsRequest());
 
                     foreach (var test in res.Tests)
                     {
@@ -439,15 +455,15 @@ Running Tests:
     {
         var cancelToken = new CancellationTokenSource();
 
-        Parallel.ForEach(_perfClients, async cli => EachCli(cli));
+        Parallel.ForEach(_perfChannels, async cli => EachCli(cli));
 
-        async void EachCli((string, Perf.PerfClient) cli)
+        async void EachCli(GrpcChannel cli)
         {
             Parallel.ForEach(RunningTests, async item => MonitorParallel(item));
 
             async void MonitorParallel(TestRequest item)
             {
-                Logger.LogInformation("Monitoring test " + item);
+                Logger.LogInformation("Monitoring test " + item.Guid);
 
                 async void MonitorTests_()
                 {
@@ -455,8 +471,8 @@ Running Tests:
                     try
                     {
                         // not wait for task to complete
-                        using var resp = cli.Item2.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken:
-                        cancelToken.Token);
+                        var perfCli = new Perf.PerfClient(cli);
+                        using var resp = perfCli.MonitorTest(new MonitorTestRequest { Guid = item.Guid }, cancellationToken: cancelToken.Token);
 
                         await foreach (var item1 in resp.ResponseStream.ReadAllAsync(cancelToken.Token))
                         {
@@ -494,7 +510,7 @@ Running Tests:
                     Parallel.ForEach(SelectedChannels, (item0) =>
                     {
                         // check only if any sel made
-                        if (item0.Contains(cli.Item1))
+                        if (item0.Contains(cli.Target))
                         {
                             MonitorTests_();
                         }
@@ -520,4 +536,3 @@ Running Tests:
         StateHasChanged();
     }
 }
-
