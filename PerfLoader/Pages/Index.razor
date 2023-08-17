@@ -88,17 +88,13 @@ Running Tests:
         public string[] SelectedChannels { get; set; } = new string[]{ "All" };
     }
 
-    // Actions.Add(new ActionOption() { Name = "Login"}});
-
-    // private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress(Configuration["PerfRunner"]));
-    private static Perf.PerfClient _perfClient = new Perf.PerfClient(GrpcChannel.ForAddress("http://localhost:5277"));
-
     private static IList<GrpcChannel> _perfChannels = new List<GrpcChannel>();
 
     private ActionOption _actionOption;
 
     private UpdateAction _updateAction = new UpdateAction();
 
+    // will not work? [Required, MinLength(1)]
     public string[] SelectedChannels { get; set; } = new string[] { };
 
     private TestRequest TestRequest { get; set; }
@@ -106,6 +102,18 @@ Running Tests:
     private CancellationToken _cancellationToken;// = new CancellationToken();
 
     private static IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender)
+        {
+            // on page load only - after Initialized
+            Logger.LogDebug("In first render");
+        }
+
+        Logger.LogDebug("In After render");
+        base.OnAfterRender(firstRender);
+    }
     protected override void OnInitialized()
     {
         NewTest();
@@ -120,7 +128,7 @@ Running Tests:
 
         _cancellationToken = new CancellationToken();
         // PerfClient = new Perf.PerfClient(channel);
-        Logger.LogInformation("Running initialized!");
+        Logger.LogDebug("Running initialized!");
 
         // load or update Perf Clients only in beginning*
         if (_perfChannels.Count == 0)
@@ -138,9 +146,9 @@ Running Tests:
                 }
             }
 
-            // SelectedChannels = _perfClients.ToArray() 
+            // SelectedChannels = _perfClients.ToArray()
         }
-        
+
         // if(RunningTests.Count > 0)
         {
             CheckTests();
@@ -154,7 +162,8 @@ Running Tests:
         public string TestGuid { get; set; }
     }
 
-    public async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid, EventArgs e)
+    public async Task HandleUpdateAction(string actionGuid, ActionOptionUpdated actionOptionUpdated, string testGuid,
+    EventArgs e)
     // private async Task HandleUpdateAction(EditContext editContext)
     {
         // var testGuid = "test";
@@ -217,13 +226,13 @@ Running Tests:
     private void NewTest()
     {
 
-        TestRequest = new TestRequest() 
-        { 
-            Name = "Test Name", 
-            Guid = Guid.NewGuid().ToString(), 
-            // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(10))
-            Rate = 3,
-        };
+        TestRequest = new TestRequest()
+            {
+                Name = "Test Name",
+                Guid = Guid.NewGuid().ToString(),
+                // Duration = Google.Protobuf.WellKnownTypes.Duration.FromTimeSpan(TimeSpan.FromSeconds(10))
+                Rate = 3,
+            };
 
         _actionOption = new ActionOption()
             {
@@ -255,13 +264,13 @@ Running Tests:
         _updateAction.ActionOption ??= _actionOption;
         _updateAction.TestGuid ??= TestRequest.Guid;
 
-/*
+        /*
         actionOption = new ActionOption()
-            {
-                Name = "LoginGrpc",
-                Rate = 3,
-                Guid = Guid.NewGuid().ToString()
-            };
+        {
+        Name = "LoginGrpc",
+        Rate = 3,
+        Guid = Guid.NewGuid().ToString()
+        };
         TestRequest.Actions.Add(actionOption);*/
     }
 
@@ -305,6 +314,9 @@ Running Tests:
 
     public void StopTest(string guid)
     {
+
+        Logger.LogInformation("Stopping test " + guid);
+
         // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
         foreach (var cli in _perfChannels)
         {
@@ -348,7 +360,7 @@ Running Tests:
         {
             foreach (var item_ in RunningTests)
             {
-                Logger.LogInformation("Stopping test " + item_);
+                Logger.LogInformation("Stopping test " + item_.Guid);
 
                 void StopAllTests()
                 {
@@ -451,7 +463,7 @@ Running Tests:
 
             async void MonitorParallel(TestRequest item)
             {
-                Logger.LogInformation("Monitoring test " + item);
+                Logger.LogInformation("Monitoring test " + item.Guid);
 
                 async void MonitorTests_()
                 {
@@ -524,4 +536,3 @@ Running Tests:
         StateHasChanged();
     }
 }
-
