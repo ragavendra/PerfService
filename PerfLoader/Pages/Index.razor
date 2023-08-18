@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using System;
 @using System.ComponentModel.DataAnnotations
+@using System.Collections.Concurrent
 @using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
@@ -88,7 +89,13 @@ Running Tests:
         public string[] SelectedChannels { get; set; } = new string[]{ "All" };
     }
 
-    private static IList<GrpcChannel> _perfChannels = new List<GrpcChannel>();
+    private static ConcurrentBag<GrpcChannel> _perfChannels = new ConcurrentBag<GrpcChannel>();
+
+    private static ConcurrentBag<GrpcChannel> _perfIdleChannels = new ConcurrentBag<GrpcChannel>();
+
+    private static object _updateChannelsLock = new object();
+
+    private static volatile bool _updateChannelsLockFlag;
 
     private ActionOption _actionOption;
 
@@ -109,6 +116,17 @@ Running Tests:
         {
             // on page load only - after Initialized
             Logger.LogDebug("In first render");
+
+            // UpdateConnections();
+            // Task task = new Task(() => Thread.Sleep(100000));
+            // task.Start();
+            // Action UpdtConn = Afce;
+            // start only once
+            // if (!_updateChannelsLockFlag)
+            {
+                Task task = new Task(new Action(UpdateConnections));
+                task.Start();
+            }
         }
 
         Logger.LogDebug("In After render");
@@ -151,7 +169,91 @@ Running Tests:
 
         // if(RunningTests.Count > 0)
         {
-            CheckTests();
+            // CheckTests();
+        }
+    }
+
+    private void Afce()
+    {
+        do
+        {
+            Logger.LogDebug("In async call now!");
+            Thread.Sleep(10 * 1000);
+        }
+        while (true);
+    }
+
+
+    private void UpdateConnections()
+    {
+        lock (_updateChannelsLock)
+        {
+
+            _updateChannelsLockFlag = true;
+
+            do
+            {
+                ConcurrentBag<GrpcChannel> allChannels = new ConcurrentBag<GrpcChannel>();
+                int ts = 3;
+
+                foreach (var ele in _perfIdleChannels)
+                {
+                    allChannels.Add(ele);
+                }
+
+                foreach (var ele in _perfChannels)
+                {
+                    allChannels.Add(ele);
+                }
+
+                foreach (var ch in allChannels)
+                {
+                    var perfCli = new Perf.PerfClient(ch);
+
+                    try
+                    {
+                        var rep = perfCli.Ping(new PingRequest());
+                        var ch_ = ch;
+
+                        // add if not exists
+                        if (!_perfChannels.Contains(ch_))
+                        {
+                            _perfChannels.Add(ch);
+                        }
+
+                        // ch_ = ch;
+                        if (_perfIdleChannels.Contains(ch_))
+                        {
+                            // _perfIdleChannels.TryTake(out var ch2);
+                            _perfIdleChannels.RemoveItem(ch_);
+                        }
+                    }
+                    catch (RpcException ex)
+                    {
+                        Logger.LogError("Unable to connect to {0}!, Retry in {1}s", ch.Target, ts);
+                        var ch_ = ch;
+
+                        // add if not exists
+                        if (!_perfIdleChannels.Contains(ch_))
+                        {
+                            _perfIdleChannels.Add(ch);
+                        }
+
+                        // ch_ = ch;
+                        if (_perfChannels.Contains(ch_))
+                        {
+                            // _perfChannels.TryTake(out var ch3);
+                            _perfChannels.RemoveItem(ch_);
+                        }
+                    }
+                }
+
+                // StateHasChanged();
+
+                // do every 10s for now
+                System.Threading.Thread.Sleep(1000 * ts);
+
+            } while (true);
         }
     }
 
