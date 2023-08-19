@@ -1,10 +1,16 @@
 ﻿@page "/"
 @using System;
-@using System.ComponentModel.DataAnnotations
-@using System.Collections.Concurrent
+@using System.ComponentModel.DataAnnotations;
+@using System.Collections.Concurrent;
 @using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
+@using PerfLoader.Helper;
+@using Polly;
+@using Polly.Registry;
+@using Polly.Retry;
+@using Polly.CircuitBreaker;
+@inject IReadOnlyPolicyRegistry<string> PollyPolicyRegistry
 @inject IConfiguration Configuration
 @inject ILogger<Index> Logger
 
@@ -86,12 +92,14 @@ Running Tests:
 
     public class PerfClientChannels_
     {
-        public string[] SelectedChannels { get; set; } = new string[]{ "All" };
+        public string[] SelectedChannels { get; set; } = new string[] { "All" };
     }
 
     private static ConcurrentBag<GrpcChannel> _perfChannels = new ConcurrentBag<GrpcChannel>();
 
     private static ConcurrentBag<GrpcChannel> _perfIdleChannels = new ConcurrentBag<GrpcChannel>();
+
+    private AsyncCircuitBreakerPolicy _circuitBreakerPolicy;
 
     private static object _updateChannelsLock = new object();
 
@@ -112,10 +120,13 @@ Running Tests:
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if(firstRender)
+        if (firstRender)
         {
             // on page load only - after Initialized
             Logger.LogDebug("In first render");
+
+            _circuitBreakerPolicy = PollyPolicyRegistry.Get<AsyncCircuitBreakerPolicy>(
+            PollyPolicies.GrpcPolicyName);
 
             // UpdateConnections();
             // Task task = new Task(() => Thread.Sleep(100000));
@@ -124,7 +135,9 @@ Running Tests:
             // start only once
             // if (!_updateChannelsLockFlag)
             {
-                Task task = new Task(new Action(UpdateConnections));
+                // Task task = new Task(new Action(UpdateConnections));
+                // Task task = new Task(new Action(UpdateConnectionsPollyPolicies));
+                Task task = new Task(new Action(UpdateConnectionsPolly));
                 task.Start();
             }
         }
@@ -181,6 +194,110 @@ Running Tests:
             Thread.Sleep(10 * 1000);
         }
         while (true);
+    }
+
+    private void UpdateConnectionsPollyPolicies()
+    {
+
+        // this stops us from making the call if the circuit is open. If we take
+        // this out, the ExecuteAsync() method below will throw a BrokenCircuitException
+        // on every call, so this is just a performance optimisation:
+
+        if (_circuitBreakerPolicy.CircuitState == CircuitState.Open ||
+        _circuitBreakerPolicy.CircuitState == CircuitState.Isolated)
+        {
+            return;
+        }
+
+        foreach (var ch in _perfChannels)
+        {
+            var perfCli = new Perf.PerfClient(ch);
+
+
+            // Where the magic happens. ExecuteAsync will handle and then re-raise any
+            // exceptions thrown, so we need to catch them here too.
+            try
+            {
+                _circuitBreakerPolicy.ExecuteAsync(
+                    () =>
+                {
+                    Logger.LogError("In polly now!");
+                    // var rep = perfCli.Ping(new PingRequest());
+                    // throw new PlatformNotSupportedException("Polly_");
+                    // Console.WriteLine("Grpc circuit!");
+                    
+                    perfCli.Ping(new PingRequest());
+                    // Some();
+
+                    return new Task(() => Thread.Sleep(0));
+                    // return new Task(() => throw new InsufficientMemoryException("Polly"));
+                });
+                /*
+                Func<Task> action = Some;
+                    void Some()
+                    { 
+                        new Task(perfCli.Ping(new PingRequest()));
+                    }
+                _circuitBreakerPolicy.ExecuteAsync(() => Some());*/
+/*
+                RetryPolicy retryPolicy = Policy.Handle<Exception>()
+    .Retry(3, (exception, retryCount) =>
+    {
+        Console.WriteLine($"{exception.GetType()} thrown, retrying {retryCount}.");
+    });
+ 
+retryPolicy.Execute(() => perfCli.Ping(new PingRequest()));
+ 
+// Console.WriteLine($"Received a response of {result}.");
+*/
+            }
+            catch (Exception e)
+            {
+                Logger.LogError("Unable to connect to {0}!", ch.Target);
+                return;
+            }
+        }
+    }
+
+    private void Some()
+    {
+        Logger.LogDebug("Throw excpn now!");
+        throw new NotImplementedException();
+    }
+
+    private void UpdateConnectionsPolly()
+    {
+        lock (_updateChannelsLock)
+        {
+
+            _updateChannelsLockFlag = true;
+            int ts = 3;
+
+            do
+            {
+                foreach (var ch in _perfChannels)
+                {
+                    var perfCli = new Perf.PerfClient(ch);
+
+                    Resilience.LoadPolicy(Logger);
+
+                    Resilience.PolicyWrap.ExecuteAsync(async ct =>
+                    {
+                        var rep = perfCli.Ping(new PingRequest());
+                        // Logger.LogError("Unable to connect to {0}!", ch.Target);
+
+                        string some() { return ""; }
+                        Func<string> someFunc = some;
+                        return await new Task<string>(someFunc);
+
+                    }, _cancellationToken);
+                }
+
+                // do every 10s for now
+                System.Threading.Thread.Sleep(1000 * ts);
+
+            } while (true);
+        }
     }
 
 
