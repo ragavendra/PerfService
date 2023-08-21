@@ -44,7 +44,7 @@ public class Resilience
                             attempt => TimeSpan.FromMilliseconds(200),
                             (exception, calculatedWaitDuration) =>
                             {
-                                logger.LogDebug(".Log,then retry: " + exception.Message, ConsoleColor.Yellow);
+                                Console.WriteLine(".Log,then retry: " + exception.Message, ConsoleColor.Yellow);
                                 retries++;
                             });
 
@@ -56,13 +56,13 @@ public class Resilience
                             durationOfBreak: TimeSpan.FromSeconds(3),
                             onBreak: (ex, breakDelay) =>
                             {
-                                logger.LogDebug(
+                                Console.WriteLine(
                                    ".Breaker logging: Breaking the circuit for " + breakDelay.TotalMilliseconds + "ms!",
                                    ConsoleColor.Magenta);
-                                logger.LogDebug("..due to: " + ex.Message, ConsoleColor.Magenta);
+                                Console.WriteLine("..due to: " + ex.Message, ConsoleColor.Magenta);
                             },
-                            onReset: () => logger.LogDebug(".Breaker logging: Call ok! Closed the circuit again!", ConsoleColor.Magenta),
-                            onHalfOpen: () => logger.LogDebug(".Breaker logging: Half-open: Next call is a trial!", ConsoleColor.Magenta)
+                            onReset: () => Console.WriteLine(".Breaker logging: Call ok! Closed the circuit again!", ConsoleColor.Magenta),
+                            onHalfOpen: () => Console.WriteLine(".Breaker logging: Half-open: Next call is a trial!", ConsoleColor.Magenta)
                             );
 
                 // Define a fallback policy: provide a nice substitute message to the user, if we found the circuit was broken.
@@ -73,8 +73,8 @@ public class Resilience
                       onFallbackAsync: async b =>
                       {
                           watch.Stop();
-                          logger.LogDebug("Fallback catches failed with: " + b.Exception.Message, ConsoleColor.Red);
-                          logger.LogDebug(" (after " + watch.ElapsedMilliseconds + "ms)", ConsoleColor.Red);
+                          Console.WriteLine("Fallback catches failed with: " + b.Exception.Message, ConsoleColor.Red);
+                          Console.WriteLine(" (after " + watch.ElapsedMilliseconds + "ms)", ConsoleColor.Red);
                           eventualFailuresDueToCircuitBreaking++;
 
                           _cts.Cancel();
@@ -93,8 +93,8 @@ public class Resilience
                       onFallbackAsync: async e =>
                       {
                           watch.Stop();
-                          logger.LogDebug("Fallback catches eventually failed with: " + e.Exception.Message, ConsoleColor.Red);
-                          logger.LogDebug(" (after " + watch.ElapsedMilliseconds + "ms)", ConsoleColor.Red);
+                          Console.WriteLine("Fallback catches eventually failed with: " + e.Exception.Message, ConsoleColor.Red);
+                          Console.WriteLine(" (after " + watch.ElapsedMilliseconds + "ms)", ConsoleColor.Red);
                           eventualFailuresForOtherReasons++;
                       }
                       );
