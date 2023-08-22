@@ -97,15 +97,9 @@ Running Tests:
 
     private static ConcurrentBag<GrpcChannel> _perfChannels = new ConcurrentBag<GrpcChannel>();
 
-    private static ConcurrentBag<GrpcChannel> _perfIdleChannels = new ConcurrentBag<GrpcChannel>();
-
-    private AsyncCircuitBreakerPolicy _circuitBreakerPolicy;
-
     private static object _updateChannelsLock = new object();
 
     private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(1, 1); // 1 thr 1 con
-
-    private static volatile bool _updateChannelsLockFlag = false;
 
     private ActionOption _actionOption;
 
@@ -126,22 +120,6 @@ Running Tests:
         {
             // on page load only - after Initialized
             Logger.LogDebug("In first render");
-
-            _circuitBreakerPolicy = PollyPolicyRegistry.Get<AsyncCircuitBreakerPolicy>(
-            PollyPolicies.GrpcPolicyName);
-
-            // UpdateConnections();
-            // Task task = new Task(() => Thread.Sleep(100000));
-            // task.Start();
-            // Action UpdtConn = Afce;
-            // start only once
-            // if (!_updateChannelsLockFlag)
-            {
-                // Task task = new Task(new Action(UpdateConnections));
-                // Task task = new Task(new Action(UpdateConnectionsPollyPolicies));
-                // Task task = new Task(new Action(UpdateConnectionsPolly));
-                // task.Start();
-            }
         }
 
         Task task = new Task(new Action(UpdateConnectionsPolly));
@@ -154,16 +132,7 @@ Running Tests:
     {
         NewTest();
 
-        /*
-        actionOption = new ActionOption() { Name = "Login1",
-        Rate = 1, Guid = Guid.NewGuid().ToString() };
-        testRequest.Actions.Add(actionOption);*/
-
-        // var host_ = "http://localhost:5277";
-        // var channel = GrpcChannel.ForAddress(host_);
-
         _cancellationToken = new CancellationToken();
-        // PerfClient = new Perf.PerfClient(channel);
         Logger.LogDebug("Running initialized!");
 
         // load or update Perf Clients only in beginning*
@@ -173,101 +142,10 @@ Running Tests:
             {
                 var channel = GrpcChannel.ForAddress(cli);
 
-                // if not online
-                // if (!channel.State.Equals(ConnectivityState.Idle))
-                {
-                    // _perfClientChannels_.PerfClientChannels.Add(cli);
-                    Logger.LogDebug("Channel {0} was created!", channel.Target);
-                    _perfChannels.Add(channel);
-                }
-            }
-
-            // SelectedChannels = _perfClients.ToArray()
-        }
-
-        // if(RunningTests.Count > 0)
-        {
-            // CheckTests();
-        }
-    }
-
-    private void Afce()
-    {
-        do
-        {
-            Logger.LogDebug("In async call now!");
-            Thread.Sleep(10 * 1000);
-        }
-        while (true);
-    }
-
-    private void UpdateConnectionsPollyPolicies()
-    {
-
-        // this stops us from making the call if the circuit is open. If we take
-        // this out, the ExecuteAsync() method below will throw a BrokenCircuitException
-        // on every call, so this is just a performance optimisation:
-
-        if (_circuitBreakerPolicy.CircuitState == CircuitState.Open ||
-        _circuitBreakerPolicy.CircuitState == CircuitState.Isolated)
-        {
-            return;
-        }
-
-        foreach (var ch in _perfChannels)
-        {
-            var perfCli = new Perf.PerfClient(ch);
-
-
-            // Where the magic happens. ExecuteAsync will handle and then re-raise any
-            // exceptions thrown, so we need to catch them here too.
-            try
-            {
-                _circuitBreakerPolicy.ExecuteAsync(
-                    () =>
-                {
-                    Logger.LogError("In polly now!");
-                    // var rep = perfCli.Ping(new PingRequest());
-                    // throw new PlatformNotSupportedException("Polly_");
-                    // Console.WriteLine("Grpc circuit!");
-
-                    perfCli.Ping(new PingRequest());
-                    // Some();
-
-                    return new Task(() => Thread.Sleep(0));
-                    // return new Task(() => throw new InsufficientMemoryException("Polly"));
-                });
-                /*
-                Func<Task> action = Some;
-            void Some()
-            { 
-                            new Task(perfCli.Ping(new PingRequest()));
-                            }
-                _circuitBreakerPolicy.ExecuteAsync(() => Some());*/
-                /*
-                RetryPolicy retryPolicy = Policy.Handle<Exception>()
-                    .Retry(3, (exception, retryCount) =>
-                    {
-                    Console.WriteLine($"{exception.GetType()} thrown, retrying {retryCount}.");
-            });
-
-            retryPolicy.Execute(() => perfCli.Ping(new PingRequest()));
-
-            // Console.WriteLine($"Received a response of {result}.");
-            */
-            }
-            catch (Exception e)
-            {
-                Logger.LogError("Unable to connect to {0}!", ch.Target);
-                return;
+                Logger.LogDebug("Channel {0} was created!", channel.Target);
+                _perfChannels.Add(channel);
             }
         }
-    }
-
-    private void Some()
-    {
-        Logger.LogDebug("Throw excpn now!");
-        throw new NotImplementedException();
     }
 
     private async void UpdateConnectionsPolly()
@@ -288,88 +166,26 @@ Running Tests:
             {
                 Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
                 // Logger.LogInformation("Context is {0}", context);
+
+                // lets not have this
+                if (_perfChannels.RemoveItem(ch))
+                {
+                    InvokeAsync(StateHasChanged);
+                }
             });
 
             var rep = policy.Execute(() =>
                 perfCli.Ping(new PingRequest())
             );
-        }
-        _updateChannelsSemSlim.Release();
-        // _updateChannelsLockFlag = false;
-    }
 
-
-    private void UpdateConnections()
-    {
-        lock (_updateChannelsLock)
-        {
-
-            _updateChannelsLockFlag = true;
-
-            do
+            if(!_perfChannels.Contains(ch))
             {
-                ConcurrentBag<GrpcChannel> allChannels = new ConcurrentBag<GrpcChannel>();
-                int ts = 3;
-
-                foreach (var ele in _perfIdleChannels)
-                {
-                    allChannels.Add(ele);
-                }
-
-                foreach (var ele in _perfChannels)
-                {
-                    allChannels.Add(ele);
-                }
-
-                foreach (var ch in allChannels)
-                {
-                    var perfCli = new Perf.PerfClient(ch);
-
-                    try
-                    {
-                        var rep = perfCli.Ping(new PingRequest());
-                        var ch_ = ch;
-
-                        // add if not exists
-                        if (!_perfChannels.Contains(ch_))
-                        {
-                            _perfChannels.Add(ch);
-                        }
-
-                        // ch_ = ch;
-                        if (_perfIdleChannels.Contains(ch_))
-                        {
-                            // _perfIdleChannels.TryTake(out var ch2);
-                            _perfIdleChannels.RemoveItem(ch_);
-                        }
-                    }
-                    catch (RpcException ex)
-                    {
-                        Logger.LogError("Unable to connect to {0}!, Retry in {1}s", ch.Target, ts);
-                        var ch_ = ch;
-
-                        // add if not exists
-                        if (!_perfIdleChannels.Contains(ch_))
-                        {
-                            _perfIdleChannels.Add(ch);
-                        }
-
-                        // ch_ = ch;
-                        if (_perfChannels.Contains(ch_))
-                        {
-                            // _perfChannels.TryTake(out var ch3);
-                            _perfChannels.RemoveItem(ch_);
-                        }
-                    }
-                }
-
-                // StateHasChanged();
-
-                // do every 10s for now
-                System.Threading.Thread.Sleep(1000 * ts);
-
-            } while (true);
+                _perfChannels.Add(ch);
+                InvokeAsync(StateHasChanged);
+            }
         }
+
+        _updateChannelsSemSlim.Release();
     }
 
     public class UpdateAction
