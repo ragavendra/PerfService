@@ -278,8 +278,8 @@ Running Tests:
 
             int iIndex = 0;
 
-            // do
-            // do {
+            do
+            {
                 Resilience._watch = new System.Diagnostics.Stopwatch();
                 Resilience._watch.Start();
 
@@ -324,7 +324,7 @@ Running Tests:
                 // do every 10s for now
                 System.Threading.Thread.Sleep(1000 * ts);
 
-            // } while (iIndex++ < 1200) ;
+            } while (iIndex++ < 1200) ;
         }
     }
 
