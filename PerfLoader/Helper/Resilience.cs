@@ -9,7 +9,7 @@ public class Resilience
 {
     private static AsyncPolicyWrap<string> _policyWrap;
 
-    private static Stopwatch watch;
+    public static Stopwatch _watch;
 
     private static volatile int _count = 0;
 
@@ -34,7 +34,7 @@ public class Resilience
         {
             lock (_lock)
             {
-                watch = null;
+                _watch = null;
                 _cts = new CancellationTokenSource();
 
                 // Define our waitAndRetry policy: keep retrying with 200ms gaps.
@@ -44,7 +44,7 @@ public class Resilience
                             attempt => TimeSpan.FromMilliseconds(200),
                             (exception, calculatedWaitDuration) =>
                             {
-                                Console.WriteLine(".Log,then retry: " + exception.Message, ConsoleColor.Yellow);
+                                logger.LogWarning(".Log,then retry: " + exception.Message, ConsoleColor.Yellow);
                                 retries++;
                             });
 
@@ -52,17 +52,17 @@ public class Resilience
                 var circuitBreakerPolicy = Policy
                       .Handle<Exception>()
                       .CircuitBreakerAsync(
-                            exceptionsAllowedBeforeBreaking: 4,
+                            exceptionsAllowedBeforeBreaking: 3,
                             durationOfBreak: TimeSpan.FromSeconds(3),
                             onBreak: (ex, breakDelay) =>
                             {
-                                Console.WriteLine(
+                                logger.LogWarning(
                                    ".Breaker logging: Breaking the circuit for " + breakDelay.TotalMilliseconds + "ms!",
                                    ConsoleColor.Magenta);
-                                Console.WriteLine("..due to: " + ex.Message, ConsoleColor.Magenta);
+                                logger.LogWarning("..due to: " + ex.Message, ConsoleColor.Magenta);
                             },
-                            onReset: () => Console.WriteLine(".Breaker logging: Call ok! Closed the circuit again!", ConsoleColor.Magenta),
-                            onHalfOpen: () => Console.WriteLine(".Breaker logging: Half-open: Next call is a trial!", ConsoleColor.Magenta)
+                            onReset: () => logger.LogWarning(".Breaker logging: Call ok! Closed the circuit again!", ConsoleColor.Magenta),
+                            onHalfOpen: () => logger.LogWarning(".Breaker logging: Half-open: Next call is a trial!", ConsoleColor.Magenta)
                             );
 
                 // Define a fallback policy: provide a nice substitute message to the user, if we found the circuit was broken.
@@ -72,12 +72,12 @@ public class Resilience
                       fallbackValue: /* Demonstrates fallback value syntax */ "Please try again later [Fallback for broken circuit]",
                       onFallbackAsync: async b =>
                       {
-                          watch.Stop();
-                          Console.WriteLine("Fallback catches failed with: " + b.Exception.Message, ConsoleColor.Red);
-                          Console.WriteLine(" (after " + watch.ElapsedMilliseconds + "ms)", ConsoleColor.Red);
+                          await Task.FromResult(true);
+                          _watch.Stop();
+                          logger.LogError("Fallback catches failed with: " + b.Exception.Message + " (after " + _watch.ElapsedMilliseconds + "ms)", ConsoleColor.Red);
                           eventualFailuresDueToCircuitBreaking++;
 
-                          _cts.Cancel();
+                          // _cts.Cancel();
                       }
                       );
 
@@ -87,14 +87,15 @@ public class Resilience
                    .FallbackAsync(
                       fallbackAction: /* Demonstrates fallback action/func syntax */ async ct =>
                       {
+                          await Task.FromResult(true);
                           /* do something else async if desired */
                           return "Please try again later [Fallback for any exception]";
                       },
                       onFallbackAsync: async e =>
                       {
-                          watch.Stop();
-                          Console.WriteLine("Fallback catches eventually failed with: " + e.Exception.Message, ConsoleColor.Red);
-                          Console.WriteLine(" (after " + watch.ElapsedMilliseconds + "ms)", ConsoleColor.Red);
+                          await Task.FromResult(true);
+                          _watch.Stop();
+                          logger.LogError("Fallback catches eventually failed with: " + " (after " + _watch.ElapsedMilliseconds + "ms)", ConsoleColor.Red);
                           eventualFailuresForOtherReasons++;
                       }
                       );
@@ -107,8 +108,8 @@ public class Resilience
                 _policyWrap = fallbackForAnyException.WrapAsync(fallbackForCircuitBreaker.WrapAsync(myResilienceStrategy));
                 // For info: Equivalent to: PolicyWrap<String> policyWrap = Policy.Wrap(fallbackForAnyException, fallbackForCircuitBreaker, waitAndRetryPolicy, circuitBreakerPolicy);
 
-                watch = new Stopwatch();
-                watch.Start();
+                _watch = new Stopwatch();
+                _watch.Start();
 
                 _initializeOnce = true;
             }

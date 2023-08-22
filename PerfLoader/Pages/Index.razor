@@ -137,10 +137,13 @@ Running Tests:
             {
                 // Task task = new Task(new Action(UpdateConnections));
                 // Task task = new Task(new Action(UpdateConnectionsPollyPolicies));
-                Task task = new Task(new Action(UpdateConnectionsPolly));
-                task.Start();
+                // Task task = new Task(new Action(UpdateConnectionsPolly));
+                // task.Start();
             }
         }
+
+        Task task = new Task(new Action(UpdateConnectionsPolly));
+        task.Start();
 
         Logger.LogDebug("In After render");
         base.OnAfterRender(firstRender);
@@ -225,31 +228,31 @@ Running Tests:
                     // var rep = perfCli.Ping(new PingRequest());
                     // throw new PlatformNotSupportedException("Polly_");
                     // Console.WriteLine("Grpc circuit!");
-                    
+
                     perfCli.Ping(new PingRequest());
                     // Some();
 
                     return new Task(() => Thread.Sleep(0));
                     // return new Task(() => throw new InsufficientMemoryException("Polly"));
                 });
-                /*
-                Func<Task> action = Some;
-                    void Some()
-                    { 
-                        new Task(perfCli.Ping(new PingRequest()));
-                    }
-                _circuitBreakerPolicy.ExecuteAsync(() => Some());*/
-/*
-                RetryPolicy retryPolicy = Policy.Handle<Exception>()
-    .Retry(3, (exception, retryCount) =>
-    {
-        Console.WriteLine($"{exception.GetType()} thrown, retrying {retryCount}.");
-    });
- 
-retryPolicy.Execute(() => perfCli.Ping(new PingRequest()));
- 
-// Console.WriteLine($"Received a response of {result}.");
-*/
+                    /*
+                    Func<Task> action = Some;
+                void Some()
+                { 
+                                new Task(perfCli.Ping(new PingRequest()));
+                                }
+                    _circuitBreakerPolicy.ExecuteAsync(() => Some());*/
+                    /*
+                    RetryPolicy retryPolicy = Policy.Handle<Exception>()
+                        .Retry(3, (exception, retryCount) =>
+                        {
+                        Console.WriteLine($"{exception.GetType()} thrown, retrying {retryCount}.");
+                });
+
+                retryPolicy.Execute(() => perfCli.Ping(new PingRequest()));
+
+                // Console.WriteLine($"Received a response of {result}.");
+            */
             }
             catch (Exception e)
             {
@@ -265,38 +268,63 @@ retryPolicy.Execute(() => perfCli.Ping(new PingRequest()));
         throw new NotImplementedException();
     }
 
-    private void UpdateConnectionsPolly()
+    private async void UpdateConnectionsPolly()
     {
-        lock (_updateChannelsLock)
+        // lock (_updateChannelsLock)
         {
 
             _updateChannelsLockFlag = true;
             int ts = 3;
 
-            do
-            {
-                foreach (var ch in _perfChannels)
+            int iIndex = 0;
+
+            // do
+            // do {
+                Resilience._watch = new System.Diagnostics.Stopwatch();
+                Resilience._watch.Start();
+
+                try
                 {
-                    var perfCli = new Perf.PerfClient(ch);
-
-                    Resilience.LoadPolicy(Logger);
-
-                    Resilience.PolicyWrap.ExecuteAsync(async ct =>
+                    foreach (var ch in _perfChannels)
                     {
-                        var rep = perfCli.Ping(new PingRequest());
-                        // Logger.LogError("Unable to connect to {0}!", ch.Target);
+                        var perfCli = new Perf.PerfClient(ch);
 
-                        string some() { return ""; }
-                        Func<string> someFunc = some;
-                        return await new Task<string>(someFunc);
+                        Resilience.LoadPolicy(Logger);
 
-                    }, _cancellationToken);
+                        var rep = await Resilience.PolicyWrap.ExecuteAsync(ct =>
+                        {
+                            var rep = perfCli.Ping(new PingRequest());
+                            // Logger.LogError("Unable to connect to {0}!", ch.Target);
+
+
+                            string some() { return "Resp from server!"; }
+                            Func<string> someFunc = some;
+                            return new Task<string>(someFunc);
+
+                        }, _cancellationToken);
+
+                        Logger.LogDebug("Response : {0} for request# {1} after {2} ms!", rep.ToString(), iIndex,
+                        Resilience._watch.ElapsedMilliseconds);
+
+                        Resilience._watch.Stop();
+                    }
+
+
                 }
+                catch (Exception e) // try-catch not needed, now that we have a Fallback.Handle<Exception>. It's only been left in to *demonstrate * it should never get hit.
+                {
+                    throw new InvalidOperationException(
+                    "Should never arrive here. Use of fallbackForAnyException should have provided nice fallback value for any exceptions.",
+                    e);
+                }
+
+                // Wait half second
+                Task.Delay(TimeSpan.FromSeconds(0.5), _cancellationToken);
 
                 // do every 10s for now
                 System.Threading.Thread.Sleep(1000 * ts);
 
-            } while (true);
+            // } while (iIndex++ < 1200) ;
         }
     }
 
