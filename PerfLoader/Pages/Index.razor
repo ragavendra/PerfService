@@ -302,8 +302,8 @@ Running Tests:
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                         (exception, timespan, context) =>
                         {
-                            Logger.LogInformation("Trying to connect to {0} again in {1} s.", ch.Target, Math.Pow(2, timespan));
-                            Logger.LogInformation("Context is {0}", context);
+                            Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
+                            // Logger.LogInformation("Context is {0}", context);
                         });
 
                         // var rep = await Resilience.PolicyWrap.ExecuteAsync(ct =>
