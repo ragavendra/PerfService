@@ -283,6 +283,7 @@ Running Tests:
             int ts = 3;
 
             int iIndex = 0;
+            Resilience.LoadPolicy(Logger);
 
             do
             {
@@ -292,10 +293,9 @@ Running Tests:
                 try
                 {
                     foreach (var ch in _perfChannels)
+                    // Parallel.ForEach(_perfChannels, async (ch) => 
                     {
                         var perfCli = new Perf.PerfClient(ch);
-
-                        Resilience.LoadPolicy(Logger);
 
                         var rep = await Resilience.PolicyWrap.ExecuteAsync(ct =>
                         {
@@ -309,11 +309,12 @@ Running Tests:
 
                         }, _cancellationToken);
 
-                        Logger.LogDebug("Response : {0} for request# {1} after {2} ms!", rep.ToString(), iIndex,
-                        Resilience._watch.ElapsedMilliseconds);
+                        Logger.LogDebug("Response : {0} for request# {1} after {2} ms from {3}!", rep.ToString(), iIndex,
+                        Resilience._watch.ElapsedMilliseconds, ch.Target);
 
                         Resilience._watch.Stop();
                     }
+                    // );
 
 
                 }
