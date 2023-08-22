@@ -3,9 +3,30 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using PerfLoader.Data;
-using PerfLoader;
+using PerfLoader.Helper;
+using Polly.Registry;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+// I'm using Serilog, if you are using something else, you can add it here
+PollyPolicies circuitBreakerManager = new PollyPolicies();
+
+// The creation of the policies is inside the PollyPolicies class. This is done
+// just so that they are grouped together in one place alongside the logging
+// var googleApiCircuitBreakerPolicy = circuitBreakerManager.GetGoogleApiCircuitBreakerPolicy();
+var redisCircuitBreakerPolicy = circuitBreakerManager.GetGrpcCircuitBreakerPolicy();
+
+// We add our policies to a Registry which is just a glorified List<>. 
+builder.Services.AddPolicyRegistry(new PolicyRegistry()
+{
+   //  { PollyPolicies.GooglePolicyName, googleApiCircuitBreakerPolicy },
+    { PollyPolicies.GrpcPolicyName, redisCircuitBreakerPolicy }
+});
+
+// When we setup our HttpClient, we need to also add the "addPolicyHandler" call as shown:
+// builder.Services.AddHttpClient<IGoogleTimezoneService, GoogleTimezoneService>()
+  //  .AddPolicyHandler(googleApiCircuitBreakerPolicy);
 
 // Add services to the container.
 builder.Services.AddRazorPages();

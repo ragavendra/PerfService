@@ -445,6 +445,11 @@ namespace PerfRunner.Services
          return new UpdateActionReply() { Status = true };
       }
 
+      public override async Task<PingReply> Ping(PingRequest pingRequest, ServerCallContext context)
+      {
+         return new PingReply() { Message = "Hello " + pingRequest.Name };
+      }
+
       #endregion
    }
 }

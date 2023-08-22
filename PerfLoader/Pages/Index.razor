@@ -1,9 +1,16 @@
 ﻿@page "/"
 @using System;
-@using System.ComponentModel.DataAnnotations
+@using System.ComponentModel.DataAnnotations;
+@using System.Collections.Concurrent;
 @using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
+@using PerfLoader.Helper;
+@using Polly;
+@using Polly.Registry;
+@using Polly.Retry;
+@using Polly.CircuitBreaker;
+@inject IReadOnlyPolicyRegistry<string> PollyPolicyRegistry
 @inject IConfiguration Configuration
 @inject ILogger<Index> Logger
 
@@ -85,10 +92,14 @@ Running Tests:
 
     public class PerfClientChannels_
     {
-        public string[] SelectedChannels { get; set; } = new string[]{ "All" };
+        public string[] SelectedChannels { get; set; } = new string[] { "All" };
     }
 
-    private static IList<GrpcChannel> _perfChannels = new List<GrpcChannel>();
+    private static ConcurrentBag<GrpcChannel> _perfChannels = new ConcurrentBag<GrpcChannel>();
+
+    private static object _updateChannelsLock = new object();
+
+    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(1, 1); // 1 thr 1 con
 
     private ActionOption _actionOption;
 
@@ -105,11 +116,14 @@ Running Tests:
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if(firstRender)
+        if (firstRender)
         {
             // on page load only - after Initialized
             Logger.LogDebug("In first render");
         }
+
+        Task task = new Task(new Action(UpdateConnectionsPolly));
+        task.Start();
 
         Logger.LogDebug("In After render");
         base.OnAfterRender(firstRender);
@@ -118,16 +132,7 @@ Running Tests:
     {
         NewTest();
 
-        /*
-        actionOption = new ActionOption() { Name = "Login1",
-        Rate = 1, Guid = Guid.NewGuid().ToString() };
-        testRequest.Actions.Add(actionOption);*/
-
-        // var host_ = "http://localhost:5277";
-        // var channel = GrpcChannel.ForAddress(host_);
-
         _cancellationToken = new CancellationToken();
-        // PerfClient = new Perf.PerfClient(channel);
         Logger.LogDebug("Running initialized!");
 
         // load or update Perf Clients only in beginning*
@@ -137,22 +142,50 @@ Running Tests:
             {
                 var channel = GrpcChannel.ForAddress(cli);
 
-                // if not online
-                // if (!channel.State.Equals(ConnectivityState.Idle))
-                {
-                    // _perfClientChannels_.PerfClientChannels.Add(cli);
-                    Logger.LogDebug("Channel {0} was created!", channel.Target);
-                    _perfChannels.Add(channel);
-                }
+                Logger.LogDebug("Channel {0} was created!", channel.Target);
+                _perfChannels.Add(channel);
             }
-
-            // SelectedChannels = _perfClients.ToArray()
         }
+    }
 
-        // if(RunningTests.Count > 0)
+    private async void UpdateConnectionsPolly()
+    {
+        // lock (_updateChannelsLock)
+        await _updateChannelsSemSlim.WaitAsync();
+
+        // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
+        // _updateChannelsLockFlag = true;
+        foreach (var ch in _perfChannels)
         {
-            CheckTests();
+            var perfCli = new Perf.PerfClient(ch);
+
+            var policy = Policy.Handle<RpcException>()
+            .WaitAndRetryForever(
+            retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            (exception, timespan, context) =>
+            {
+                Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
+                // Logger.LogInformation("Context is {0}", context);
+
+                // lets not have this
+                if (_perfChannels.RemoveItem(ch))
+                {
+                    InvokeAsync(StateHasChanged);
+                }
+            });
+
+            var rep = policy.Execute(() =>
+                perfCli.Ping(new PingRequest())
+            );
+
+            if(!_perfChannels.Contains(ch))
+            {
+                _perfChannels.Add(ch);
+                InvokeAsync(StateHasChanged);
+            }
         }
+
+        _updateChannelsSemSlim.Release();
     }
 
     public class UpdateAction

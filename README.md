@@ -70,6 +70,7 @@ Redis is used as a common user store to store users and are pulled and pushed in
 14. Updating duration for action will run the action for the next n update seconds since update.
 15. Update distribution for each action.
 16. Run, update and monitor test(s) on selected runner(s). If no runner is selected, all are probed*.
+17. PerfLoader dynamically maintains the PerfRunner(s) list using [Polly](https://github.com/App-vNext/Polly)
 
 ### Planned features - Loader
 1. Clean front end interface for interaction. The app needs a lot of fron end improvement yet. Basic operations such as rate, duration and distribution updates are instantanious.
