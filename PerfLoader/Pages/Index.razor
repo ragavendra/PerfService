@@ -237,23 +237,23 @@ Running Tests:
                     return new Task(() => Thread.Sleep(0));
                     // return new Task(() => throw new InsufficientMemoryException("Polly"));
                 });
-                    /*
-                    Func<Task> action = Some;
-                void Some()
-                { 
-                                new Task(perfCli.Ping(new PingRequest()));
-                                }
-                    _circuitBreakerPolicy.ExecuteAsync(() => Some());*/
-                    /*
-                    RetryPolicy retryPolicy = Policy.Handle<Exception>()
-                        .Retry(3, (exception, retryCount) =>
-                        {
-                        Console.WriteLine($"{exception.GetType()} thrown, retrying {retryCount}.");
-                });
+                /*
+                Func<Task> action = Some;
+            void Some()
+            { 
+                            new Task(perfCli.Ping(new PingRequest()));
+                            }
+                _circuitBreakerPolicy.ExecuteAsync(() => Some());*/
+                /*
+                RetryPolicy retryPolicy = Policy.Handle<Exception>()
+                    .Retry(3, (exception, retryCount) =>
+                    {
+                    Console.WriteLine($"{exception.GetType()} thrown, retrying {retryCount}.");
+            });
 
-                retryPolicy.Execute(() => perfCli.Ping(new PingRequest()));
+            retryPolicy.Execute(() => perfCli.Ping(new PingRequest()));
 
-                // Console.WriteLine($"Received a response of {result}.");
+            // Console.WriteLine($"Received a response of {result}.");
             */
             }
             catch (Exception e)
@@ -285,31 +285,42 @@ Running Tests:
             int iIndex = 0;
             Resilience.LoadPolicy(Logger);
 
-            do
-            {
+           //  do
+           // {
                 Resilience._watch = new System.Diagnostics.Stopwatch();
                 Resilience._watch.Start();
 
-                try
+                // try
                 {
                     foreach (var ch in _perfChannels)
                     // Parallel.ForEach(_perfChannels, async (ch) => 
                     {
                         var perfCli = new Perf.PerfClient(ch);
 
-                        var rep = await Resilience.PolicyWrap.ExecuteAsync(ct =>
+                        var policy = Policy.Handle<RpcException>()
+                        .WaitAndRetryForever(
+                        retryAttempt => TimeSpan.FromSeconds(retryAttempt),
+                        (exception, timespan, context) =>
                         {
-                            var rep = perfCli.Ping(new PingRequest());
+                            Logger.LogInformation("Trying to connect to {0} again in {1} s.", ch.Target, Math.Pow(2, timespan));
+                            Logger.LogInformation("Context is {0}", context);
+                        });
+
+                        // var rep = await Resilience.PolicyWrap.ExecuteAsync(ct =>
+                        // {
+                            var rep = policy.Execute(() =>
+                                perfCli.Ping(new PingRequest())
+                            );
 
                             // Logger.LogError("Unable to connect to {0}!", ch.Target);
-                            Logger.LogDebug("In policy now for " + ch.Target);
+/*                            Logger.LogDebug("In policy now for " + ch.Target);
 
 
                             string some() { return "Resp from server!"; }
                             Func<string> someFunc = some;
                             return new Task<string>(someFunc);
 
-                        }, _cancellationToken);
+                        }, _cancellationToken);*/
 
                         Logger.LogDebug("Response : {0} for request# {1} after {2} ms from {3}!", rep.ToString(), iIndex,
                         Resilience._watch.Elapsed.TotalMilliseconds, ch.Target);
@@ -320,11 +331,12 @@ Running Tests:
 
 
                 }
-                catch (Exception e) // try-catch not needed, now that we have a Fallback.Handle<Exception>. It's only been left in to *demonstrate * it should never get hit.
+                // catch (Exception e) // try-catch not needed, now that we have a Fallback.Handle<Exception>. It's only been left in to *demonstrate * it should never get hit.
                 {
-                    throw new InvalidOperationException(
+                //    Logger.LogDebug("Unable to connect " + e.GetType());
+                  /*  throw new InvalidOperationException(
                     "Should never arrive here. Use of fallbackForAnyException should have provided nice fallback value for any exceptions.",
-                    e);
+                    e);*/
                 }
 
                 // Wait half second
@@ -333,7 +345,7 @@ Running Tests:
                 // do every 10s for now
                 System.Threading.Thread.Sleep(1000 * ts);
 
-            } while (iIndex++ < 1200) ;
+            // } while (iIndex++ < 1200) ;
         }
         finally
         {
