@@ -103,9 +103,9 @@ Running Tests:
 
     private static object _updateChannelsLock = new object();
 
-    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(1, 1);
+    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(1, 1); // 1 thr 1 con
 
-    private static volatile bool _updateChannelsLockFlag;
+    private static volatile bool _updateChannelsLockFlag = false;
 
     private ActionOption _actionOption;
 
@@ -273,89 +273,29 @@ Running Tests:
     private async void UpdateConnectionsPolly()
     {
         // lock (_updateChannelsLock)
-        // await _updateChannelsSemSlim.WaitAsync();
+        await _updateChannelsSemSlim.WaitAsync();
 
-        try
+        // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
+        // _updateChannelsLockFlag = true;
+        foreach (var ch in _perfChannels)
         {
-            // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
+            var perfCli = new Perf.PerfClient(ch);
 
-            // _updateChannelsLockFlag = true;
-            int ts = 3;
-
-            int iIndex = 0;
-            Resilience.LoadPolicy(Logger);
-
-           //  do
-           // {
-                Resilience._watch = new System.Diagnostics.Stopwatch();
-                Resilience._watch.Start();
-
-                // try
-                {
-                    foreach (var ch in _perfChannels)
-                    // Parallel.ForEach(_perfChannels, async (ch) => 
-                    {
-                        var perfCli = new Perf.PerfClient(ch);
-
-                        var policy = Policy.Handle<RpcException>()
-                        .WaitAndRetryForever(
-                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-                        (exception, timespan, context) =>
-                        {
-                            Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
-                            // Logger.LogInformation("Context is {0}", context);
-                        });
-
-                        // var rep = await Resilience.PolicyWrap.ExecuteAsync(ct =>
-                        // {
-                            var rep = policy.Execute(() =>
-                                perfCli.Ping(new PingRequest())
-                            );
-
-                            // Logger.LogError("Unable to connect to {0}!", ch.Target);
-/*                            Logger.LogDebug("In policy now for " + ch.Target);
-
-
-                            string some() { return "Resp from server!"; }
-                            Func<string> someFunc = some;
-                            return new Task<string>(someFunc);
-
-                        }, _cancellationToken);*/
-
-                        Logger.LogDebug("Response : {0} for request# {1} after {2} ms from {3}!", rep.ToString(), iIndex,
-                        Resilience._watch.Elapsed.TotalMilliseconds, ch.Target);
-
-                        Resilience._watch.Stop();
-                    }
-                    // );
-
-
-                }
-                // catch (Exception e) // try-catch not needed, now that we have a Fallback.Handle<Exception>. It's only been left in to *demonstrate * it should never get hit.
-                {
-                //    Logger.LogDebug("Unable to connect " + e.GetType());
-                  /*  throw new InvalidOperationException(
-                    "Should never arrive here. Use of fallbackForAnyException should have provided nice fallback value for any exceptions.",
-                    e);*/
-                }
-
-                // Wait half second
-                Task.Delay(TimeSpan.FromSeconds(0.5), _cancellationToken);
-
-                // do every 10s for now
-                System.Threading.Thread.Sleep(1000 * ts);
-
-            // } while (iIndex++ < 1200) ;
-        }
-        finally
-        {
-            if(_updateChannelsLockFlag)
+            var policy = Policy.Handle<RpcException>()
+            .WaitAndRetryForever(
+            retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            (exception, timespan, context) =>
             {
-                // System.Threading.Monitor.Exit(_updateChannelsLock);
-            }
+                Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
+                // Logger.LogInformation("Context is {0}", context);
+            });
 
-            // _updateChannelsSemSlim.Release();
+            var rep = policy.Execute(() =>
+                perfCli.Ping(new PingRequest())
+            );
         }
+        _updateChannelsSemSlim.Release();
+        // _updateChannelsLockFlag = false;
     }
 
 
