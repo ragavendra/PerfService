@@ -300,7 +300,9 @@ Running Tests:
                         var rep = await Resilience.PolicyWrap.ExecuteAsync(ct =>
                         {
                             var rep = perfCli.Ping(new PingRequest());
+
                             // Logger.LogError("Unable to connect to {0}!", ch.Target);
+                            Logger.LogDebug("In policy now for " + ch.Target);
 
 
                             string some() { return "Resp from server!"; }
@@ -310,7 +312,7 @@ Running Tests:
                         }, _cancellationToken);
 
                         Logger.LogDebug("Response : {0} for request# {1} after {2} ms from {3}!", rep.ToString(), iIndex,
-                        Resilience._watch.ElapsedMilliseconds, ch.Target);
+                        Resilience._watch.Elapsed.TotalMilliseconds, ch.Target);
 
                         Resilience._watch.Stop();
                     }
