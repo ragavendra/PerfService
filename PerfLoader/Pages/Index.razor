@@ -103,6 +103,8 @@ Running Tests:
 
     private static object _updateChannelsLock = new object();
 
+    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(1, 1);
+
     private static volatile bool _updateChannelsLockFlag;
 
     private ActionOption _actionOption;
@@ -271,9 +273,13 @@ Running Tests:
     private async void UpdateConnectionsPolly()
     {
         // lock (_updateChannelsLock)
-        {
+        // await _updateChannelsSemSlim.WaitAsync();
 
-            _updateChannelsLockFlag = true;
+        try
+        {
+            // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
+
+            // _updateChannelsLockFlag = true;
             int ts = 3;
 
             int iIndex = 0;
@@ -325,6 +331,15 @@ Running Tests:
                 System.Threading.Thread.Sleep(1000 * ts);
 
             } while (iIndex++ < 1200) ;
+        }
+        finally
+        {
+            if(_updateChannelsLockFlag)
+            {
+                // System.Threading.Monitor.Exit(_updateChannelsLock);
+            }
+
+            // _updateChannelsSemSlim.Release();
         }
     }
 
