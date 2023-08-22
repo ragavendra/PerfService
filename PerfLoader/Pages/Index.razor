@@ -299,7 +299,7 @@ Running Tests:
 
                         var policy = Policy.Handle<RpcException>()
                         .WaitAndRetryForever(
-                        retryAttempt => TimeSpan.FromSeconds(retryAttempt),
+                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                         (exception, timespan, context) =>
                         {
                             Logger.LogInformation("Trying to connect to {0} again in {1} s.", ch.Target, Math.Pow(2, timespan));
