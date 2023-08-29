@@ -32,6 +32,9 @@ Welcome to Perf Loader.
 <SurveyPrompt Title="How is Blazor working for you?" />
 <br>
 
+<UserMessage UserMessage_=_userMessage />
+<br>
+
 <EditForm Model="@TestRequest">
 <InputSelect @bind-Value=SelectedChannels>
 @foreach(var channel in _perfChannels)
@@ -39,6 +42,8 @@ Welcome to Perf Loader.
  <option value="@channel.Target">@channel.Target</option>
 }
  </InputSelect>
+
+ <button @onclick="() => UpdateConnectionsPolly()">Probe Clients</button>
 <br>
     <InputText @bind-Value=TestRequest.Name></InputText>
 
@@ -99,11 +104,13 @@ Running Tests:
 
     private static object _updateChannelsLock = new object();
 
-    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(1, 1); // 1 thr 1 con
+    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(3, 3); // 1 thr 1 con
 
     private ActionOption _actionOption;
 
     private UpdateAction _updateAction = new UpdateAction();
+
+    private Models.UserMessage _userMessage = new Models.UserMessage();
 
     // will not work? [Required, MinLength(1)]
     public string[] SelectedChannels { get; set; } = new string[] { };
@@ -122,6 +129,7 @@ Running Tests:
             Logger.LogDebug("In first render");
         }
 
+        // probe on every StateHasChanged
         Task task = new Task(new Action(UpdateConnectionsPolly));
         task.Start();
 
@@ -155,13 +163,15 @@ Running Tests:
 
         // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
         // _updateChannelsLockFlag = true;
-        foreach (var ch in _perfChannels)
+        // foreach (var ch in _perfChannels)
+        Parallel.ForEach(_perfChannels, ch =>
         {
             var perfCli = new Perf.PerfClient(ch);
 
             var policy = Policy.Handle<RpcException>()
             .WaitAndRetryForever(
-            retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            // retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            retryAttempt => TimeSpan.FromSeconds(3),
             (exception, timespan, context) =>
             {
                 Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
@@ -172,6 +182,11 @@ Running Tests:
                 {
                     InvokeAsync(StateHasChanged);
                 }
+/*
+                if(_perfChannels.Count <= 0)
+                {
+                    return;
+                }*/
             });
 
             var rep = policy.Execute(() =>
@@ -183,7 +198,7 @@ Running Tests:
                 _perfChannels.Add(ch);
                 InvokeAsync(StateHasChanged);
             }
-        }
+        });
 
         _updateChannelsSemSlim.Release();
     }
@@ -307,9 +322,27 @@ Running Tests:
         TestRequest.Actions.Add(actionOption);*/
     }
 
+    private bool AreClientsAvailable()
+    {
+        if (_perfChannels.Count <= 0)
+        {
+            _userMessage.WarningMessage = "None of the clients are running!";
+            Logger.LogError(_userMessage.WarningMessage);
+            return false;
+        }
+
+        return true;
+    }
+
     private async void StartTestAsync()
     {
-        Logger.LogInformation("Starting test " + TestRequest.Guid);
+        if(!AreClientsAvailable())
+        {
+            return;
+        }
+
+        _userMessage.InfoMessage = "Starting test " + TestRequest.Guid;
+        Logger.LogInformation(_userMessage.InfoMessage);
 
         // not wait for task to complete
         // var rep = PerfClient.RunTestAsync(TestRequest);
@@ -347,8 +380,13 @@ Running Tests:
 
     public void StopTest(string guid)
     {
+        if (!AreClientsAvailable())
+        {
+            return;
+        }
 
-        Logger.LogInformation("Stopping test " + guid);
+        _userMessage.InfoMessage = "Stopping test " + guid;
+        Logger.LogInformation(_userMessage.InfoMessage);
 
         // var rep = PerfClient.StopTestAsync(new StopTestRequest { Guid = guid });
         foreach (var cli in _perfChannels)
@@ -389,6 +427,11 @@ Running Tests:
 
     private async void StopAllTestsAsync()
     {
+        if(!AreClientsAvailable())
+        {
+            return;
+        }
+
         foreach (var cli in _perfChannels)
         {
             foreach (var item_ in RunningTests)
@@ -428,6 +471,11 @@ Running Tests:
 
     private void CheckTests()
     {
+        if(!AreClientsAvailable())
+        {
+            return;
+        }
+
         RunningTests.Clear();
 
         foreach (var cli in _perfChannels)
@@ -486,6 +534,11 @@ Running Tests:
 
     private async void MonitorAllTestsAsync()
     {
+        if(!AreClientsAvailable())
+        {
+            return;
+        }
+
         var cancelToken = new CancellationTokenSource();
 
         Parallel.ForEach(_perfChannels, async cli => EachCli(cli));

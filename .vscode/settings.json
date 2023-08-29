@@ -1,3 +1,4 @@
 {
-    "dotnet.defaultSolution": "PerfRunner.sln"
+    "dotnet.defaultSolution": "PerfRunner.sln",
+    "editor.autoClosingBrackets": "never"
 }

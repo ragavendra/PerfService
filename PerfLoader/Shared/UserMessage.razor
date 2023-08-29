@@ -1,0 +1,38 @@
+@using PerfRunner.V1;
+@using PerfLoader.Models;
+@using PerfLoader.Pages;
+
+@if (!string.IsNullOrWhiteSpace(UserMessage_.InfoMessage))
+{
+  <div class="alert alert-icon alert-info">
+    @UserMessage_.InfoMessage 
+    <span class="icon-remove icon-white" @onclick="() => UserMessage_.InfoMessage = string.Empty"></span>
+  </div>
+}
+@if (!string.IsNullOrWhiteSpace(UserMessage_.WarningMessage))
+{
+  <div class="alert alert-icon alert-warning">
+    <span style="white-space: pre-line">@UserMessage_.WarningMessage</span>
+    <span class="icon-remove icon-white" @onclick="() => UserMessage_.WarningMessage = string.Empty"></span>
+  </div>
+}
+@if (!string.IsNullOrWhiteSpace(@UserMessage_.ErrorMessage))
+{
+  <div class="alert alert-icon alert-error">
+    <span style="white-space: pre-line">@UserMessage_.ErrorMessage</span>
+    <span class="icon-remove icon-white" @onclick="() => UserMessage_.ErrorMessage = string.Empty"></span>
+  </div>
+}
+@if (!string.IsNullOrWhiteSpace(UserMessage_.SuccessMessage))
+{
+  <div class="alert alert-icon alert-success">
+    @UserMessage_.SuccessMessage
+    <span class="icon-remove icon-white" @onclick="() => UserMessage_.SuccessMessage = string.Empty"></span>
+  </div>
+}
+
+@code
+{
+       [Parameter]
+       public Models.UserMessage? UserMessage_ { get; set; }
+}

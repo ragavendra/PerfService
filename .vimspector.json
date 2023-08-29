@@ -1,0 +1,20 @@
+ {
+   "configurations": {
+     "attach": {
+       "adapter": "netcoredbg",
+       "configuration": {
+         "request": "attach",
+         "processId": "${pid}"
+       }
+     },
+     "launch": {
+       "adapter": "netcoredbg",
+       "configuration": {
+         "request": "launch",
+         "program": "/run/media/scion/4b29c2d1-0afc-4483-9ae7-029e32ec28b8/repos/PerfRunner/PerfRunner/bin/Debug/net6.0/PerfRunner.dll",
+         "args": [],
+         "stopAtEntry": false
+       }
+     }
+   }
+ }
