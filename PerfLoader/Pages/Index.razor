@@ -104,7 +104,7 @@ Running Tests:
 
     private static object _updateChannelsLock = new object();
 
-    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(3, 3); // 1 thr 1 con
+    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(3, 6); // 1 thr 1 con
 
     private ActionOption _actionOption;
 
@@ -180,8 +180,14 @@ Running Tests:
                 // lets not have this
                 if (_perfChannels.RemoveItem(ch))
                 {
-                    InvokeAsync(StateHasChanged);
                 }
+
+                foreach(var ele in _perfChannels)
+                {
+                    Logger.LogInformation("Ele in " + ele.Target);
+                }
+                
+                InvokeAsync(StateHasChanged);
 /*
                 if(_perfChannels.Count <= 0)
                 {
