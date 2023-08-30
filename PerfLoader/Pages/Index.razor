@@ -127,11 +127,11 @@ Running Tests:
         {
             // on page load only - after Initialized
             Logger.LogDebug("In first render");
-        }
 
-        // probe on every StateHasChanged
-        Task task = new Task(new Action(UpdateConnectionsPolly));
-        task.Start();
+            // probe on every StateHasChanged
+            Task task = new Task(new Action(UpdateConnectionsPolly));
+            task.Start();
+        }
 
         Logger.LogDebug("In After render");
         base.OnAfterRender(firstRender);
@@ -161,6 +161,13 @@ Running Tests:
         // lock (_updateChannelsLock)
         await _updateChannelsSemSlim.WaitAsync();
 
+        ConcurrentBag<GrpcChannel> chnnls = new ConcurrentBag<GrpcChannel>();
+
+        foreach(var ch in _perfChannels)
+        {
+            chnnls.Add(ch);
+        }
+
         // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
         // _updateChannelsLockFlag = true;
         // foreach (var ch in _perfChannels)
@@ -171,8 +178,8 @@ Running Tests:
             var policy = Policy.Handle<RpcException>()
             .WaitAndRetryForever(
             // retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-            retryAttempt => TimeSpan.FromSeconds(3),
-            (exception, timespan, context) =>
+            sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(3),
+            onRetry: (exception, timespan, context) =>
             {
                 Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
                 // Logger.LogInformation("Context is {0}", context);
@@ -180,6 +187,8 @@ Running Tests:
                 // lets not have this
                 if (_perfChannels.RemoveItem(ch))
                 {
+                    Logger.LogInformation("Removed - " + ch.Target);
+                    InvokeAsync(StateHasChanged);
                 }
 
                 foreach(var ele in _perfChannels)
@@ -187,7 +196,7 @@ Running Tests:
                     Logger.LogInformation("Ele in " + ele.Target);
                 }
                 
-                InvokeAsync(StateHasChanged);
+  //              InvokeAsync(StateHasChanged);
 /*
                 if(_perfChannels.Count <= 0)
                 {
@@ -195,9 +204,14 @@ Running Tests:
                 }*/
             });
 
+            Logger.LogInformation("Pinging {0} now.", ch.Target);
+
+            // on fail, this is running again*
             var rep = policy.Execute(() =>
                 perfCli.Ping(new PingRequest())
             );
+
+            InvokeAsync(StateHasChanged);
 
             if(!_perfChannels.Contains(ch))
             {
