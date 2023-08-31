@@ -43,7 +43,7 @@ Welcome to Perf Loader.
 }
  </InputSelect>
 
- <button @onclick="() => UpdateConnectionsPollyAsync()">Probe Clients</button>
+ <button @onclick="UpdateConnectionsPollyAsync">Probe Clients</button>
 <br>
     <InputText @bind-Value=TestRequest.Name></InputText>
 
@@ -66,9 +66,9 @@ Actions:
  <!-- InputDate @bind-Value=TestRequest.Actions.Last().Duration></InputDate -->
  <button @onclick="() => TestRequest.Actions.Add(TestRequest.Actions.Last())">+</button>   
  <button @onclick="() => TestRequest.Actions.RemoveAt(TestRequest.Actions.Count - 1)">-</button>
- <button @onclick="() => StartTestAsync()">Start Test</button>
+ <button @onclick="StartTestAsync">Start Test</button>
 
- <button @onclick="() => StopAllTestsAsync()">Stop All Tests</button>
+ <button @onclick="StopAllTestsAsync">Stop All Tests</button>
 </EditForm>
 
 Running Tests:
@@ -88,9 +88,9 @@ Running Tests:
     </CascadingValue>
 }
 <br>
-<button @onclick="() => CheckTests()">CheckTests</button>
+<button @onclick="CheckTests">CheckTests</button>
  <br>
- <button @onclick="() => MonitorAllTestsAsync()">MonitorAllTests</button>
+ <button @onclick="MonitorAllTestsAsync">MonitorAllTests</button>
 
 @code {
 
