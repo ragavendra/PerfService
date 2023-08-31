@@ -44,6 +44,7 @@ Welcome to Perf Loader.
  </InputSelect>
 
  <button @onclick="() => UpdateConnectionsPolly()">Probe Clients</button>
+ <button @onclick="() => StateHasChanged()">Refresh List</button>
 <br>
     <InputText @bind-Value=TestRequest.Name></InputText>
 
@@ -129,12 +130,12 @@ Running Tests:
             Logger.LogDebug("In first render");
 
             // probe on every StateHasChanged
-            Task task = new Task(new Action(UpdateConnectionsPolly));
+            Task task = new Task(UpdateConnectionsPolly);
             task.Start();
         }
 
         Logger.LogDebug("In After render");
-        base.OnAfterRender(firstRender);
+        // base.OnAfterRender(firstRender);
     }
     protected override void OnInitialized()
     {
@@ -171,7 +172,7 @@ Running Tests:
         // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
         // _updateChannelsLockFlag = true;
         // foreach (var ch in _perfChannels)
-        Parallel.ForEach(_perfChannels, ch =>
+        Parallel.ForEachAsync(_perfChannels, (ch, cnc) =>
         {
             var perfCli = new Perf.PerfClient(ch);
 
@@ -191,16 +192,16 @@ Running Tests:
                     InvokeAsync(StateHasChanged);
                 }
 
-                foreach(var ele in _perfChannels)
+                foreach (var ele in _perfChannels)
                 {
                     Logger.LogInformation("Ele in " + ele.Target);
                 }
-                
-  //              InvokeAsync(StateHasChanged);
-/*
+
+                // InvokeAsync(StateHasChanged);
+                /*
                 if(_perfChannels.Count <= 0)
                 {
-                    return;
+                return;
                 }*/
             });
 
@@ -208,20 +209,27 @@ Running Tests:
 
             // on fail, this is running again*
             var rep = policy.Execute(() =>
-                perfCli.Ping(new PingRequest())
+            perfCli.Ping(new PingRequest())
             );
 
-            InvokeAsync(StateHasChanged);
+            // InvokeAsync(StateHasChanged);
 
-            if(!_perfChannels.Contains(ch))
+            if (!_perfChannels.Contains(ch))
             {
+                Logger.LogInformation("Adding - " + ch.Target);
                 _perfChannels.Add(ch);
                 InvokeAsync(StateHasChanged);
             }
+
+            return default;
         });
+        // , cncl.Token, task);
+
+        Logger.LogDebug("Finished Parallel loop");
 
         _updateChannelsSemSlim.Release();
     }
+
 
     public class UpdateAction
     {

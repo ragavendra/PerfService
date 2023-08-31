@@ -1,7 +1,3 @@
 {
-    "dotnet.defaultSolution": "PerfRunner.sln",
-    "editor.autoClosingBrackets": "never",
-    "editor.autoClosingOvertype": "never",
-    "editor.autoClosingQuotes": "never",
-    "javascript.inlayHints.parameterNames.enabled": "all"
+    "dotnet.defaultSolution": "PerfRunner.sln"
 }
