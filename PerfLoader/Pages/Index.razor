@@ -48,8 +48,7 @@ Welcome to Perf Loader.
     <InputText @bind-Value=TestRequest.Name></InputText>
 
     <InputNumber @bind-Value=TestRequest.Rate></InputNumber>
-
-
+<br>
 Actions: 
 @foreach (var item in TestRequest.Actions)
 {
@@ -160,16 +159,6 @@ Running Tests:
         // lock (_updateChannelsLock)
         await _updateChannelsSemSlim.WaitAsync();
 
-        ConcurrentBag<GrpcChannel> chnnls = new ConcurrentBag<GrpcChannel>();
-
-        foreach(var ch in _perfChannels)
-        {
-            chnnls.Add(ch);
-        }
-
-        // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
-        // _updateChannelsLockFlag = true;
-        // foreach (var ch in _perfChannels)
         #pragma warning disable CS4014 
         Parallel.ForEachAsync(_perfChannels, (ch, cnc) =>
         {
@@ -222,7 +211,6 @@ Running Tests:
 
             return default;
         });
-        // , cncl.Token, task);
 
         Logger.LogDebug("Finished Parallel loop");
 
