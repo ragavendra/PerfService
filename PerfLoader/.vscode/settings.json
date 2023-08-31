@@ -1,3 +1,5 @@
 {
-    "dotnet.defaultSolution": "PerfLoader.sln"
+    "dotnet.defaultSolution": "PerfLoader.sln",
+    "editor.autoClosingBrackets": "never",
+    "javascript.inlayHints.parameterNames.enabled": "all"
 }

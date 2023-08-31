@@ -1,11 +1,9 @@
-﻿namespace PerfRunner.Services;
-
-using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.Metrics;
-using System.Threading;
 using System.Threading.Tasks.Dataflow;
 using PerfRunner.V1;
+
+namespace PerfRunner.Services;
 
 /* Sample output:
 Processor count = 4.
@@ -22,122 +20,125 @@ and start the test first.
 
 /// <summary>
 /// One ActionRunner<T> for each action of type <T> or test to be run.
+/// <typeparamref name="T" />
 /// </summary>
 public class ActionRunner<T> : IActionRunner<T>
 {
-   private Histogram<double> _runCounter;
+    private Histogram<double>? _runCounter;
 
-   private ActionOption _actionOption;
+    private ActionOption? _actionOption;
 
-   private readonly ILogger<ActionRunner<T>> _logger;
+    private readonly ILogger<ActionRunner<T>> _logger;
 
-   public Guid Guid { get; set; }
+    public Guid Guid { get; set; }
 
-   public Guid TestGuid { get; set; }
+    public Guid TestGuid { get; set; }
 
-   public ActionOption ActionOption { get => _actionOption; set => _actionOption = value; }
+    public ActionOption? ActionOption { get => _actionOption; set => _actionOption = value; }
 
-   public Histogram<double> RunCounter { get => _runCounter; set => _runCounter = value; }
+    public Histogram<double>? RunCounter { get => _runCounter; set => _runCounter = value; }
 
-   public ActionBlock<T> ActionBlock { get; set; }
+    public ActionBlock<T>? ActionBlock { get; set; }
 
-   public T TypeValue { get; set; }
+    public T? TypeValue { get; set; }
 
-   public ActionRunner(ILogger<ActionRunner<T>> logger)
-   {
-      _logger = logger;
-   }
+    public ActionRunner(ILogger<ActionRunner<T>> logger)
+    {
+        _logger = logger;
+    }
 
-   // Initiates several computations by using dataflow and returns the elapsed
-   // time required to initiate the computations.
-   public async Task<bool> StartActionsPerSecondAsync(int rate)
-   {
-      // loop if paused
-      while (ActionOption.Paused)
-      {
-         Thread.Sleep(300);
-      }
+    /// <summary>
+    /// Initiates several computations by using dataflow and returns the elapsed
+    /// time required to initiate the computations.
+    /// </summary>
+    public async Task<bool> StartActionsPerSecondAsync(int rate)
+    {
+        // loop if paused
+        while (ActionOption.Paused)
+        {
+            Thread.Sleep(300);
+        }
 
-      ActionOption.Stopwatch.Start();
+        ActionOption.Stopwatch.Start();
 
-      // Compute the time that it takes for several messages to
-      // flow through the dataflow block.
-      var sw = new Stopwatch();
-      sw.Start();
+        // Compute the time that it takes for several messages to
+        // flow through the dataflow block.
+        var sw = new Stopwatch();
+        sw.Start();
 
-      var divisor = 0;
-      var remaining = 0;
+        var divisor = 0;
+        var remaining = 0;
 
-      // get rate by 1000 ms to post in intervals
-      var divisor_ = 1000 / rate;
+        // get rate by 1000 ms to post in intervals
+        var divisor_ = 1000 / rate;
 
-      int indexer = 0;
+        int indexer = 0;
 
-      while (rate-- > 0)
-      {
-         // remaining = divisor;
-         if (_actionOption.LoadDistribution.Equals(LoadDistribution.Uneven) == true)
-         {
-            var rand = new Random();
-            divisor = rand.Next(divisor_);
+        while (rate-- > 0)
+        {
+            // remaining = divisor;
+            if (_actionOption.LoadDistribution.Equals(LoadDistribution.Uneven) == true)
+            {
+                var rand = new Random();
+                divisor = rand.Next(divisor_);
 
-            // _logger?.LogInformation($"Divisor - {divisor} .");
-            remaining = divisor_ - divisor;
+                // _logger?.LogInformation($"Divisor - {divisor} .");
+                remaining = divisor_ - divisor;
 
-            // Thread.Sleep(divisor_);
-         }
-         else
-         {
-            divisor = divisor_;
-         }
+                // Thread.Sleep(divisor_);
+            }
+            else
+            {
+                divisor = divisor_;
+            }
 
-         Thread.Sleep(divisor);
-         // divisor = divisor_;
+            Thread.Sleep(divisor);
+            // divisor = divisor_;
 
-         ActionBlock.Post(TypeValue);
-         _logger?.LogDebug(
-            $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds} ms, waited for remain - {remaining} ms. and divisor - {divisor} ms"
-         );
+            ActionBlock?.Post(TypeValue!);
+            _logger?.LogDebug(
+                    $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds.ToString()} ms, waited for remain - {remaining.ToString()} ms. and divisor - {divisor.ToString()} ms"
+                    );
 
-         // update instr
-         UpdateInstr(sw.Elapsed.TotalMilliseconds, indexer++);
+            // update instr
+            UpdateInstr(sw.Elapsed.TotalMilliseconds, indexer++);
 
-         Thread.Sleep(remaining);
-      }
+            Thread.Sleep(remaining);
+        }
 
-      // no more to post 
-      // ActionBlock.Complete();
+        // no more to post 
+        // ActionBlock.Complete();
 
-      // Wait for all messages to propagate through the network.
-      // workerBlock.Completion.Wait();
+        // Wait for all messages to propagate through the network.
+        // workerBlock.Completion.Wait();
 
-      while (sw.Elapsed.TotalMilliseconds <= 1000)
-      {
-         Thread.Sleep(100);
-      }
+        while (sw.Elapsed.TotalMilliseconds <= 1000)
+        {
+            Thread.Sleep(100);
+        }
 
-      sw.Stop();
+        sw.Stop();
 
-      _logger?.LogDebug(
-         $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds} ms for {Guid}");
+        _logger?.LogDebug(
+                $"After complete, Elapsed = {sw.Elapsed.TotalMilliseconds.ToString()} ms for {Guid.ToString()}");
 
-      return false;
-   }
+        return false;
+    }
 
-   public async void UpdateInstr(double totalMilliseconds, int interation)
-   {
-         TagList taglist = new TagList();
-         taglist.Add("action", TypeValue!.GetType());
-         taglist.Add("iteration", interation);
-         taglist.Add("guid", TestGuid.ToString().Remove(6));
-         // taglist.Add("action-guid", Guid.ToString().Remove(6));
+    public void UpdateInstr(double totalMilliseconds, int interation)
+    {
+        TagList taglist = new TagList();
+        taglist.Add("action", TypeValue!.GetType());
+        taglist.Add("iteration", interation);
+        taglist.Add("guid", TestGuid.ToString().Remove(6));
+        // taglist.Add("action-guid", Guid.ToString().Remove(6));
 
-         // record time takes in ms for each call
-         _runCounter.Record(totalMilliseconds, taglist);
-   }
+        // record time takes in ms for each call
+        _runCounter?.Record(totalMilliseconds, taglist);
+    }
 
-   public object CloneObj()
-   {
-      return MemberwiseClone();
-   }
+    public object CloneObj()
+    {
+        return MemberwiseClone();
+    }
 }
