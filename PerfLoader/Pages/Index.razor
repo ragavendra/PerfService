@@ -43,8 +43,7 @@ Welcome to Perf Loader.
 }
  </InputSelect>
 
- <button @onclick="() => UpdateConnectionsPolly()">Probe Clients</button>
- <button @onclick="() => StateHasChanged()">Refresh List</button>
+ <button @onclick="() => UpdateConnectionsPollyAsync()">Probe Clients</button>
 <br>
     <InputText @bind-Value=TestRequest.Name></InputText>
 
@@ -105,7 +104,7 @@ Running Tests:
 
     private static object _updateChannelsLock = new object();
 
-    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(3, 6); // 1 thr 1 con
+    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(1, 1); // 1 thr 1 con
 
     private ActionOption _actionOption;
 
@@ -122,7 +121,7 @@ Running Tests:
 
     private static IList<TestRequest> RunningTests { get; set; } = new List<TestRequest>();
 
-    protected override void OnAfterRender(bool firstRender)
+    protected override async Task OnAfterRenderAsync(bool firstRender)
     {
         if (firstRender)
         {
@@ -130,8 +129,7 @@ Running Tests:
             Logger.LogDebug("In first render");
 
             // probe on every StateHasChanged
-            Task task = new Task(UpdateConnectionsPolly);
-            task.Start();
+            UpdateConnectionsPollyAsync();
         }
 
         Logger.LogDebug("In After render");
@@ -157,7 +155,7 @@ Running Tests:
         }
     }
 
-    private async void UpdateConnectionsPolly()
+    private async void UpdateConnectionsPollyAsync()
     {
         // lock (_updateChannelsLock)
         await _updateChannelsSemSlim.WaitAsync();
@@ -172,6 +170,7 @@ Running Tests:
         // System.Threading.Monitor.Enter(_updateChannelsLock, ref _updateChannelsLockFlag);
         // _updateChannelsLockFlag = true;
         // foreach (var ch in _perfChannels)
+        #pragma warning disable CS4014 
         Parallel.ForEachAsync(_perfChannels, (ch, cnc) =>
         {
             var perfCli = new Perf.PerfClient(ch);
