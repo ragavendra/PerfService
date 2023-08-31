@@ -101,9 +101,9 @@ Running Tests:
 
     private static ConcurrentBag<GrpcChannel> _perfChannels = new ConcurrentBag<GrpcChannel>();
 
-    private static object _updateChannelsLock = new object();
+    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(2, 2); // 1 thr 1 con
 
-    private static SemaphoreSlim _updateChannelsSemSlim = new SemaphoreSlim(1, 1); // 1 thr 1 con
+    private static volatile bool _probeChannels;
 
     private ActionOption _actionOption;
 
@@ -127,8 +127,12 @@ Running Tests:
             // on page load only - after Initialized
             Logger.LogDebug("In first render");
 
-            // probe on every StateHasChanged
-            UpdateConnectionsPollyAsync();
+            if (!_probeChannels)
+            {
+                // probe on every StateHasChanged
+                ProbeLooperAsync();
+                // UpdateConnectionsPollyAsync();
+            }
         }
 
         Logger.LogDebug("In After render");
@@ -152,6 +156,21 @@ Running Tests:
                 _perfChannels.Add(channel);
             }
         }
+    }
+
+    private async void ProbeLooperAsync()
+    {
+        _probeChannels = true;
+
+        do
+        {
+            UpdateConnectionsPollyAsync();
+
+            // probe every 60 secs
+            await Task.Delay(TimeSpan.FromMinutes(1));
+        } while (true);
+
+        _probeChannels = false;
     }
 
     private async void UpdateConnectionsPollyAsync()
@@ -193,7 +212,7 @@ Running Tests:
                 }*/
             });
 
-            Logger.LogInformation("Pinging {0} now.", ch.Target);
+            Logger.LogInformation("Pinging {0} now at {1}.", ch.Target, DateTime.Now.ToString());
 
             // on fail, this is running again*
             var rep = policy.Execute(() =>
