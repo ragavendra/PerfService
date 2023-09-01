@@ -44,6 +44,23 @@ and
 
 The `mcr.microsoft.com/dotnet/sdk:6.0` and `redis:alpine` images are used.
 
+`Dev` instance is run and in non secure mode `http`. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0) for production or `https` use.
+
+###### PerfLoader
+Building `PerfLoader` alone.
+`sudo docker build -t perf_loader -f PerfLoaderDocker .`
+
+Running it.
+`sudo docker run -p 5137:5137 perf_loader`
+
+###### PerfRunner
+
+Building `PerfRunner` alone.
+`sudo docker build -t perf_runner .`
+
+Running it.
+`sudo docker run -p 5277:5277 perf_runner`
+
 ### Redis Cache manager
 Redis is used as a common user store to store users and are pulled and pushed into a queue there say when one or multiple `PerfRunner`s are running.
 
@@ -139,8 +156,8 @@ message TestRequest {
   repeated .perf.ActionOption actions = 4;
 }
 ```
-### License
-Free for non-commercial use, but please read ![LICENSE](LICENSE) for commercial use, other(s) and support.
+### Contributing
+Please read ![CONTRIBUTING](CONTRIBUTING.md) to help make any c) for commercial use, other(s) and support.
 
 ### Issues
 Please report any issues [here](https://github.com/ragavendra/PerfService/issues). This can be ranging from a minor defect to a valid feature request.

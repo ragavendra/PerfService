@@ -33,7 +33,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 
-// Google auth
+/*/ Google auth
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 builder.Services.AddAuthentication().AddGoogle(options => 
 {
@@ -42,7 +42,7 @@ builder.Services.AddAuthentication().AddGoogle(options =>
     options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
     options.ClaimActions.MapJsonKey("urn:google:profile", "link");
     options.ClaimActions.MapJsonKey("urn:google:image", "picture");
-});
+});*/
 
 builder.Services.AddHttpContextAccessor();
 

@@ -1,25 +1,59 @@
 services:
-  app:
-#    image: ${IMAGE_NAME}:${IMAGE_VERSION}-perf-app
-#    image: mcr.microsoft.com/dotnet/sdk:6.0
-    container_name: perf-app-srvc
+# PerfRunner
+  perf-runner-00:
+    container_name: perf-runner-00
     build:
       context: ./
       dockerfile: ./Dockerfile
-#      cache_from:
-#        - ${IMAGE_NAME}:${IMAGE_VERSION}-perf-app
-#        - perf-app
     deploy:
       resources:
         limits:
           memory: 160M
     restart: unless-stopped
     ports:
-      - 5277:5000
+      - 5277:5277
     environment:
       - REDIS_ADDR
     depends_on:
       - redis-app
+
+# PerfRunner 2
+  perf-runner-01:
+    container_name: perf-runner-01
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    deploy:
+      resources:
+        limits:
+          memory: 160M
+    restart: unless-stopped
+    ports:
+      - 5278:5277
+    environment:
+      - REDIS_ADDR
+    depends_on:
+      - redis-app
+
+# PerfLoader
+  perf-loaderr:
+    container_name: perf-loader
+    build:
+      context: ./
+      dockerfile: ./PerfLoaderDocker
+    deploy:
+      resources:
+        limits:
+          memory: 160M
+    restart: unless-stopped
+    ports:
+      - 5137:5137
+    environment:
+      - "${PERFRUNNER00_ADDR}"
+      - "${PERFRUNNER01_ADDR}"
+    depends_on:
+      - "${PERFRUNNER00_HOST}"
+      - "${PERFRUNNER01_HOST}"
 
 # Redis used by App service
   redis-app:
