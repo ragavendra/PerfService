@@ -40,20 +40,22 @@ Once in this directory. Should be as straight as
 
 and
 
-`docker compose up --no-build`
+`sudo docker-compose up --no-build`
 
 The `mcr.microsoft.com/dotnet/sdk:6.0` and `redis:alpine` images are used.
 
 `Dev` instance is run and in non secure mode `http`. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/docker-https?view=aspnetcore-6.0) for production or `https` use.
 
-###### PerfLoader
+If all images were built and run succesfully using `sudo docker-compose up`, you should be ableto access the `PerfLoader` [here](http://localhost:5137/) and should be able to run test(s) from there.
+
+###### PerfLoader only
 Building `PerfLoader` alone.
 `sudo docker build -t perf_loader -f PerfLoaderDocker .`
 
 Running it.
 `sudo docker run -p 5137:5137 perf_loader`
 
-###### PerfRunner
+###### PerfRunner only
 
 Building `PerfRunner` alone.
 `sudo docker build -t perf_runner .`
