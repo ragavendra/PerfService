@@ -90,7 +90,7 @@ dotnet-counters monitor -n PerfRunner --counters PerfService.PerfRunner
 ```
 
 ### Prometheus
-Prometheus is used to more or less display or relay the instrumentation metrics to apps like Grafana or similar. To install you may have to download and run it on oyur distribution. The config file for it is [here](PerfRunner/grafanaDashboard.json) or append the scrape config like below.
+Prometheus is used to more or less display or relay the instrumentation metrics to apps like Grafana or similar. To install you may have to download and run it on your distribution. It should be as straight as `./prometheus`. The config file for it is [here](PerfRunner/prometheus.yml) or append the scrape config like below.
 
 ```
   - job_name: 'PerfRunner'
@@ -98,14 +98,23 @@ Prometheus is used to more or less display or relay the instrumentation metrics 
     static_configs:
       - targets: ['localhost:9186']
 ```
+Look for Perf.. in graph. You should see the graph like [here](Screens/Prometheus.png) or [this](http://localhost:9186/metrics) link should have the data from the `PerfRunner`s.
 
 ### Grafana
-To run Grafana as a docker image, run.
+To run Grafana as a docker container, run.
 
 ``` 
-docker run -d --name=grafana -p 3000:3000 grafana/grafana-enterprise
-admin
+sudo docker run --name=grafana -p 3000:3000 grafana/grafana-enterprise admin
 ```
+First login should be `admin` and `admin`.
+
+In Connections --> Data sources, install the `Prometheus` data source plugin in it and all the dashboards as well. In settings use `docker0` ip address instead of `localhost` as Grafana docker container has to see prometheus.
+
+Update the prometheus uid in the dashboard [file](PerfRunner/grafanaDashboard.json) and import it to the dashboards. If all went well, you should see the data in the dashboard like [here](Screens/Grafana.png).
+
+To get uid or to create a new dashboard with data shource as `Prometheus` and type Perf.. to get something like `PerfService_Runs_count` and similar to get metrics for it. In the new dashboard settings, see the json model to get the prometheus id from there.
+
+P.S. - Make sure any test is running when you watch for the data.
 
 ### Run results
 Please refer [here](Screens/300PerSecondActionLoad.png) for a sample run with upto 300 users per second with 12 core processor and having about 17% CPU usage and about 1.5 GB memory usage.

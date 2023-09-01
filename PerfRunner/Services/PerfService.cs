@@ -143,10 +143,16 @@ namespace PerfRunner.Services
 
                 Meter meter = new Meter(_configuration["INSTR_METER"]);
 
-                actionRunner.RunCounter = meter.CreateHistogram<double>(
+                actionRunner.RunHistogram = meter.CreateHistogram<double>(
                         // name: actionType!.ToString() + "_" + actionRunner.Guid.ToString().Remove(6),
-                        name: "PerfService",
-                        unit: "Runs",
+                        name: "PerfRunner",
+                        unit: "ms",
+                        description: $"No. of {actionType} run for {testRequest.Guid.Remove(6)}.");
+
+                actionRunner.RunCounter = meter.CreateCounter<int>(
+                        // name: actionType!.ToString() + "_" + actionRunner.Guid.ToString().Remove(6),
+                        name: $"PerfRunner.{actionType}",
+                        unit: "s",
                         description: $"No. of {actionType} run for {testRequest.Guid.Remove(6)}.");
 
                 testRequest.ActionRunners.Add(actionRunner);

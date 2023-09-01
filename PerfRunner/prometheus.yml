@@ -33,11 +33,6 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9184']
 
-  - job_name: node
-    scrape_interval: 1s # poll very quickly for a more responsive demo
-    static_configs:
-      - targets: ['localhost:9100']
-
   - job_name: 'PerfRunner'
     scrape_interval: 1s # poll very quickly for a more responsive demo
     static_configs:

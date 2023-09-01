@@ -25,7 +25,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "d5fe2dce-2b0b-4495-aa2a-26b9a17269bc"
+          "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
         },
         "fieldConfig": {
           "defaults": {
@@ -102,7 +102,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "d5fe2dce-2b0b-4495-aa2a-26b9a17269bc"
+              "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
             },
             "editorMode": "builder",
             "expr": "rate(PerfService_Runs_count{action=\"PerfRunner.Tests.PlayBowling\"}[$__rate_interval])",
@@ -117,7 +117,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "d5fe2dce-2b0b-4495-aa2a-26b9a17269bc"
+          "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
         },
         "fieldConfig": {
           "defaults": {
@@ -194,7 +194,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "d5fe2dce-2b0b-4495-aa2a-26b9a17269bc"
+              "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
             },
             "editorMode": "builder",
             "expr": "rate(PerfService_Runs_count{action=\"PerfRunner.Tests.Login\"}[$__rate_interval])",
@@ -209,7 +209,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "d5fe2dce-2b0b-4495-aa2a-26b9a17269bc"
+          "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
         },
         "fieldConfig": {
           "defaults": {
@@ -286,7 +286,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "d5fe2dce-2b0b-4495-aa2a-26b9a17269bc"
+              "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
             },
             "editorMode": "builder",
             "expr": "rate(PerfService_Runs_count[$__rate_interval])",
@@ -301,7 +301,7 @@
       {
         "datasource": {
           "type": "prometheus",
-          "uid": "d5fe2dce-2b0b-4495-aa2a-26b9a17269bc"
+          "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
         },
         "fieldConfig": {
           "defaults": {
@@ -378,7 +378,7 @@
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "d5fe2dce-2b0b-4495-aa2a-26b9a17269bc"
+              "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
             },
             "editorMode": "builder",
             "expr": "histogram_quantile(0.95, sum by(le) (rate(PerfService_Runs_bucket[$__rate_interval])))",
