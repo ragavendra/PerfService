@@ -15,7 +15,6 @@ namespace PerfRunner
             Directory.CreateDirectory(logOutputDir);
          }*/
 
-
          CreateHostBuilder(args).Build().Run();
       }
 
