@@ -284,7 +284,7 @@
         "x": 0,
         "y": 12
       },
-      "id": 7,
+      "id": 16,
       "options": {
         "legend": {
           "calcs": [],
@@ -303,15 +303,22 @@
             "type": "prometheus",
             "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
           },
-          "editorMode": "code",
-          "expr": "rate(PerfRunner_ms_count{action=\"PerfRunner.Tests.PlayBowling\"}[$__rate_interval])",
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "exemplar": false,
+          "expr": "rate(PerfRunner_ms_count{action=\"PerfRunner.Tests.Login\"}[$__rate_interval])",
+          "format": "time_series",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
           "instant": false,
+          "interval": "",
           "legendFormat": "__auto",
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "useBackend": false
         }
       ],
-      "title": "Perf Srvc Runs count - rate intrvl - Play Bowling",
+      "title": "Login Threads count - rate intrvl",
       "type": "timeseries"
     },
     {
@@ -378,7 +385,7 @@
         "x": 12,
         "y": 12
       },
-      "id": 8,
+      "id": 15,
       "options": {
         "legend": {
           "calcs": [],
@@ -397,107 +404,18 @@
             "type": "prometheus",
             "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
           },
-          "editorMode": "code",
-          "expr": "rate(PerfRunner_ms_count{action=\"PerfRunner.Tests.Login\"}[$__rate_interval])",
+          "disableTextWrap": false,
+          "editorMode": "builder",
+          "expr": "rate(PerfRunner_ms_count{action=\"PerfRunner.Tests.PlayBowling\"}[$__rate_interval])",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
           "instant": false,
           "range": true,
-          "refId": "A"
+          "refId": "A",
+          "useBackend": false
         }
       ],
-      "title": "Perf Srvc Runs count - rate intrvl - Play Login",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 12,
-        "x": 0,
-        "y": 24
-      },
-      "id": 3,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
-          },
-          "editorMode": "code",
-          "expr": "rate(PerfRunner_ms_count[$__rate_interval])",
-          "instant": false,
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Perf Srvc Runs count - rate intrvl",
+      "title": "Play Bowling Threads count",
       "type": "timeseries"
     },
     {
@@ -593,197 +511,9 @@
       ],
       "title": "PerfService Runs bucket - Hist",
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 12,
-        "x": 0,
-        "y": 36
-      },
-      "id": 12,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
-          },
-          "editorMode": "code",
-          "expr": "quantile(0.95, avg by (webId) (rate(PerfRunner_ms_sum[5m])/rate(PerfRunner_ms_count[5m])))",
-          "hide": false,
-          "instant": false,
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "PerfService Runs bucket - Quantile",
-      "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "palette-classic"
-          },
-          "custom": {
-            "axisCenteredZero": false,
-            "axisColorMode": "text",
-            "axisLabel": "",
-            "axisPlacement": "auto",
-            "barAlignment": 0,
-            "drawStyle": "line",
-            "fillOpacity": 0,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 1,
-            "pointSize": 5,
-            "scaleDistribution": {
-              "type": "linear"
-            },
-            "showPoints": "auto",
-            "spanNulls": false,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            },
-            "thresholdsStyle": {
-              "mode": "off"
-            }
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": null
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          }
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 12,
-        "w": 12,
-        "x": 12,
-        "y": 36
-      },
-      "id": 4,
-      "options": {
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": true
-        },
-        "tooltip": {
-          "mode": "single",
-          "sort": "none"
-        }
-      },
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "a06067eb-7af1-4425-a019-02a1546a38cc"
-          },
-          "editorMode": "code",
-          "expr": "histogram_quantile(0.95, sum by(le) (rate(PerfRunner_ms_count[$__rate_interval])))",
-          "hide": false,
-          "instant": false,
-          "range": true,
-          "refId": "A"
-        }
-      ],
-      "title": "PerfService Runs bucket - Hist",
-      "type": "timeseries"
     }
   ],
-  "refresh": false,
+  "refresh": "",
   "schemaVersion": 38,
   "style": "dark",
   "tags": [],
@@ -791,13 +521,13 @@
     "list": []
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "PerfService",
   "uid": "fbee318f-ee06-42bc-ab0d-c0e7d4eca56d",
-  "version": 19,
+  "version": 41,
   "weekStart": ""
 }
