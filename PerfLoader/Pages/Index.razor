@@ -36,39 +36,68 @@ Welcome to Perf Loader.
 <br>
 
 <EditForm Model="@TestRequest">
-<InputSelect @bind-Value=SelectedChannels>
-@foreach(var channel in _perfChannels)
-{
- <option value="@channel.Target">@channel.Target</option>
-}
- </InputSelect>
+    <div class="clients">
+        <label>Clients:</label>
+        <br />
+        <InputSelect @bind-Value=SelectedChannels>
+            @foreach (var channel in _perfChannels)
+            {
+                <option value="@channel.Target">@channel.Target</option>
+            }
+        </InputSelect>
+        <br>
+        <br>
+        <button @onclick="UpdateConnectionsPollyAsync">Probe Clients</button>
+    </div>
 
- <button @onclick="UpdateConnectionsPollyAsync">Probe Clients</button>
 <br>
-    <InputText @bind-Value=TestRequest.Name></InputText>
-
-    <InputNumber @bind-Value=TestRequest.Rate></InputNumber>
-<br>
+    <div class="new-test">
+<div class="actions">
+            Test Name:
+            <InputText @bind-Value=TestRequest.Name />
+        <br>
+        <br>
+            Test Rate:
+    <InputNumber @bind-Value=TestRequest.Rate />
+        <br>
+        <br>
+</div>
+<div class="actions">
 Actions: 
 @foreach (var item in TestRequest.Actions)
 {
     <br>
-    <label>Name: @item.Name</label>
+    <label>Action: @item.Name</label>
+    <br>
     <label>Rate: @item.Rate</label>
+    <br>
 }
-<br>
+</div>
+<div class="new-action">
+New Action:
+        <br>
+        Name:
  <InputText @bind-Value=TestRequest.Actions.Last().Name></InputText>
+        <br>
+ Rate:
  <InputNumber @bind-Value=TestRequest.Actions.Last().Rate></InputNumber>   
+        <br>
+ Load distribution:
  <InputSelect @bind-Value=TestRequest.Actions.Last().LoadDistribution>
  <option value="@LoadDistribution.Even">Even</option>
  <option value="@LoadDistribution.Uneven">Uneven</option>
  </InputSelect>   
+        <br>
+</div>
  <!-- InputDate @bind-Value=TestRequest.Actions.Last().Duration></InputDate -->
- <button @onclick="() => TestRequest.Actions.Add(TestRequest.Actions.Last())">+</button>   
+ <button @onclick="() => TestRequest.Actions.Add(new ActionOption())">+</button>   
  <button @onclick="() => TestRequest.Actions.RemoveAt(TestRequest.Actions.Count - 1)">-</button>
+    <br>
+    <br>
  <button @onclick="StartTestAsync">Start Test</button>
 
  <button @onclick="StopAllTestsAsync">Stop All Tests</button>
+</div>
 </EditForm>
 
 Running Tests:
