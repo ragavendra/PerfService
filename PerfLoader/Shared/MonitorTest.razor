@@ -1,9 +1,7 @@
 @using PerfRunner.V1;
 @using PerfLoader.Pages;
 
-<h3>Monitoring Tests</h3>
 
-<br>
 <label>Guid - @TestRequest.Guid</label>
 <br>
 <label>Name - @TestRequest.Name</label>
@@ -50,6 +48,7 @@
 }
 <br>
 <button @onclick="() => IndexPage.StopTest(TestRequest.Guid)">Stop</button>
+ <br>
 
 @code
 {

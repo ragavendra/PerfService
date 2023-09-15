@@ -2,11 +2,24 @@
 .clients,
 .actions,
 .new-action,
+.running-test,
+.running-tests,
 .new-test {
     border: 2px outset #0071c1;
     /* border:hsl(0, 60%, 30%); */
-    margin: 2rem;
+    margin: 1rem;
     padding: 1rem;
     border-radius: 11px;
     width: fit-content;
+}
+
+.running-test {
+    align-content: flex-start;
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    grid-auto-rows: minmax(100px, auto);
 }
