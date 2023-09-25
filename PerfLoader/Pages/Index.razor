@@ -215,11 +215,12 @@ Welcome to Perf Loader.
     {
         StringBuilder builder = new StringBuilder();
 
-        X509Certificate2 mCert = new X509Certificate2("/run/media/scion/4b29c2d1-0afc-4483-9ae7-029e32ec28b8/repos/PerfRunner/https.crt");
+        // X509Certificate2 mCert = new X509Certificate2("/usr/local/share/ca-certificates/aspnet/https.crt");
         // X509Store store = new X509Store("/usr/local/share/ca-certificates/aspnet/https.crt");
         // X509Store store = new X509Store("/run/media/scion/4b29c2d1-0afc-4483-9ae7-029e32ec28b8/repos/PerfRunner/https.crt");
-        // store.Open(OpenFlags.ReadOnly);
-        // foreach (X509Certificate2 mCert in store.Certificates)
+        X509Store store = new X509Store();
+        store.Open(OpenFlags.ReadOnly);
+        foreach (X509Certificate2 mCert in store.Certificates)
         {
             builder.AppendLine(
                 "# Issuer: " + mCert.Issuer.ToString() + "\n" +
@@ -228,7 +229,9 @@ Welcome to Perf Loader.
                 "# Serial: " + mCert.SerialNumber.ToString() + "\n" +
                 "# SHA1 Fingerprint: " + mCert.GetCertHashString().ToString() + "\n" +
                 ExportToPEM(mCert) + "\n");
+            Console.WriteLine("Cert serial " + mCert.SerialNumber);
         }
+
         return builder.ToString();
     }
 
