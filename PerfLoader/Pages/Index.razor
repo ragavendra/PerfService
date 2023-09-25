@@ -2,6 +2,8 @@
 @using System;
 @using System.ComponentModel.DataAnnotations;
 @using System.Collections.Concurrent;
+@using System.Text;
+@using System.Security.Cryptography.X509Certificates;
 @using Grpc.Core;
 @using Grpc.Net.Client;
 @using PerfRunner.V1;
@@ -183,7 +185,10 @@ Welcome to Perf Loader.
         {
             foreach (var cli in Configuration.GetRequiredSection("PerfRunners").Get<List<string>>())
             {
-                var channel = GrpcChannel.ForAddress(cli);
+                var sRootCert = GetRootCertificates();
+                GrpcChannelOptions grpcChannelOptions = new GrpcChannelOptions();
+                grpcChannelOptions.Credentials = new SslCredentials();
+                var channel = GrpcChannel.ForAddress(cli, grpcChannelOptions);
 
                 Logger.LogDebug("Channel {0} was created!", channel.Target);
                 _perfChannels.Add(channel);
@@ -206,51 +211,91 @@ Welcome to Perf Loader.
         _probeChannels = false;
     }
 
+    public static string GetRootCertificates()
+    {
+        StringBuilder builder = new StringBuilder();
+
+        X509Certificate2 mCert = new X509Certificate2("/run/media/scion/4b29c2d1-0afc-4483-9ae7-029e32ec28b8/repos/PerfRunner/https.crt");
+        // X509Store store = new X509Store("/usr/local/share/ca-certificates/aspnet/https.crt");
+        // X509Store store = new X509Store("/run/media/scion/4b29c2d1-0afc-4483-9ae7-029e32ec28b8/repos/PerfRunner/https.crt");
+        // store.Open(OpenFlags.ReadOnly);
+        // foreach (X509Certificate2 mCert in store.Certificates)
+        {
+            builder.AppendLine(
+                "# Issuer: " + mCert.Issuer.ToString() + "\n" +
+                "# Subject: " + mCert.Subject.ToString() + "\n" +
+                "# Label: " + mCert.FriendlyName.ToString() + "\n" +
+                "# Serial: " + mCert.SerialNumber.ToString() + "\n" +
+                "# SHA1 Fingerprint: " + mCert.GetCertHashString().ToString() + "\n" +
+                ExportToPEM(mCert) + "\n");
+        }
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// Export a certificate to a PEM format string
+    /// </summary>
+    /// <param name="cert">The certificate to export</param>
+    /// <returns>A PEM encoded string</returns>
+    public static string ExportToPEM(X509Certificate cert)
+    {
+        System.Text.StringBuilder builder = new StringBuilder();            
+
+    builder.AppendLine("-----BEGIN CERTIFICATE-----");
+    builder.AppendLine(Convert.ToBase64String(cert.Export(X509ContentType.Cert), Base64FormattingOptions.InsertLineBreaks));
+    builder.AppendLine("-----END CERTIFICATE-----");
+
+    return builder.ToString();
+}
+
     private async void UpdateConnectionsPollyAsync()
     {
         // lock (_updateChannelsLock)
         await _updateChannelsSemSlim.WaitAsync();
 
-        #pragma warning disable CS4014 
+#pragma warning disable CS4014
         Parallel.ForEachAsync(_perfChannels, (ch, cnc) =>
         {
             var perfCli = new Perf.PerfClient(ch);
 
+            // var rep_ = perfCli.Ping(new PingRequest());
+
             var policy = Policy.Handle<RpcException>()
-            .WaitAndRetryForever(
-            // retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
-            sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(3),
-            onRetry: (exception, timespan, context) =>
-            {
-                Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
-                // Logger.LogInformation("Context is {0}", context);
+    .WaitAndRetryForever(
+    // retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+    sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(3),
+    onRetry: (exception, timespan, context) =>
+    {
+    Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
+    // Logger.LogInformation("Context is {0}", context);
 
-                // lets not have this
-                if (_perfChannels.RemoveItem(ch))
-                {
-                    Logger.LogInformation("Removed - " + ch.Target);
-                    InvokeAsync(StateHasChanged);
-                }
+    // lets not have this
+    if (_perfChannels.RemoveItem(ch))
+    {
+        Logger.LogInformation("Removed - " + ch.Target);
+        InvokeAsync(StateHasChanged);
+    }
 
-                foreach (var ele in _perfChannels)
-                {
-                    Logger.LogInformation("Ele in " + ele.Target);
-                }
+    foreach (var ele in _perfChannels)
+    {
+        Logger.LogInformation("Ele in " + ele.Target);
+    }
 
-                // InvokeAsync(StateHasChanged);
-                /*
-                if(_perfChannels.Count <= 0)
-                {
-                return;
-                }*/
+    // InvokeAsync(StateHasChanged);
+    /*
+    if(_perfChannels.Count <= 0)
+    {
+    return;
+    }*/
             });
 
             Logger.LogInformation("Pinging {0} now at {1}.", ch.Target, DateTime.Now.ToString());
 
             // on fail, this is running again*
             var rep = policy.Execute(() =>
-            perfCli.Ping(new PingRequest())
-            );
+
+    perfCli.Ping(new PingRequest())
+    );
 
             // InvokeAsync(StateHasChanged);
 
