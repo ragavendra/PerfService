@@ -119,6 +119,27 @@ P.S. - Make sure any test is running when you watch for the data.
 ### Run results
 Please refer [here](Screens/300PerSecondActionLoad.png) for a sample run with upto 300 users per second with 12 core processor and having about 17% CPU usage and about 1.5 GB memory usage.
 
+### Https support
+May be it is the dev cert which is not letting to talk to the cli's, but below are the stpes.
+
+dotnet dev-certs https
+sudo -E dotnet dev-certs https -ep /usr/local/share/ca-certificates/aspnet/https.crt --format PEM
+
+
+In Arch, you may want to do like below to trust the certificate.
+// sudo update-ca-certificates
+
+The way local CA certificates are handled has changed. If you have added any locally trusted certificates:
+
+    Move /usr/local/share/ca-certificates/*.crt to /etc/ca-certificates/trust-source/anchors/
+    Do the same with all manually-added /etc/ssl/certs/*.pem files and rename them to *.crt
+    Instead of update-ca-certificates, run trust extract-compat
+
+Also see man 8 update-ca-trust and trust --help.
+
+//
+sudo trust anchor --store ~/my-ca-cert.crt
+
 ### Sample commands
 To run from tests directly `CLI` with `PerfRunner` running.
 
