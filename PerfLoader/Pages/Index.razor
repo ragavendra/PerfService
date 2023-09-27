@@ -185,10 +185,25 @@ Welcome to Perf Loader.
         {
             foreach (var cli in Configuration.GetRequiredSection("PerfRunners").Get<List<string>>())
             {
-                var sRootCert = GetRootCertificates();
-                GrpcChannelOptions grpcChannelOptions = new GrpcChannelOptions();
-                grpcChannelOptions.Credentials = new SslCredentials();
-                var channel = GrpcChannel.ForAddress(cli, grpcChannelOptions);
+                /*
+                // var sRootCert = GetRootCertificates();
+
+                // https://learn.microsoft.com/en-us/dotnet/architecture/grpc-for-wcf-developers/channel-credentials
+                // var cert = new X509Certificate2(args[0], args[1]);
+                var cert = new X509Certificate2("/tmp/dotnet-dev.crt");
+                X509Store store = new X509Store();
+                store.Open(OpenFlags.ReadOnly);
+                var handler = new HttpClientHandler();
+                // handler.ClientCertificates.Add(store.Certificates[0]);
+                handler.ClientCertificates.Add(cert);
+                var httpClient = new HttpClient(handler);
+
+                GrpcChannelOptions grpcChannelOptions = new GrpcChannelOptions(){ HttpClient = httpClient };
+                
+                // grpcChannelOptions.Credentials = new SslCredentials(sRootCert);
+                // var channel = GrpcChannel.ForAddress(cli, grpcChannelOptions);
+                */
+                var channel = GrpcChannel.ForAddress(cli);
 
                 Logger.LogDebug("Channel {0} was created!", channel.Target);
                 _perfChannels.Add(channel);
