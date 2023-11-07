@@ -26,6 +26,20 @@ PS - Need to update `docker-compose.yml` for more than one `PerfRunner`
 Front end or the web interface to initiate performance test run(s) and control or to stop them.
 <a href="PerfLoader.png" target="_blank">Screen</a>
 
+In development, you can use watch like
+```
+dotnet watch
+```
+or you will have to build and run
+```
+dotnet run build
+dotnet run --no-build Debug 
+```
+or in one command
+```
+dotnet run build Debug
+```
+
 ### PerfRunnerTests
 Unit tests for the `PerfRunner` to be kept updated with any new features added to the `PerfRunner` project.
 

@@ -222,8 +222,8 @@ Welcome to Perf Loader.
             sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(3),
             onRetry: (exception, timespan, context) =>
             {
-                Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
-                // Logger.LogInformation("Context is {0}", context);
+                Logger.LogInformation("Issue connecting - {0}", exception.Message);
+                Logger.LogInformation("Attempt {1} - Trying to connect to {2} again in {3} s.", timespan, ch.Target, context);
 
                 // lets not have this
                 if (_perfChannels.RemoveItem(ch))
@@ -234,7 +234,7 @@ Welcome to Perf Loader.
 
                 foreach (var ele in _perfChannels)
                 {
-                    Logger.LogInformation("Ele in " + ele.Target);
+                    Logger.LogInformation("Can connect to " + ele.Target);
                 }
 
                 // InvokeAsync(StateHasChanged);
