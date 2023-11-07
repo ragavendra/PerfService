@@ -24,7 +24,9 @@ and start the test first.
 /// </summary>
 public class ActionRunner<T> : IActionRunner<T>
 {
-    private Histogram<double>? _runCounter;
+    private Histogram<double>? _runHistogram;
+
+    private Counter<int>? _runCounter;
 
     private ActionOption? _actionOption;
 
@@ -36,7 +38,9 @@ public class ActionRunner<T> : IActionRunner<T>
 
     public ActionOption? ActionOption { get => _actionOption; set => _actionOption = value; }
 
-    public Histogram<double>? RunCounter { get => _runCounter; set => _runCounter = value; }
+    public Histogram<double>? RunHistogram { get => _runHistogram; set => _runHistogram = value; }
+
+    public Counter<int>? RunCounter { get => _runCounter; set => _runCounter = value; }
 
     public ActionBlock<T>? ActionBlock { get; set; }
 
@@ -100,11 +104,14 @@ public class ActionRunner<T> : IActionRunner<T>
                     $"After Posting, elapsed - {sw.Elapsed.TotalMilliseconds.ToString()} ms, waited for remain - {remaining.ToString()} ms. and divisor - {divisor.ToString()} ms"
                     );
 
-            // update instr
-            UpdateInstr(sw.Elapsed.TotalMilliseconds, indexer++);
+            // update  hist
+            UpdateHistAsync(sw.Elapsed.TotalMilliseconds, indexer++);
 
             Thread.Sleep(remaining);
         }
+
+        // update  hist
+        UpdateCntrAsync(sw.Elapsed.TotalMilliseconds, indexer);
 
         // no more to post 
         // ActionBlock.Complete();
@@ -125,16 +132,30 @@ public class ActionRunner<T> : IActionRunner<T>
         return false;
     }
 
-    public void UpdateInstr(double totalMilliseconds, int interation)
+    public async void UpdateCntrAsync(double totalMilliseconds, int iteration)
     {
         TagList taglist = new TagList();
         taglist.Add("action", TypeValue!.GetType());
-        taglist.Add("iteration", interation);
+        // taglist.Add("iteration", iteration);
+        // taglist.Add("period", totalMilliseconds.ToString());
         taglist.Add("guid", TestGuid.ToString().Remove(6));
+        taglist.Add("host", Environment.GetEnvironmentVariable("ASPNETCORE_URLS"));
+
+        // record counter
+        _runCounter?.Add(iteration, taglist);
+    }
+
+    public async void UpdateHistAsync(double totalMilliseconds, int iteration)
+    {
+        TagList taglist = new TagList();
+        taglist.Add("action", TypeValue!.GetType());
+        taglist.Add("iteration", iteration);
+        taglist.Add("guid", TestGuid.ToString().Remove(6));
+        taglist.Add("host", Environment.GetEnvironmentVariable("ASPNETCORE_URLS"));
         // taglist.Add("action-guid", Guid.ToString().Remove(6));
 
         // record time takes in ms for each call
-        _runCounter?.Record(totalMilliseconds, taglist);
+        _runHistogram?.Record(totalMilliseconds, taglist);
     }
 
     public object CloneObj()

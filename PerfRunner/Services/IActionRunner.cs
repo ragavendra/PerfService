@@ -11,7 +11,9 @@ namespace PerfRunner.Services
 
         public Guid TestGuid { get; set; }
 
-        public Histogram<double> RunCounter { get; set; }
+        public Counter<int>? RunCounter { get; set; }
+
+        public Histogram<double>? RunHistogram { get; set; }
 
         public ActionBlock<T> ActionBlock { get; set; }
 

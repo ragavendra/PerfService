@@ -28,69 +28,102 @@
 <h1>Hello, world!</h1>
 
 Welcome to Perf Loader.
-
 <SurveyPrompt Title="How is Blazor working for you?" />
-<br>
-
 <UserMessage UserMessage_=_userMessage />
-<br>
 
+<div class="wrapper">
 <EditForm Model="@TestRequest">
-<InputSelect @bind-Value=SelectedChannels>
-@foreach(var channel in _perfChannels)
-{
- <option value="@channel.Target">@channel.Target</option>
-}
- </InputSelect>
+    <div class="clients">
+        <label>Clients:</label>
+        <br />
+        <InputSelect @bind-Value=SelectedChannels>
+            @foreach (var channel in _perfChannels)
+            {
+                <option value="@channel.Target">@channel.Target</option>
+            }
+        </InputSelect>
+        <br>
+        <br>
+        <button @onclick="UpdateConnectionsPollyAsync">Probe Clients</button>
+    </div>
 
- <button @onclick="UpdateConnectionsPollyAsync">Probe Clients</button>
-<br>
-    <InputText @bind-Value=TestRequest.Name></InputText>
+    <div class="new-test">
+        <h4>New Test</h4>
+        <div class="actions">
+            Test Name:
+            <InputText @bind-Value=TestRequest.Name></InputText>
+            <br>
+            <br>
+            Test Rate:
+            <InputNumber @bind-Value=TestRequest.Rate />
+            <br>
+            <br>
+        </div>
+        <div class="actions">
+            Actions:
+            @foreach (var item in TestRequest.Actions)
+            {
+                <br>
+                <label>Action: @item.Name</label>
+                <br>
+                <label>Rate: @item.Rate</label>
+                <br>
+            }
+        </div>
+        <div class="new-action">
+            New Action:
+            <br>
+            Name:
+            <InputText @bind-Value=TestRequest.Actions.Last().Name></InputText>
+            <br>
+            Rate:
+            <InputNumber @bind-Value=TestRequest.Actions.Last().Rate></InputNumber>
+            <br>
+            Load distribution:
+            <InputSelect @bind-Value=TestRequest.Actions.Last().LoadDistribution>
+                <option value="@LoadDistribution.Even">Even</option>
+                <option value="@LoadDistribution.Uneven">Uneven</option>
+            </InputSelect>
+            <br>
+        </div>
+        <!-- InputDate @bind-Value=TestRequest.Actions.Last().Duration></InputDate -->
+        <button @onclick="() => TestRequest.Actions.Add(new ActionOption())">+</button>
+        <button @onclick="() => TestRequest.Actions.RemoveAt(TestRequest.Actions.Count - 1)">-</button>
+        <br>
+        <br>
+        <button @onclick="StartTestAsync">Start Test</button>
 
-    <InputNumber @bind-Value=TestRequest.Rate></InputNumber>
-<br>
-Actions: 
-@foreach (var item in TestRequest.Actions)
-{
-    <br>
-    <label>Name: @item.Name</label>
-    <label>Rate: @item.Rate</label>
-}
-<br>
- <InputText @bind-Value=TestRequest.Actions.Last().Name></InputText>
- <InputNumber @bind-Value=TestRequest.Actions.Last().Rate></InputNumber>   
- <InputSelect @bind-Value=TestRequest.Actions.Last().LoadDistribution>
- <option value="@LoadDistribution.Even">Even</option>
- <option value="@LoadDistribution.Uneven">Uneven</option>
- </InputSelect>   
- <!-- InputDate @bind-Value=TestRequest.Actions.Last().Duration></InputDate -->
- <button @onclick="() => TestRequest.Actions.Add(TestRequest.Actions.Last())">+</button>   
- <button @onclick="() => TestRequest.Actions.RemoveAt(TestRequest.Actions.Count - 1)">-</button>
- <button @onclick="StartTestAsync">Start Test</button>
-
- <button @onclick="StopAllTestsAsync">Stop All Tests</button>
+        <button @onclick="StopAllTestsAsync">Stop All Tests</button>
+    </div>
 </EditForm>
+<div class="running-tests">
+    <h4>Running Test(s)</h4>
+    @foreach (var item in RunningTests)
+    {
+        <label>@item.Guid</label>
+        <button @onclick="() => StopTest(item.Guid)">Stop</button>
+        <br>
+    }
+</div>
+</div>
 
-Running Tests:
-@foreach (var item in RunningTests)
-{
- <br>
- <label>@item.Guid</label>
- <button @onclick="() => StopTest(item.Guid)">Stop</button>
-}
-<br>
-<br>
-
-@foreach (var item in RunningTests)
-{
-    <CascadingValue Value="@this">
-        <MonitorTest TestRequest=item />
-    </CascadingValue>
-}
-<br>
-<button @onclick="CheckTests">CheckTests</button>
- <br>
- <button @onclick="MonitorAllTestsAsync">MonitorAllTests</button>
+<div class="running-tests">
+<h4>Monitoring Test(s)</h4>
+<div class="wrapper">
+    @foreach (var item in RunningTests)
+    {
+        <div class="running-test" style="">
+            <CascadingValue Value="@this">
+                <MonitorTest TestRequest=item />
+            </CascadingValue>
+        </div>
+    }
+</div>
+    <button @onclick="CheckTests">CheckTests</button>
+    <button @onclick="MonitorAllTestsAsync">MonitorAllTests</button>
+        <br>
+        <br>
+</div>
 
 @code {
 
@@ -189,8 +222,8 @@ Running Tests:
             sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(3),
             onRetry: (exception, timespan, context) =>
             {
-                Logger.LogInformation("Attempt {3} - Trying to connect to {0} again in {1} s.", timespan, ch.Target, context);
-                // Logger.LogInformation("Context is {0}", context);
+                Logger.LogInformation("Issue connecting - {0}", exception.Message);
+                Logger.LogInformation("Attempt {1} - Trying to connect to {2} again in {3} s.", timespan, ch.Target, context);
 
                 // lets not have this
                 if (_perfChannels.RemoveItem(ch))
@@ -201,7 +234,7 @@ Running Tests:
 
                 foreach (var ele in _perfChannels)
                 {
-                    Logger.LogInformation("Ele in " + ele.Target);
+                    Logger.LogInformation("Can connect to " + ele.Target);
                 }
 
                 // InvokeAsync(StateHasChanged);
