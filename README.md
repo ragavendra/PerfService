@@ -48,7 +48,7 @@ Unit tests for the `PerfRunner` to be kept updated with any new features added t
 
 ### Getting Started
 #### Docker
-Creating container using one `PerfRunner` image and one `Redis` image like microservice architecture. Please check [docker-compose.yml](docker-compose.yml) to more information.
+Creating container using one `PerfRunner` image and one `Redis` image like microservice architecture. You can add many `PerfRunner`'s running in different ports like 5278, 5279 and so on ( Please update `PerfLoader`'s `appSettings.json` accordingly to reflect this ) to emulate distributed load generation. Please check [docker-compose.yml](docker-compose.yml) for more information.
 
 Once in this directory, building images should be as straight as
 
