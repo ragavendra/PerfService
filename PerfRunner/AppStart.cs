@@ -42,7 +42,7 @@ namespace PerfRunner
          // services.AddSingleton<IUserManager, UserManager>();
 
          services.AddSingleton<KafkaClientHandle>();
-         services.AddSingleton<KafkaDependentProducer<string, User>>();
+         services.AddSingleton<KafkaDependentProducer<string, string>>();
          // services.AddSingleton<KafkaDependentProducer<string, long>>();
          services.AddSingleton<IUserManager, KafkaUserStore>();
 

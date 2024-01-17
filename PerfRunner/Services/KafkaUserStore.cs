@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Confluent.Kafka;
 using PerfRunner.Models;
 
@@ -10,15 +11,15 @@ namespace PerfRunner.Services
 
       private readonly string _topic;
 
-      private readonly KafkaDependentProducer<string, User> _producer;
+      private readonly KafkaDependentProducer<string, string> _producer;
 
-      private readonly IConsumer<string, User> _consumer;
+      private readonly IConsumer<string, string> _consumer;
 
       private readonly int _consumerTimeout;
 
       public UserFormatInfo UserFormatInfo { get; set; } = new UserFormatInfo();
 
-      public KafkaUserStore(KafkaDependentProducer<string, User> producer, ILogger<KafkaUserStore> logger, IConfiguration configuration)
+      public KafkaUserStore(KafkaDependentProducer<string, string> producer, ILogger<KafkaUserStore> logger, IConfiguration configuration)
       {
          _topic = configuration.GetValue<string>("Kafka:UserTopic");
          _producer = producer;
@@ -27,7 +28,7 @@ namespace PerfRunner.Services
          // InitializeAsync();
          var consumerConfig = new ConsumerConfig();
          configuration.GetSection("Kafka:ConsumerSettings").Bind(consumerConfig);
-         _consumer = new ConsumerBuilder<string, User>(consumerConfig).Build();
+         _consumer = new ConsumerBuilder<string, string>(consumerConfig).Build();
 
          if (!int.TryParse(configuration.GetValue<string>("Kafka:ConsumerSettings:ConsumeTimeout"), out _consumerTimeout))
             _consumerTimeout = 6_000;
@@ -48,7 +49,7 @@ namespace PerfRunner.Services
          LoadUsers();
       }
 
-      private void _deliveryReportHandler(DeliveryReport<string, User> deliveryReport)
+      private void _deliveryReportHandler(DeliveryReport<string, string> deliveryReport)
       {
          if (deliveryReport.Status == PersistenceStatus.NotPersisted)
          {
@@ -84,13 +85,14 @@ namespace PerfRunner.Services
          _consumer.Subscribe(_topic);
          var msg = _consumer.Consume(_consumerTimeout);
 
-         if (msg.Message.Value is not User)
+         if (msg?.Message?.Value == null)
          {
             _logger.LogWarning($"No more {userState.ToString()} users present!");
          }
          else
          {
-            return msg.Message.Value;
+            var user = JsonSerializer.Deserialize<User>(msg?.Message?.Value);
+            return user;
          }
 
          return default;
@@ -98,9 +100,11 @@ namespace PerfRunner.Services
 
       public bool CheckInUser(User user)
       {
+         var user_ = JsonSerializer.Serialize(user);
+
          // no await as method is sync
          // _producer.ProduceAsync(_topic, new Message<string, User> { Key = user.State.ToString(), Value = user });
-         _producer.Produce(_topic, new Message<string, User> { Key = user.State.ToString(), Value = user }, _deliveryReportHandler);
+         _producer.Produce(_topic, new Message<string, string> { Key = user.State.ToString(), Value = user_ }, _deliveryReportHandler);
 
          return true;
       }
