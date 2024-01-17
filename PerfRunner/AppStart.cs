@@ -1,5 +1,7 @@
+using Confluent.Kafka;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
+using PerfRunner.Models;
 using PerfRunner.Services;
 using PerfRunner.Tests;
 using Polly;
@@ -37,7 +39,12 @@ namespace PerfRunner
          services.AddTransient<IActionRunner<ITestBase>, ActionRunner<ITestBase>>();
          services.AddSingleton<ITestStateManager, TestStateManager>();
 
-         services.AddSingleton<IUserManager, UserManager>();
+         // services.AddSingleton<IUserManager, UserManager>();
+
+         services.AddSingleton<KafkaClientHandle>();
+         services.AddSingleton<KafkaDependentProducer<string, User>>();
+         // services.AddSingleton<KafkaDependentProducer<string, long>>();
+         services.AddSingleton<IUserManager, KafkaUserStore>();
 
          /*
                   try
