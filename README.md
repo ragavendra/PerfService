@@ -65,6 +65,20 @@ Redis is used as a common user store to store users and are pulled and pushed in
 
 `PerfRunner` can alone be run without the `redis` as well, in which case the user store should default to the in-memory queue and running multiple `Perfrunner`s can cause the same user to call the api's from each of the `PerfRunner`s.
 
+### Kafka as User manager
+Kafka can be used as User manager instead of the in-memory User manager. Kfks service is loaded as a DI service suring the app startup as singleton.
+
+To use Kafka as user manager
+
+a. update the Kafka settings in [PerfRunner/appsettings.json](PerfRunner/appsettings.json)
+b. Comment and uncomment in [PrefRunner/AppStart.cs](PrefRunner/AppStart.cs) file.
+```
+// services.AddSingleton<IUserManager, UserManager>();
+services.AddSingleton<KafkaClientHandle>();
+services.AddSingleton<KafkaDependentProducer<string, string>>();
+services.AddSingleton<IUserManager, KafkaUserStore>();
+```
+
 ### Planned features
  ....
 
@@ -87,6 +101,7 @@ Redis is used as a common user store to store users and are pulled and pushed in
 15. Update distribution for each action.
 16. Run, update and monitor test(s) on selected runner(s). If no runner is selected, all are probed*.
 17. PerfLoader dynamically maintains the PerfRunner(s) list using [Polly](https://github.com/App-vNext/Polly) polling every minute.
+19. UserManager as in memory user manager or Redis user manager or Kafka user manager.
 
 ### Planned features - Loader
 1. Clean front end interface for interaction. The app needs a lot of fron end improvement yet. Basic operations such as rate, duration and distribution updates are instantanious.
