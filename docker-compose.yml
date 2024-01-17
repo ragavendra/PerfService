@@ -4,7 +4,7 @@ services:
 #    image: mcr.microsoft.com/dotnet/sdk:6.0
     container_name: perf-app-srvc
     build:
-      context: ./
+      context: ./PerfRunner
       dockerfile: ./Dockerfile
 #      cache_from:
 #        - ${IMAGE_NAME}:${IMAGE_VERSION}-perf-app
