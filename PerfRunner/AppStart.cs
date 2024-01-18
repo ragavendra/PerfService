@@ -46,7 +46,6 @@ namespace PerfRunner
          services.AddSingleton<KafkaDependentProducer<string, string>>();
          // services.AddSingleton<KafkaDependentProducer<string, long>>();
          services.AddSingleton<IUserManager, KafkaUserStore>();
-         */
 
          /*
                   try

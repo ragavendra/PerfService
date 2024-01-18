@@ -66,17 +66,25 @@ Redis is used as a common user store to store users and are pulled and pushed in
 `PerfRunner` can alone be run without the `redis` as well, in which case the user store should default to the in-memory queue and running multiple `Perfrunner`s can cause the same user to call the api's from each of the `PerfRunner`s.
 
 ### Kafka as User manager
-Kafka can be used as User manager instead of the in-memory User manager. Kfks service is loaded as a DI service suring the app startup as singleton.
+Kafka can be used as User manager instead of the in-memory User manager. One topic for each user state need to be created which holds the users. Kfks service is loaded as a DI service suring the app startup as singleton.
 
 To use Kafka as user manager
 
 a. update the Kafka settings in [PerfRunner/appsettings.json](PerfRunner/appsettings.json)
 b. Comment and uncomment in [PrefRunner/AppStart.cs](PrefRunner/AppStart.cs) file.
+
 ```
 // services.AddSingleton<IUserManager, UserManager>();
 services.AddSingleton<KafkaClientHandle>();
 services.AddSingleton<KafkaDependentProducer<string, string>>();
 services.AddSingleton<IUserManager, KafkaUserStore>();
+```
+c. Download an run Zookeeper and Kafka ( Only for local setup )
+
+d. Create topics for each state i.e. for `perf_user_authenticated` , `perf_user_playing`, `perf_user_waiting`, `perf_user_ready` for the sample implementation.
+```
+bin/kafka-topics.sh --create --topic perf_user_ready --bootstrap-server loca
+lhost:9092
 ```
 
 ### Planned features
