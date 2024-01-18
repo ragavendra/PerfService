@@ -30,7 +30,7 @@ namespace PerfRunner.Services
          configuration.GetSection("Kafka:ConsumerSettings").Bind(consumerConfig);
          _consumer = new ConsumerBuilder<string, string>(consumerConfig).Build();
 
-         if (!int.TryParse(configuration.GetValue<string>("Kafka:ConsumerSettings:ConsumeTimeout"), out _consumerTimeout))
+         if (!int.TryParse(configuration.GetValue<string>("KafkaConsumeTimeout"), out _consumerTimeout))
             _consumerTimeout = 6_000;
 
          LoadUsers();
@@ -82,7 +82,9 @@ namespace PerfRunner.Services
 
       public User CheckOutUser(UserState userState)
       {
-         _consumer.Subscribe(_topic);
+         // _consumer.Subscribe(_topic);
+         _consumer.Subscribe("perf_user_" + userState.ToString().ToLower());
+
          var msg = _consumer.Consume(_consumerTimeout);
 
          if (msg?.Message?.Value == null)
@@ -104,7 +106,7 @@ namespace PerfRunner.Services
 
          // no await as method is sync
          // _producer.ProduceAsync(_topic, new Message<string, User> { Key = user.State.ToString(), Value = user });
-         _producer.Produce(_topic, new Message<string, string> { Key = user.State.ToString(), Value = user_ }, _deliveryReportHandler);
+         _producer.Produce("perf_user_" + user.State.ToString().ToLower(), new Message<string, string> { Key = user.State.ToString(), Value = user_ }, _deliveryReportHandler);
 
          return true;
       }

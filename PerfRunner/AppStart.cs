@@ -39,14 +39,12 @@ namespace PerfRunner
          services.AddTransient<IActionRunner<ITestBase>, ActionRunner<ITestBase>>();
          services.AddSingleton<ITestStateManager, TestStateManager>();
 
-         services.AddSingleton<IUserManager, UserManager>();
+         // services.AddSingleton<IUserManager, UserManager>();
 
-/*
          services.AddSingleton<KafkaClientHandle>();
          services.AddSingleton<KafkaDependentProducer<string, string>>();
          // services.AddSingleton<KafkaDependentProducer<string, long>>();
          services.AddSingleton<IUserManager, KafkaUserStore>();
-         */
 
          /*
                   try
