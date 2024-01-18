@@ -17,12 +17,15 @@ namespace PerfRunner.Services
 
       private readonly int _consumerTimeout;
 
+      private readonly IConfiguration _configuration;
+
       public UserFormatInfo UserFormatInfo { get; set; } = new UserFormatInfo();
 
       public KafkaUserStore(KafkaDependentProducer<string, string> producer, ILogger<KafkaUserStore> logger, IConfiguration configuration)
       {
          _topic = configuration.GetValue<string>("Kafka:UserTopic");
          _producer = producer;
+         _configuration = configuration;
          _logger = logger;
 
          // InitializeAsync();
@@ -69,8 +72,13 @@ namespace PerfRunner.Services
             // load users to ready state
       private void LoadUsers()
       {
-         var totalUsers = UserFormatInfo?.TotalUsers;
-         var accountIndex = UserFormatInfo?.UserStartIndex;
+         long totalUsers, accountIndex;
+         if(!long.TryParse(_configuration.GetValue<string>("TotalUsers"), out totalUsers))
+            totalUsers = UserFormatInfo.TotalUsers;
+
+         if(!long.TryParse(_configuration.GetValue<string>("AccountStartIndex"), out accountIndex))
+            accountIndex = UserFormatInfo.UserStartIndex;
+
          while (totalUsers-- >= 0)
          {
             var user = new User(string.Format(UserFormatInfo!.UserAccountFormat, accountIndex++), UserState.Ready);

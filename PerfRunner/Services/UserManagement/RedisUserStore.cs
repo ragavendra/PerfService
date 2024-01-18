@@ -36,18 +36,10 @@ namespace PerfRunner.Services
          _logger = logger;
          _configuration = configuration;
 
-         // _redisConnectionOptions = new ConfigurationOptions() { };
-         // _redisConnectionOptions.
-         // "localhost";
-         // object asyncState = new object();
-         // Task.AsyncState;
-
          _connectionString = $"{_configuration["REDIS_ADDR"]},ssl=false,allowAdmin=true,abortConnect=false";
-         // var connectionString = $"{addr},ssl=false,allowAdmin=true,abortConnect=false";
 
          _redisConnectionOptions = ConfigurationOptions.Parse(_connectionString);
 
-         // Try to reconnect multiple times if the first retry fails.
          _redisConnectionOptions.ConnectRetry = REDIS_RETRY_NUM;
          _redisConnectionOptions.ReconnectRetryPolicy = new ExponentialRetry(1000);
 
@@ -59,19 +51,9 @@ namespace PerfRunner.Services
       }
 
 
-      // public RedisUserStore(ILogger<RedisUserStore> logger, IConfiguration configuration)
       public RedisUserStore(string addr)
       {
-         // _logger = logger;
-         // _configuration = configuration;
 
-         // _redisConnectionOptions = new ConfigurationOptions() { };
-         // _redisConnectionOptions.
-         // "localhost";
-         // object asyncState = new object();
-         // Task.AsyncState;
-
-         // var connectionString = $"{_configuration["REDIS_ADDR"]},ssl=false,allowAdmin=true,abortConnect=false";
          _connectionString = $"{addr},ssl=false,allowAdmin=true,abortConnect=false";
 
          _redisConnectionOptions = ConfigurationOptions.Parse(_connectionString);
@@ -91,12 +73,6 @@ namespace PerfRunner.Services
       {
          EnsureRedisConnected();
          return Task.CompletedTask;
-      }
-
-      public ConnectionMultiplexer GetConnection()
-      {
-         EnsureRedisConnected();
-         return _redis;
       }
 
       private void EnsureRedisConnected()
@@ -152,28 +128,19 @@ namespace PerfRunner.Services
             // load users to ready state
       private void LoadUsers()
       {
-         var totalUsers = UserFormatInfo?.TotalUsers;
-         var accountIndex = UserFormatInfo?.UserStartIndex;
+         long totalUsers, accountIndex;
+         if (!long.TryParse(_configuration.GetValue<string>("TotalUsers"), out totalUsers))
+            totalUsers = UserFormatInfo.TotalUsers;
+
+         if (!long.TryParse(_configuration.GetValue<string>("AccountStartIndex"), out accountIndex))
+            accountIndex = UserFormatInfo.UserStartIndex;
+
          while (totalUsers-- >= 0)
          {
             var user = new User(string.Format(UserFormatInfo!.UserAccountFormat, accountIndex++), UserState.Ready);
             // _logger.LogInformation("Loading user - {user}", user);
             // Console.WriteLine($"Loading user - {user.Email}");
             CheckInUser(user);
-         }
-      }
-
-      public bool Ping()
-      {
-         try
-         {
-            var cache = _redis.GetDatabase();
-            var res = cache.Ping();
-            return res != TimeSpan.Zero;
-         }
-         catch (Exception)
-         {
-            return false;
          }
       }
 

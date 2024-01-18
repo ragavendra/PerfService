@@ -14,6 +14,12 @@ under one repository.
 ### PerfRunner
 The actual hoster and runner of service which has a folder called tests which contain the tests. Simply copy the `TestBase.cs` in it to your new test and update the `RunTest` method in it to suit your performance test needs. The http client has been typed DIed into `_httpClient` which can be used in the test(s) to make the http calls along with an end point.
 
+Each instance PerfRunner instance can be configured to run from a certain email index to a count so that no instance uses the same accounts. `AccountStartIndex` and `TotalUsers` need to be updated accordingly in the appsettings json, like
+
+Instance1 `AccountStartIndex = 1_000 ` and `TotalUsers = 300`
+Instance2 `AccountStartIndex = 1_301 ` and `TotalUsers = 500`
+and so on.
+
 To run on a specific port, when running multiple instances.
 
 ```

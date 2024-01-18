@@ -21,6 +21,8 @@ namespace PerfRunner.Services
       private ConcurrentDictionary<UserState, ConcurrentQueue<User>> Users
       = new ConcurrentDictionary<UserState, ConcurrentQueue<User>>();
 
+      private readonly IConfiguration _configuration;
+
       public UserFormatInfo UserFormatInfo { get; set; } = new UserFormatInfo();
 
       public UserManager(ILogger<UserManager> logger)
@@ -56,8 +58,13 @@ namespace PerfRunner.Services
       // load users to ready state
       private void LoadUsers()
       {
-         var totalUsers = UserFormatInfo?.TotalUsers;
-         var accountIndex = UserFormatInfo?.UserStartIndex;
+         long totalUsers, accountIndex;
+         if (!long.TryParse(_configuration.GetValue<string>("TotalUsers"), out totalUsers))
+            totalUsers = UserFormatInfo.TotalUsers;
+
+         if (!long.TryParse(_configuration.GetValue<string>("AccountStartIndex"), out accountIndex))
+            accountIndex = UserFormatInfo.UserStartIndex;
+
          while (totalUsers-- >= 0)
          {
             var user = new User(string.Format(UserFormatInfo!.UserAccountFormat, accountIndex++), UserState.Ready);
